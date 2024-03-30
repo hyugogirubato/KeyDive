@@ -135,7 +135,7 @@ const prepareKeyRequest = (address) => {
                 index = 4;
             } else {
                 index = 5; // Default index assignment
-                print(Level.WARNING, SDK_API < 23 ? 'SDK API too old' : 'SDK API not implemented');
+                print(Level.WARNING, 'SDK API not implemented');
                 print(Level.WARNING, `Defaulting to args[${index}] for PrepareKeyRequest`);
             }
             this.ret = args[index];
