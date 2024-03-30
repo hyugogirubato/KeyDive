@@ -1,0 +1,5 @@
+frida~=16.1.4
+pathlib~=1.0.1
+coloredlogs~=15.0.1
+pycryptodomex~=3.20.0
+protobuf~=4.25.1
