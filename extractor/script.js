@@ -76,6 +76,8 @@ const hookLibrary = (name) => {
 
     let hookedCount = 0;
     functions.forEach((func) => {
+        if (func.type !== 'function') return;
+
         const funcName = func.name;
         const funcAddr = func.address;
 
