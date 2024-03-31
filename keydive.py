@@ -4,6 +4,7 @@ import time
 
 import coloredlogs
 from _frida import Process
+from pathlib import Path
 
 from extractor.cdm import Cdm
 
@@ -17,12 +18,17 @@ if __name__ == '__main__':
 
     # Parse command line arguments for device ID
     parser = argparse.ArgumentParser(description='Extract Widevine L3 keys from an Android device.')
-    parser.add_argument('--device', type=str, help='Target Android device ID.')
+    parser.add_argument('--device', required=False, type=str, help='Target Android device ID.')
+    parser.add_argument('--symbols', required=False, type=Path, help='Ghidra XML symbols file.')
     args = parser.parse_args()
 
     try:
+        symbols = args.symbols
+        if symbols and not symbols.is_file():
+            raise FileNotFoundError('Symbols file not found')
+
         # Initialize CDM handler with given device
-        cdm = Cdm(device=args.device)
+        cdm = Cdm(device=args.device, symbols=symbols)
 
         # Find Widevine process on the device
         process: Process = next((p for p in cdm.device.enumerate_processes() if cdm.vendor.process == p.name), None)

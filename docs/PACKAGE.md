@@ -1,4 +1,4 @@
-# Packages
+# Package
 
 This document provides an overview of the external libraries, tools, and applications utilized within the KeyDive project. Each package plays a crucial role in enabling the project to efficiently extract Widevine L3 keys from Android devices for educational and research purposes.
 

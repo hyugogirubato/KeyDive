@@ -43,16 +43,21 @@ To use KeyDive, follow these steps:
 
 ### Command-Line Options
 
-```sh
-usage: keydive.py [-h] [--device DEVICE]
+```shell
+usage: keydive.py [-h] [--device DEVICE] [--symbols SYMBOLS]
 
 Extract Widevine L3 keys from an Android device.
 
 options:
-  -h, --help       show this help message and exit
-  --device DEVICE  Target Android device ID.
+  -h, --help         show this help message and exit
+  --device DEVICE    Target Android device ID.
+  --symbols SYMBOLS  Ghidra XML symbols file.
 
 ```
+
+### Extracting Symbols for Advanced Usage
+
+For advanced users looking to use custom symbols with KeyDive, a comprehensive guide on extracting symbols from Widevine libraries using Ghidra is available. Please refer to our [Symbols Extraction Guide](./docs/SYMBOLS.md) for detailed instructions.
 
 ## Temporary Disabling L1 for L3 Extraction
 

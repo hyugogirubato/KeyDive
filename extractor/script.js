@@ -4,14 +4,10 @@
  * Source: https://github.com/hyugogirubato/KeyDive
  */
 
-const SDK_API = '${SDK_API}'; // Dynamically replaced with the actual SDK API level.
-const OEM_CRYPTO_API = [
-    // Mapping of function names across different API levels (obfuscated names may vary).
-    'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd',
-    'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
-    'qbjxtubz', 'qkfrcjtw', 'rbhjspoh'
-    // Add more as needed for different versions.
-];
+// Placeholder values dynamically replaced at runtime.
+const SDK_API = parseInt('${SDK_API}', 10);
+const OEM_CRYPTO_API = JSON.parse('${OEM_CRYPTO_API}');
+const SYMBOLS = JSON.parse('${SYMBOLS}');
 
 
 // Logging levels to synchronize with Python's logging module.
@@ -71,7 +67,20 @@ const getLibrary = (name) => Process.getModuleByName(name);
 const hookLibrary = (name) => {
     // https://github.com/poxyran/misc/blob/master/frida-enumerate-imports.py
     const library = getLibrary(name);
-    const functions = [...library.enumerateExports(), ...library.enumerateImports()];
+    if (!library) return false;
+
+    let functions;
+    if (SYMBOLS.length > 0) {
+        functions = SYMBOLS.map(symbol => ({
+            'type': 'function',
+            'name': symbol.name,
+            'address': ptr(parseInt(symbol.address, 16) + parseInt(library.base, 16))
+        }));
+        print(Level.INFO, 'Successfully imported symbols');
+    } else {
+        functions = [...library.enumerateExports(), ...library.enumerateImports()];
+    }
+
     const targetFunction = functions.find(func => OEM_CRYPTO_API.includes(func.name));
 
     let hookedCount = 0;

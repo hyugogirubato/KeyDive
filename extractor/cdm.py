@@ -1,9 +1,11 @@
+import json
 import logging
 import re
 import subprocess
 from pathlib import Path
 
 import frida
+import xmltodict
 from _frida import Process
 from frida.core import Device, Session, Script, RPCException
 from Cryptodome.PublicKey import RSA
@@ -18,8 +20,15 @@ class Cdm:
     """
     Manages the capture and processing of DRM keys from a specified device using Frida to inject custom hooks.
     """
+    OEM_CRYPTO_API = [
+        # Mapping of function names across different API levels (obfuscated names may vary).
+        'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd',
+        'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
+        'qbjxtubz', 'qkfrcjtw', 'rbhjspoh'
+        # Add more as needed for different versions.
+    ]
 
-    def __init__(self, device: str = None):
+    def __init__(self, device: str = None, symbols: Path = None):
         self.logger = logging.getLogger('Cdm')
         self.running = True
         self.keys = {}
@@ -33,7 +42,7 @@ class Cdm:
         self.logger.info('ABI CPU: %s', self.properties['ro.product.cpu.abi'])
 
         # Determine vendor based on SDK API
-        self.script = self._prepare_hook_script()
+        self.script = self._prepare_hook_script(symbols)
         self.vendor = self._prepare_vendor()
 
     def _fetch_device_properties(self) -> dict:
@@ -55,12 +64,71 @@ class Cdm:
                 properties[key] = value
         return properties
 
-    def _prepare_hook_script(self) -> str:
+    def _prepare_hook_script(self, path: Path) -> str:
         """
-        Prepares and returns the hook script with the SDK API version replaced.
+        Prepares and returns the hook script by replacing placeholders with actual values, including
+        SDK API version and selected symbols from a given XML file.
         """
-        script_content = SCRIPT_PATH.read_text(encoding='utf-8')
-        return script_content.replace("'${SDK_API}'", str(self.sdk_api))
+        symbols = {}
+        if path:
+            try:
+                # Parse the XML file
+                program = xmltodict.parse(path.read_bytes())['PROGRAM']
+                base_addr = int(program['@IMAGE_BASE'], 16)
+                functions: [dict] = program['SYMBOL_TABLE']['SYMBOL']
+
+                # Find a target function from a predefined list
+                target = next((f['@NAME'] for f in functions if f['@NAME'] in self.OEM_CRYPTO_API), None)
+
+                # Extract relevant symbols
+                for func in functions:
+                    name = func['@NAME']
+
+                    # Add symbol if it matches specific criteria
+                    if any(keyword in name for keyword in ['UsePrivacyMode', 'PrepareKeyRequest']) or name == target or (not target and re.match(r'^[a-z]+$', name)):
+                        addr = hex(int(func['@ADDRESS'], 16) - base_addr)
+                        symbols[addr] = {'name': name, 'address': addr}
+            except Exception:
+                raise ValueError('Failed to extract symbols from Ghidra')
+
+        # Read and prepare the hook script content
+        content = SCRIPT_PATH.read_text(encoding='utf-8')
+        # Replace placeholders with actual values
+        content = content.replace('${SDK_API}', str(self.sdk_api))
+        content = content.replace('${OEM_CRYPTO_API}', json.dumps(self.OEM_CRYPTO_API))
+        content = content.replace('${SYMBOLS}', json.dumps(list(symbols.values())))
+
+        return content
+
+    def _prepare_vendor(self) -> Vendor:
+        """
+        Prepares and selects the most compatible vendor version based on the device's processes.
+        """
+        details: [int] = []
+        for p in self.device.enumerate_processes():
+            for k, v in Vendor.SDK_VERSIONS.items():
+                if p.name == v[2]:
+                    session: Session = self.device.attach(p.name)
+                    script: Script = session.create_script(self.script)
+                    script.load()
+                    try:
+                        script.exports_sync.getlibrary(v[3])
+                        details.append(k)
+                    except RPCException:
+                        pass
+                    session.detach()
+
+        if not details:
+            return Vendor.from_sdk_api(self.sdk_api)
+
+        # Find the closest SDK version to the current one, preferring lower matches in case of a tie.
+        sdk_api = min(details, key=lambda x: abs(x - self.sdk_api))
+        if sdk_api == Vendor.SDK_MAX and self.sdk_api > Vendor.SDK_MAX:
+            sdk_api = self.sdk_api
+        elif sdk_api != self.sdk_api:
+            self.logger.warning('Non-default Widevine version for SDK %s', sdk_api)
+
+        return Vendor.from_sdk_api(sdk_api)
 
     def _process_message(self, message: dict, data: bytes) -> None:
         """
@@ -131,36 +199,6 @@ class Cdm:
             self.running = False
         else:
             self.logger.warning('Failed to intercept the private key')
-
-    def _prepare_vendor(self) -> Vendor:
-        """
-        Prepares and selects the most compatible vendor version based on the device's processes.
-        """
-        details: [int] = []
-        for p in self.device.enumerate_processes():
-            for k, v in Vendor.SDK_VERSIONS.items():
-                if p.name == v[2]:
-                    session: Session = self.device.attach(p.name)
-                    script: Script = session.create_script(self.script)
-                    script.load()
-                    try:
-                        script.exports_sync.getlibrary(v[3])
-                        details.append(k)
-                    except RPCException:
-                        pass
-                    session.detach()
-
-        if not details:
-            return Vendor.from_sdk_api(self.sdk_api)
-
-        # Find the closest SDK version to the current one, preferring lower matches in case of a tie.
-        sdk_api = min(details, key=lambda x: abs(x - self.sdk_api))
-        if sdk_api == Vendor.SDK_MAX and self.sdk_api > Vendor.SDK_MAX:
-            sdk_api = self.sdk_api
-        elif sdk_api != self.sdk_api:
-            self.logger.warning('Non-default Widevine version for SDK %s', sdk_api)
-
-        return Vendor.from_sdk_api(sdk_api)
 
     def hook_process(self, process: Process) -> bool:
         """
