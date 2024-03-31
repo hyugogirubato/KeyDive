@@ -21,9 +21,7 @@ Ensure you have Ghidra installed on your system. If not, download it from the [G
 #### 4. Exporting Symbols as XML
 - After analysis, navigate to `File` > `Export Program...`.
 - In the "Export Program" window, choose the "XML" format from the dropdown menu.
-- Click "Options
-
-" and ensure that only the "Symbols" option is selected. This step is crucial as it filters the export to include only the symbols necessary for KeyDive, making the XML file more manageable and relevant.
+- Click "Options" and ensure that only the "Symbols" option is selected. This step is crucial as it filters the export to include only the symbols necessary for KeyDive, making the XML file more manageable and relevant.
 - Choose a destination for the `symbols.xml` file and confirm the export.
 
 #### 5. Using the Symbols with KeyDive
