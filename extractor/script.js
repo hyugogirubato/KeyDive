@@ -7,19 +7,9 @@
 const SDK_API = '${SDK_API}'; // Dynamically replaced with the actual SDK API level.
 const OEM_CRYPTO_API = [
     // Mapping of function names across different API levels (obfuscated names may vary).
-    'rnmsglvj',
-    'polorucp',
-    'kqzqahjq',
-    'pldrclfq',
-    'kgaitijd',
-    'cwkfcplc',
-    'crhqcdet',
-    'ulns',     // 11, 13
-    'dnvffnze', // 15
-    'ygjiljer', // 15
-    'qbjxtubz', // 16
-    'qkfrcjtw', // 16
-    'rbhjspoh'  // 17
+    'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd',
+    'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
+    'qbjxtubz', 'qkfrcjtw', 'rbhjspoh'
     // Add more as needed for different versions.
 ];
 

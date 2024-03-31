@@ -24,6 +24,7 @@ class Vendor:
         24: (11, '1.0', 'mediadrmserver', 'libwvdrmengine.so'),
         23: (11, '1.0', 'mediaserver', 'libwvdrmengine.so')
     }
+    SDK_MAX = max(SDK_VERSIONS.keys())
 
     def __init__(self, oem: int, version: str, process: str, library: str):
         """
@@ -51,7 +52,7 @@ class Vendor:
 
         vendor_details = cls.SDK_VERSIONS.get(sdk_api)
         if not vendor_details:
-            vendor_details = cls.SDK_VERSIONS[max(cls.SDK_VERSIONS.keys())]
+            vendor_details = cls.SDK_VERSIONS[cls.SDK_MAX]
             logger.warning('CMD version is not yet implemented')
             logger.warning('Using closest supported CDM version: %s', vendor_details[1])
         else:

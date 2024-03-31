@@ -33,8 +33,8 @@ class Cdm:
         self.logger.info('ABI CPU: %s', self.properties['ro.product.cpu.abi'])
 
         # Determine vendor based on SDK API
-        self.vendor = Vendor.from_sdk_api(self.sdk_api)
-        self.script: str = self._prepare_hook_script()
+        self.script = self._prepare_hook_script()
+        self.vendor = self._prepare_vendor()
 
     def _fetch_device_properties(self) -> dict:
         """
@@ -131,6 +131,36 @@ class Cdm:
             self.running = False
         else:
             self.logger.warning('Failed to intercept the private key')
+
+    def _prepare_vendor(self) -> Vendor:
+        """
+        Prepares and selects the most compatible vendor version based on the device's processes.
+        """
+        details: [int] = []
+        for p in self.device.enumerate_processes():
+            for k, v in Vendor.SDK_VERSIONS.items():
+                if p.name == v[2]:
+                    session: Session = self.device.attach(p.name)
+                    script: Script = session.create_script(self.script)
+                    script.load()
+                    try:
+                        script.exports_sync.getlibrary(v[3])
+                        details.append(k)
+                    except RPCException:
+                        pass
+                    session.detach()
+
+        if not details:
+            return Vendor.from_sdk_api(self.sdk_api)
+
+        # Find the closest SDK version to the current one, preferring lower matches in case of a tie.
+        sdk_api = min(details, key=lambda x: abs(x - self.sdk_api))
+        if sdk_api == Vendor.SDK_MAX and self.sdk_api > Vendor.SDK_MAX:
+            sdk_api = self.sdk_api
+        elif sdk_api != self.sdk_api:
+            self.logger.warning('Non-default Widevine version for SDK %s', sdk_api)
+
+        return Vendor.from_sdk_api(sdk_api)
 
     def hook_process(self, process: Process) -> bool:
         """
