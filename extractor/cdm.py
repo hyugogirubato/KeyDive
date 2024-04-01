@@ -105,7 +105,7 @@ class Cdm:
         content = SCRIPT_PATH.read_text(encoding='utf-8')
         # Replace placeholders with actual values
         content = content.replace('${SDK_API}', str(self.sdk_api))
-        content = content.replace('${OEM_CRYPTO_API}', json.dumps(self.OEM_CRYPTO_API))
+        content = content.replace('${OEM_CRYPTO_API}', json.dumps(list(self.OEM_CRYPTO_API)))
         content = content.replace('${SYMBOLS}', json.dumps(list(selected.values())))
 
         return content
