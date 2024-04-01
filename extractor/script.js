@@ -75,19 +75,18 @@ const hookLibrary = (name) => {
     const library = getLibrary(name);
     if (!library) return false;
 
-    let functions;
+    let functions, target;
     if (SYMBOLS.length > 0) {
         functions = SYMBOLS.map(symbol => ({
             'type': 'function',
             'name': symbol.name,
             'address': ptr(parseInt(symbol.address, 16) + parseInt(library.base, 16))
         }));
-        print(Level.INFO, 'Successfully imported symbols');
+        print(Level.INFO, 'Successfully imported functions');
     } else {
         functions = [...library.enumerateExports(), ...library.enumerateImports()];
+        target = functions.find(func => OEM_CRYPTO_API.includes(func.name));
     }
-
-    const targetFunction = functions.find(func => OEM_CRYPTO_API.includes(func.name));
 
     let hookedCount = 0;
     functions.forEach((func) => {
@@ -102,7 +101,7 @@ const hookLibrary = (name) => {
                 disablePrivacyMode(funcAddr);
             } else if (funcName.includes('PrepareKeyRequest')) {
                 prepareKeyRequest(funcAddr);
-            } else if (targetFunction === func || (!targetFunction && funcName.match(/^[a-z]+$/))) {
+            } else if (target === func || (!target && funcName.match(/^[a-z]+$/))) {
                 getPrivateKey(funcAddr);
             } else {
                 funcHooked = false;
@@ -113,7 +112,7 @@ const hookLibrary = (name) => {
                 print(Level.DEBUG, `Hooked (${funcAddr}): ${funcName}`);
             }
         } catch (e) {
-            print(Level.ERROR, `${funcName} (${funcAddr}): ${e.message}`);
+            print(Level.ERROR, `${e.message} for ${funcName}`);
         }
     });
 

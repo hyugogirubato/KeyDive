@@ -15,3 +15,5 @@ tree() {
   path=${1:-.}
   find ${path} -print | sort | sed 's;[^/]*/;|---;g;s;---|; |;g'
 }
+
+clear

@@ -7,6 +7,7 @@ import coloredlogs
 from _frida import Process
 from pathlib import Path
 
+import extractor
 from extractor.cdm import Cdm
 
 coloredlogs.install(
@@ -24,6 +25,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
+        logger.info('Version: %s', extractor.__version__)
+
         # Start ADB server
         exitcode, _ = subprocess.getstatusoutput('adb start-server')
         if exitcode != 0:
