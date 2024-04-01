@@ -33,13 +33,14 @@ Follow these steps to set up KeyDive:
 
 ## Usage
 
-To use KeyDive, follow these steps:
+1. Play a DRM-protected video on the target device.
+2. Launch the KeyDive script.
+3. Reload the DRM-protected video on your device.
+4. The script will automatically extract the Widevine L3 keys, saving them as follows:
+   - `client_id.bin` - This file contains device identification information.
+   - `private_key.pem` - This file contains the RSA private key.
 
-1. Launch the KeyDive script.
-2. Play a DRM-protected video on the target device.
-3. The script will automatically extract the Widevine L3 keys, saving them in the following format:
-   - `client_id.bin` - Contains device identification information.
-   - `private_key.pem` - Contains the RSA private key.
+This sequence ensures that the DRM-protected content is active and ready for key extraction by the time the KeyDive script is initiated, optimizing the extraction process.
 
 ### Command-Line Options
 
