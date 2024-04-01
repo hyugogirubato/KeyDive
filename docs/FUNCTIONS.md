@@ -1,8 +1,8 @@
-# Symbols
+# Functions
 
-To utilize custom symbols with KeyDive, particularly when extracting Widevine L3 DRM keys from Android devices, you might need to generate a `symbols.xml` file using Ghidra. This file helps KeyDive accurately identify necessary symbols within the Widevine library, facilitating a more efficient extraction process. Below is a step-by-step guide on how to create a `symbols.xml` file using Ghidra:
+To utilize custom functions with KeyDive, particularly when extracting Widevine L3 DRM keys from Android devices, you might need to generate a `functions.xml` file using Ghidra. This file helps KeyDive accurately identify necessary functions within the Widevine library, facilitating a more efficient extraction process. Below is a step-by-step guide on how to create a `functions.xml` file using Ghidra:
 
-### Extracting Symbols with Ghidra
+### Extracting functions with Ghidra
 
 #### 1. Preparing Ghidra
 Ensure you have Ghidra installed on your system. If not, download it from the [Ghidra project page](https://ghidra-sre.org/) and follow the installation instructions.
@@ -18,27 +18,27 @@ Ensure you have Ghidra installed on your system. If not, download it from the [G
 - In the "Auto Analysis" window, ensure all relevant analyzers are selected, especially those related to symbol and function discovery. Click "Analyze" to start the process.
 - Wait for the analysis to complete, which may take some time depending on the binary's size and complexity.
 
-#### 4. Exporting Symbols as XML
+#### 4. Exporting Functions as XML
 - After analysis, navigate to `File` > `Export Program...`.
 - In the "Export Program" window, choose the "XML" format from the dropdown menu.
-- Click "Options" and ensure that only the "Symbols" option is selected. This step is crucial as it filters the export to include only the symbols necessary for KeyDive, making the XML file more manageable and relevant.
-- Choose a destination for the `symbols.xml` file and confirm the export.
+- Click "Options" and ensure that only the "Functions" option is selected. This step is crucial as it filters the export to include only the functions necessary for KeyDive, making the XML file more manageable and relevant.
+- Choose a destination for the `functions.xml` file and confirm the export.
 
-#### 5. Using the Symbols with KeyDive
-Once you have the `symbols.xml` file:
+#### 5. Using the Functions with KeyDive
+Once you have the `functions.xml` file:
 
 - Ensure KeyDive is set up according to its documentation.
-- When running KeyDive, use the `--symbols` argument to specify the path to your `symbols.xml` file. For example:
+- When running KeyDive, use the `--functions` argument to specify the path to your `functions.xml` file. For example:
   ```shell
-  python keydive.py --device <DEVICE_ID> --symbols /path/to/symbols_x86.xml
+  python keydive.py --device <DEVICE_ID> --functions /path/to/functions_x86.xml
   ```
 - Proceed with the key extraction process as detailed in KeyDive's usage instructions.
 
 ### Additional Tips
 
-- **Understanding Symbols:** The `symbols.xml` file maps function names and variables within the Widevine CDM library, enabling KeyDive to correctly identify and hook into specific processes for key extraction.
+- **Understanding Functions:** The `functions.xml` file maps function names and variables within the Widevine CDM library, enabling KeyDive to correctly identify and hook into specific processes for key extraction.
 - **Ghidra Compatibility:** Ensure your version of Ghidra supports the binary format you're analyzing. Newer versions of Ghidra typically offer better support for a wide range of binary formats.
-- **Analysis Depth:** While a full analysis is recommended, you can customize the analysis options based on your understanding of the binary and the symbols you are specifically interested in. This can significantly reduce analysis time.
+- **Analysis Depth:** While a full analysis is recommended, you can customize the analysis options based on your understanding of the binary and the functions you are specifically interested in. This can significantly reduce analysis time.
 - **Security Considerations:** Be aware of the security implications of extracting and handling DRM keys. Always comply with legal restrictions and ethical guidelines when using tools like KeyDive and Ghidra for reverse engineering.
 
-By following these steps, you can generate a `symbols.xml` file that aids in the effective use of KeyDive for educational, research, or security analysis purposes.
+By following these steps, you can generate a `functions.xml` file that aids in the effective use of KeyDive for educational, research, or security analysis purposes.

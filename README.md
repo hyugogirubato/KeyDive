@@ -45,20 +45,21 @@ This sequence ensures that the DRM-protected content is active and ready for key
 ### Command-Line Options
 
 ```shell
-usage: keydive.py [-h] [--device DEVICE] [--symbols SYMBOLS]
+usage: keydive.py [-h] [--device DEVICE] [--functions FUNCTIONS]
 
 Extract Widevine L3 keys from an Android device.
 
 options:
-  -h, --help         show this help message and exit
-  --device DEVICE    Target Android device ID.
-  --symbols SYMBOLS  Ghidra XML symbols file.
+  -h, --help            show this help message and exit
+  --device DEVICE       Target Android device ID.
+  --functions FUNCTIONS
+                        Ghidra XML functions file.
 
 ```
 
-### Extracting Symbols for Advanced Usage
+### Extracting Functions for Advanced Usage
 
-For advanced users looking to use custom symbols with KeyDive, a comprehensive guide on extracting symbols from Widevine libraries using Ghidra is available. Please refer to our [Symbols Extraction Guide](./docs/SYMBOLS.md) for detailed instructions.
+For advanced users looking to use custom functions with KeyDive, a comprehensive guide on extracting functions from Widevine libraries using Ghidra is available. Please refer to our [Functions Extraction Guide](./docs/FUNCTIONS.md) for detailed instructions.
 
 ## Temporary Disabling L1 for L3 Extraction
 

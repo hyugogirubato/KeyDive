@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # Parse command line arguments for device ID
     parser = argparse.ArgumentParser(description='Extract Widevine L3 keys from an Android device.')
     parser.add_argument('--device', required=False, type=str, help='Target Android device ID.')
-    parser.add_argument('--symbols', required=False, type=Path, help='Ghidra XML symbols file.')
+    parser.add_argument('--functions', required=False, type=Path, help='Ghidra XML functions file.')
     args = parser.parse_args()
 
     try:
@@ -30,7 +30,7 @@ if __name__ == '__main__':
             raise EnvironmentError('ADB is not recognized as an environment variable')
 
         # Initialize CDM handler with given device
-        cdm = Cdm(device=args.device, symbols=args.symbols)
+        cdm = Cdm(device=args.device, functions=args.functions)
 
         # Find Widevine process on the device
         process: Process = next((p for p in cdm.device.enumerate_processes() if cdm.vendor.process == p.name), None)
