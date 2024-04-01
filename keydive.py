@@ -20,8 +20,8 @@ if __name__ == '__main__':
 
     # Parse command line arguments for device ID
     parser = argparse.ArgumentParser(description='Extract Widevine L3 keys from an Android device.')
-    parser.add_argument('--device', required=False, type=str, help='Target Android device ID.')
-    parser.add_argument('--functions', required=False, type=Path, help='Ghidra XML functions file.')
+    parser.add_argument('-d', '--device', required=False, type=str, help='Target Android device ID.')
+    parser.add_argument('-f', '--functions', required=False, type=Path, help='Ghidra XML functions file.')
     args = parser.parse_args()
 
     try:

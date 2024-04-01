@@ -43,6 +43,7 @@ class Cdm:
 
         # Determine vendor based on SDK API
         self.script = self._prepare_hook_script(functions)
+        self.logger.info('Successfully loaded script')
         self.vendor = self._prepare_vendor()
 
     def _fetch_device_properties(self) -> dict:
@@ -82,22 +83,20 @@ class Cdm:
                 functions = program['FUNCTIONS']['FUNCTION']
 
                 # Find a target function from a predefined list
-                target = next((f'@NAME' for f in functions if f['@NAME'] in self.OEM_CRYPTO_API), None)
+                target = next((f['@NAME'] for f in functions if f['@NAME'] in self.OEM_CRYPTO_API), None)
 
                 # Extract relevant functions
                 for func in functions:
                     name = func['@NAME']
-                    params = func['ADDRESS_RANGE']
-                    args = len(params) - 1 if isinstance(params, list) else 0
+                    args = len(func.get('REGISTER_VAR', []))
 
                     # Add function if it matches specific criteria
-                    if (
+                    if name not in selected and (
                             name == target
                             or any(keyword in name for keyword in ['UsePrivacyMode', 'PrepareKeyRequest'])
                             or (not target and re.match(r'^[a-z]+$', name) and args >= 6)
                     ):
-                        addr = int(func['@ENTRY_POINT'], 16) - addr_base
-                        selected[addr] = {'name': name, 'address': hex(addr)}
+                        selected[name] = {'name': name, 'address': hex(int(func['@ENTRY_POINT'], 16) - addr_base)}
             except Exception:
                 raise ValueError('Failed to extract functions from Ghidra')
 
