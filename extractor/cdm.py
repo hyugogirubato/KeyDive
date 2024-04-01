@@ -7,7 +7,7 @@ from pathlib import Path
 import frida
 import xmltodict
 from _frida import Process
-from frida.core import Device, Session, Script, RPCException
+from frida.core import Device, Session, Script
 from Cryptodome.PublicKey import RSA
 
 from extractor.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, DrmCertificate, SignedDrmCertificate
@@ -89,7 +89,9 @@ class Cdm:
                     name = func['@NAME']
 
                     # Add symbol if it matches specific criteria
-                    if any(keyword in name for keyword in ['UsePrivacyMode', 'PrepareKeyRequest']) or name == target or (not target and re.match(r'^[a-z]+$', name)):
+                    if any(keyword in name for keyword in
+                           ['UsePrivacyMode', 'PrepareKeyRequest']) or name == target or (
+                            not target and re.match(r'^[a-z]+$', name)):
                         addr = hex(int(func['@ADDRESS'], 16) - base_addr)
                         symbols[addr] = {'name': name, 'address': addr}
             except Exception:
