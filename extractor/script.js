@@ -61,7 +61,13 @@ const print = (level, message) => {
 }
 
 // Identifies and returns the specified library.
-const getLibrary = (name) => Process.getModuleByName(name);
+const getLibrary = (name) => {
+    try {
+        return Process.getModuleByName(name);
+    } catch (e) {
+        return undefined;
+    }
+};
 
 // Hooks into specified functions within a library, aiming to extract keys and disable privacy mode.
 const hookLibrary = (name) => {

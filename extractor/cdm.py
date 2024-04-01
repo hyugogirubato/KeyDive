@@ -115,11 +115,8 @@ class Cdm:
                     session: Session = self.device.attach(p.name)
                     script: Script = session.create_script(self.script)
                     script.load()
-                    try:
-                        script.exports_sync.getlibrary(v[3])
+                    if script.exports_sync.getlibrary(v[3]):
                         details.append(k)
-                    except RPCException:
-                        pass
                     session.detach()
 
         if not details:
@@ -213,9 +210,8 @@ class Cdm:
         script.on('message', self._process_message)
         script.load()
 
-        try:
-            library_info = script.exports_sync.getlibrary(self.vendor.library)
+        library_info = script.exports_sync.getlibrary(self.vendor.library)
+        if library_info:
             self.logger.info('Library: %s (%s)', library_info['name'], library_info['path'])
             return script.exports_sync.hooklibrary(library_info['name'])
-        except RPCException:
-            return False
+        return False
