@@ -71,6 +71,10 @@ class Cdm:
         """
         symbols = {}
         if path:
+            # Verify symbols file path
+            if not path.is_file():
+                raise FileNotFoundError('Symbols file not found')
+
             try:
                 # Parse the XML file
                 program = xmltodict.parse(path.read_bytes())['PROGRAM']

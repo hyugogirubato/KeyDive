@@ -1,5 +1,6 @@
 import argparse
 import logging
+import subprocess
 import time
 
 import coloredlogs
@@ -23,12 +24,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
-        symbols = args.symbols
-        if symbols and not symbols.is_file():
-            raise FileNotFoundError('Symbols file not found')
+        # Start ADB server
+        exitcode, _ = subprocess.getstatusoutput('adb start-server')
+        if exitcode != 0:
+            raise EnvironmentError('ADB is not recognized as an environment variable')
 
         # Initialize CDM handler with given device
-        cdm = Cdm(device=args.device, symbols=symbols)
+        cdm = Cdm(device=args.device, symbols=args.symbols)
 
         # Find Widevine process on the device
         process: Process = next((p for p in cdm.device.enumerate_processes() if cdm.vendor.process == p.name), None)
