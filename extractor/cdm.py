@@ -132,7 +132,7 @@ class Cdm:
         """
         Lists processes running on the device, returning a mapping of process names to PIDs.
         """
-        # https://github.com/frida/frida/issues/2593
+        # https://github.com/frida/frida/issues/1225#issuecomment-604181822
         # Iterate through lines starting from the second line (skipping header)
         processes = {}
         for line in subprocess.getoutput(f'adb -s "{self.device.id}" shell ps').splitlines()[1:]:
