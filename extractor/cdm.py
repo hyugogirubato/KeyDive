@@ -6,7 +6,6 @@ from pathlib import Path
 
 import xmltodict
 import frida
-from _frida import Process
 from frida.core import Device, Session, Script
 from Cryptodome.PublicKey import RSA
 
@@ -28,23 +27,35 @@ class Cdm:
         # Add more as needed for different versions.
     }
 
-    def __init__(self, device: str = None, functions: Path = None):
+    def __init__(self, device: str = None, functions: Path = None, force: bool = False):
         self.logger = logging.getLogger('Cdm')
+        self.functions = functions
         self.running = True
         self.keys = {}
+        # Select device based on provided ID or default to the first USB device.
         self.device: Device = frida.get_device(id=device, timeout=5) if device else frida.get_usb_device(timeout=5)
         self.logger.info('Device: %s (%s)', self.device.name, self.device.id)
 
-        # Fetch and log device properties
+        # Obtain device properties
         self.properties = self._fetch_device_properties()
+
         self.sdk_api = self.properties['ro.build.version.sdk']
         self.logger.info('SDK API: %s', self.sdk_api)
         self.logger.info('ABI CPU: %s', self.properties['ro.product.cpu.abi'])
 
-        # Determine vendor based on SDK API
-        self.script = self._prepare_hook_script(functions)
-        self.logger.info('Successfully loaded script')
-        self.vendor = self._prepare_vendor()
+        # Load the hook scrip
+        self.script = self._prepare_hook_script()
+        self.logger.info('Script loaded successfully')
+
+        # Determine vendor based on device SDK API
+        vendor_api = self._prepare_vendor_api(force=force)
+        self.vendor = Vendor.from_sdk_api(vendor_api)
+
+        # Update script for specific vendor API, if necessary
+        if vendor_api != self.sdk_api:
+            self.sdk_api = vendor_api
+            self.script = self._prepare_hook_script()
+            self.logger.info('Script updated for vendor API')
 
     def _fetch_device_properties(self) -> dict:
         """
@@ -65,76 +76,112 @@ class Cdm:
                 properties[key] = value
         return properties
 
-    def _prepare_hook_script(self, path: Path) -> str:
+    def _prepare_hook_script(self) -> str:
         """
-        Prepares and returns the hook script by replacing placeholders with actual values, including
-        SDK API version and selected functions from a given XML file.
+        Prepares the Frida hook script, injecting dynamic content like SDK API and selected functions.
         """
-        selected = {}
-        if path:
-            # Verify symbols file path
-            if not path.is_file():
-                raise FileNotFoundError('Symbols file not found')
-
-            try:
-                # Parse the XML file
-                program = xmltodict.parse(path.read_bytes())['PROGRAM']
-                addr_base = int(program['@IMAGE_BASE'], 16)
-                functions = program['FUNCTIONS']['FUNCTION']
-
-                # Find a target function from a predefined list
-                target = next((f['@NAME'] for f in functions if f['@NAME'] in self.OEM_CRYPTO_API), None)
-
-                # Extract relevant functions
-                for func in functions:
-                    name = func['@NAME']
-                    args = len(func.get('REGISTER_VAR', []))
-
-                    # Add function if it matches specific criteria
-                    if name not in selected and (
-                            name == target
-                            or any(keyword in name for keyword in ['UsePrivacyMode', 'PrepareKeyRequest'])
-                            or (not target and re.match(r'^[a-z]+$', name) and args >= 6)
-                    ):
-                        selected[name] = {'name': name, 'address': hex(int(func['@ENTRY_POINT'], 16) - addr_base)}
-            except Exception:
-                raise ValueError('Failed to extract functions from Ghidra')
-
-        # Read and prepare the hook script content
         content = SCRIPT_PATH.read_text(encoding='utf-8')
-        # Replace placeholders with actual values
-        content = content.replace('${SDK_API}', str(self.sdk_api))
-        content = content.replace('${OEM_CRYPTO_API}', json.dumps(list(self.OEM_CRYPTO_API)))
-        content = content.replace('${SYMBOLS}', json.dumps(list(selected.values())))
+        selected = self._select_functions() if self.functions else {}
+
+        # Replace placeholders in script template
+        replacements = {
+            '${SDK_API}': str(self.sdk_api),
+            '${OEM_CRYPTO_API}': json.dumps(list(self.OEM_CRYPTO_API)),
+            '${SYMBOLS}': json.dumps(list(selected.values())),
+        }
+
+        for placeholder, real_value in replacements.items():
+            content = content.replace(placeholder, real_value)
 
         return content
 
-    def _prepare_vendor(self) -> Vendor:
+    def _select_functions(self) -> dict:
         """
-        Prepares and selects the most compatible vendor version based on the device's processes.
+        Parses the provided XML functions file to select relevant functions.
         """
+        if not self.functions.is_file():
+            raise FileNotFoundError('Functions file not found')
+
+        try:
+            program = xmltodict.parse(self.functions.read_bytes())['PROGRAM']
+            addr_base = int(program['@IMAGE_BASE'], 16)
+            functions = program['FUNCTIONS']['FUNCTION']
+
+            # Find a target function from a predefined list
+            target = next((f['@NAME'] for f in functions if f['@NAME'] in self.OEM_CRYPTO_API), None)
+
+            # Extract relevant functions
+            selected = {}
+            for func in functions:
+                name = func['@NAME']
+                args = len(func.get('REGISTER_VAR', []))
+
+                # Add function if it matches specific criteria
+                if name not in selected and (
+                        name == target
+                        or any(keyword in name for keyword in ['UsePrivacyMode', 'PrepareKeyRequest'])
+                        or (not target and re.match(r'^[a-z]+$', name) and args >= 6)
+                ):
+                    selected[name] = {'name': name, 'address': hex(int(func['@ENTRY_POINT'], 16) - addr_base)}
+            return selected
+        except Exception:
+            pass
+        raise ValueError('Failed to extract functions from Ghidra')
+
+    def enumerate_processes(self) -> dict:
+        """
+        Lists processes running on the device, returning a mapping of process names to PIDs.
+        """
+        # https://github.com/frida/frida/issues/2593
+        # Iterate through lines starting from the second line (skipping header)
+        processes = {}
+        for line in subprocess.getoutput(f'adb -s "{self.device.id}" shell ps').splitlines()[1:]:
+            try:
+                line = line.split()  # USER,PID,PPID,VSZ,RSS,WCHAN,ADDR,S,NAME
+                name = ' '.join(line[8:]).strip()
+                name = name if name.startswith('[') else Path(name).name
+                processes[name] = int(line[1])
+            except Exception:
+                pass
+
+        return processes
+
+    def _prepare_vendor_api(self, force: bool = False) -> int:
+        """
+        Determines the most compatible vendor API version based on device processes.
+        """
+        if force:
+            self.logger.warning('Using default vendor due to force flag')
+            return self.sdk_api
+
+        # Check if forcing is not enabled and enumerate processes
         details: [int] = []
-        for p in self.device.enumerate_processes():
-            for k, v in Vendor.SDK_VERSIONS.items():
-                if p.name == v[2]:
-                    session: Session = self.device.attach(p.name)
-                    script: Script = session.create_script(self.script)
-                    script.load()
-                    if script.exports_sync.getlibrary(v[3]):
-                        details.append(k)
-                    session.detach()
+        processes = self.enumerate_processes()
+        for k, v in Vendor.SDK_VERSIONS.items():
+            pid = processes.get(v[2])
+            if pid:
+                self.logger.debug('Analysing... (%s)', v[2])
+                session: Session = self.device.attach(pid)
+                script: Script = session.create_script(self.script)
+                script.load()
+                if script.exports_sync.getlibrary(v[3]):
+                    details.append(k)
+                session.detach()
 
-        if not details:
-            return Vendor.from_sdk_api(self.sdk_api)
+        # If no compatible versions found
+        if details:
+            # Find the closest SDK version to the current one, preferring lower matches in case of a tie.
+            sdk_api = min(details, key=lambda x: abs(x - self.sdk_api))
 
-        # Find the closest SDK version to the current one, preferring lower matches in case of a tie.
-        sdk_api = min(details, key=lambda x: abs(x - self.sdk_api))
-        if sdk_api == Vendor.SDK_MAX and self.sdk_api > Vendor.SDK_MAX:
-            sdk_api = self.sdk_api
-        elif sdk_api != self.sdk_api:
-            self.logger.warning('Non-default Widevine version for SDK %s', sdk_api)
+            # Adjust SDK version if it exceeds the maximum supported version
+            if sdk_api == Vendor.SDK_MAX and self.sdk_api > Vendor.SDK_MAX:
+                sdk_api = self.sdk_api
+            elif sdk_api != self.sdk_api:
+                self.logger.warning('Using non-default Widevine version for SDK %s', sdk_api)
 
-        return Vendor.from_sdk_api(sdk_api)
+            return sdk_api
+
+        raise EnvironmentError('Unable to detect Widevine, see: https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#drm-info')
 
     def _process_message(self, message: dict, data: bytes) -> None:
         """
@@ -206,11 +253,11 @@ class Cdm:
         else:
             self.logger.warning('Failed to intercept the private key')
 
-    def hook_process(self, process: Process) -> bool:
+    def hook_process(self, pid: int) -> bool:
         """
         Hooks into the specified process to intercept DRM keys.
         """
-        session: Session = self.device.attach(process.name)
+        session: Session = self.device.attach(pid)
         script: Script = session.create_script(self.script)
         script.on('message', self._process_message)
         script.load()
@@ -218,5 +265,13 @@ class Cdm:
         library_info = script.exports_sync.getlibrary(self.vendor.library)
         if library_info:
             self.logger.info('Library: %s (%s)', library_info['name'], library_info['path'])
+
+            # Check if Ghidra XML functions loaded
+            if self.sdk_api > 33:
+                if not self.functions:
+                    raise AttributeError('For SDK API > 33, specifying "functions" is required, see: https://github.com/hyugogirubato/KeyDive/blob/main/docs/FUNCTIONS.md')
+            elif self.functions:
+                self.logger.warning('The "functions" attribute is deprecated for SDK API < 34')
+
             return script.exports_sync.hooklibrary(library_info['name'])
         return False

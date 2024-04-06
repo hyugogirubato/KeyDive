@@ -82,7 +82,6 @@ const hookLibrary = (name) => {
             'name': symbol.name,
             'address': ptr(parseInt(symbol.address, 16) + parseInt(library.base, 16))
         }));
-        print(Level.INFO, 'Successfully imported functions');
     } else {
         functions = [...library.enumerateExports(), ...library.enumerateImports()];
         target = functions.find(func => OEM_CRYPTO_API.includes(func.name));

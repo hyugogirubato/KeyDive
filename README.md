@@ -3,7 +3,8 @@
 KeyDive is a sophisticated Python script designed for the precise extraction of Widevine L3 DRM (Digital Rights Management) keys from Android devices. This tool leverages the capabilities of the Widevine CDM (Content Decryption Module) to facilitate the recovery of DRM keys, enabling a deeper understanding and analysis of the Widevine L3 DRM implementation across various Android SDK versions.
 
 > [!IMPORTANT]
-> Support for Android 14+ (SDK > 33) is currently under development. Some features may not function as expected on these newer versions.
+> 
+> Support for Android 14+ (SDK > 33) require the use of functions extracted from Ghidra.
 
 ## Features
 
@@ -44,15 +45,17 @@ This sequence ensures that the DRM-protected content is active and ready for key
 ### Command-Line Options
 
 ```shell
-usage: keydive.py [-h] [--device DEVICE] [--functions FUNCTIONS]
+usage: keydive.py [-h] [-d DEVICE] [-f FUNCTIONS] [--force]
 
 Extract Widevine L3 keys from an Android device.
 
 options:
   -h, --help            show this help message and exit
-  --device DEVICE       Target Android device ID.
-  --functions FUNCTIONS
-                        Ghidra XML functions file.
+  -d DEVICE, --device DEVICE
+                        Target Android device ID.
+  -f FUNCTIONS, --functions FUNCTIONS
+                        Path to Ghidra XML functions file.
+  --force               Force using the default vendor (skipping analysis).
 
 ```
 
