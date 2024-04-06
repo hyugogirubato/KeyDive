@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Switched from Frida to ADB for listing processes due to a [Frida issue](https://github.com/frida/frida/issues/2669).
+- Switched from Frida to ADB for listing processes due to a [Frida issue](https://github.com/frida/frida/issues/1225#issuecomment-604181822).
 - Optimized process search to improve performance.
 - Improved error reporting when the Widevine process is not detected.
 
