@@ -56,7 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Optimized analysis logic during the hook process for increased efficiency.
 - Improved script generation process for more reliable and effective hooking.
 
-# [1.0.1] - 2024-03-31
+## [1.0.1] - 2024-03-31
 
 ### Added
 
