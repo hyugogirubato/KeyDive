@@ -23,7 +23,7 @@ class Cdm:
         # Mapping of function names across different API levels (obfuscated names may vary).
         'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd',
         'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
-        'qbjxtubz', 'qkfrcjtw', 'rbhjspoh', 'zgtjmxko'
+        'qbjxtubz', 'qkfrcjtw', 'rbhjspoh', 'zgtjmxko', 'igrqajte'
         # Add more as needed for different versions.
     }
 

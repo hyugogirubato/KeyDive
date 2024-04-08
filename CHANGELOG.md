@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2024-04-08
+
+### Added
+
+- Added a function known from SDK 33 (arm64-v8a).
+
+### Fixed
+
+- Removed import analysis that was causing the JavaScript script to crash.
+
 ## [1.0.4] - 2024-04-06
 
 ### Added
@@ -68,6 +78,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[1.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.5
 [1.0.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.4
 [1.0.3]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.3
 [1.0.2]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.2

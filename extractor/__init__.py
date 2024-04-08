@@ -1,4 +1,4 @@
 from .cdm import *
 from .vendor import *
 
-__version__ = '1.0.4'
+__version__ = '1.0.5'
