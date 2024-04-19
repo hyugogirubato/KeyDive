@@ -63,7 +63,8 @@ class Cdm:
         """
         # https://source.android.com/docs/core/architecture/configuration/add-system-properties?#shell-commands
         properties = {}
-        for line in subprocess.getoutput(f'adb -s "{self.device.id}" shell getprop').splitlines():
+        sp = subprocess.run(f'adb -s "{self.device.id}" shell getprop', capture_output=True)
+        for line in sp.stdout.decode('utf-8').splitlines():
             match = re.match(r'\[(.*?)\]: \[(.*?)\]', line)
             if match:
                 key, value = match.groups()
@@ -135,7 +136,8 @@ class Cdm:
         # https://github.com/frida/frida/issues/1225#issuecomment-604181822
         # Iterate through lines starting from the second line (skipping header)
         processes = {}
-        for line in subprocess.getoutput(f'adb -s "{self.device.id}" shell ps').splitlines()[1:]:
+        sp = subprocess.run(f'adb -s "{self.device.id}" shell ps', capture_output=True)
+        for line in sp.stdout.decode('utf-8').splitlines()[1:]:
             try:
                 line = line.split()  # USER,PID,PPID,VSZ,RSS,WCHAN,ADDR,S,NAME
                 name = ' '.join(line[8:]).strip()

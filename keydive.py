@@ -29,8 +29,8 @@ if __name__ == '__main__':
         logger.info('Version: %s', extractor.__version__)
 
         # Ensure the ADB server is running
-        exitcode, _ = subprocess.getstatusoutput('adb start-server')
-        if exitcode != 0:
+        sp = subprocess.run('adb start-server', capture_output=True)
+        if sp.returncode != 0:
             raise EnvironmentError('ADB is not recognized as an environment variable, see https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#adb-android-debug-bridge')
 
         # Initialize the CDM handler with the specified or default device
