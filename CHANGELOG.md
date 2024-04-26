@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2024-04-26
+
+### Added
+
+- Added `mksrc` script to manually improve Android shell interaction.
+- Added `editor` script for a text editor within the Android shell.
+
+### Changed
+
+- Removed example from the XML functions to prevent misunderstandings.
+- Enhanced the Android shell functionality.
+
+### Fixed
+
+- Fixed encoding issues with ADB commands, addressing issue [#3](https://github.com/hyugogirubato/KeyDive/issues/3).
+
 ## [1.0.5] - 2024-04-08
 
 ### Added
@@ -78,6 +94,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[1.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.6
 [1.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.5
 [1.0.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.4
 [1.0.3]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.3
