@@ -67,7 +67,7 @@ const getLibrary = (name) => {
     } catch (e) {
         return undefined;
     }
-};
+}
 
 // Hooks into specified functions within a library, aiming to extract keys and disable privacy mode.
 const hookLibrary = (name) => {
