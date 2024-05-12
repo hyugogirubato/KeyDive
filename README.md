@@ -42,6 +42,18 @@ Follow these steps to set up KeyDive:
 
 This sequence ensures that the DRM-protected content is active and ready for key extraction by the time the KeyDive script is initiated, optimizing the extraction process.
 
+### Offline Extraction Process
+
+For situations where internet access is limited or unavailable, KeyDive supports an offline extraction mode. This mode allows for the extraction of DRM keys without an active internet connection. Follow these steps to prepare:
+
+1. **Prepare the Android Device:**
+   - Install all necessary dependencies and tools while connected to the internet. Ensure that all software and libraries required by KeyDive are properly configured on the device. This includes making sure the device is fully prepared to handle DRM extraction in an offline environment.
+
+2. **Execute KeyDive in Offline Mode:**
+   - Once all the preparations are complete and the device is disconnected from the internet, run the KeyDive script to extract the Widevine L3 keys. Ensure that the DRM-protected content is ready and available on the device for extraction.
+
+For a detailed step-by-step guide on setting up and executing KeyDive without internet access, please refer to our dedicated document: [Offline Mode Detailed Guide](./docs/Axinom/OFFLINE.md).
+
 ### Command-Line Options
 
 ```shell

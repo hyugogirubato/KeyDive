@@ -4,12 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2024-05-12
+
+### Added
+
+- Added a new function specific to VENDOR 15 based on insights from [videohelp](https://forum.videohelp.com/threads/414104-Impossible-situation-dumping-keys-using-virtual-Android#post2730673).
+- Included a detailed process for extracting keys in offline mode.
+
 ## [1.0.6] - 2024-04-26
 
 ### Added
 
 - Added `mksrc` script to manually improve Android shell interaction.
-- Added `editor` script for a text editor within the Android shell.
 
 ### Changed
 
@@ -94,6 +100,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[1.0.7]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.7
 [1.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.6
 [1.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.5
 [1.0.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.4
