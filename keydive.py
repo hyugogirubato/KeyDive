@@ -29,7 +29,7 @@ if __name__ == '__main__':
         logger.info('Version: %s', extractor.__version__)
 
         # Ensure the ADB server is running
-        sp = subprocess.run('adb start-server', capture_output=True)
+        sp = subprocess.run(['adb', 'start-server'], capture_output=True)
         if sp.returncode != 0:
             raise EnvironmentError('ADB is not recognized as an environment variable, see https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#adb-android-debug-bridge')
 

@@ -77,7 +77,7 @@ For advanced users looking to use custom functions with KeyDive, a comprehensive
 
 ## Temporary Disabling L1 for L3 Extraction
 
-Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/Magisk-Modules-Repo/liboemcryptodisabler) to temporarily disable L1, thereby facilitating L3 key extraction.
+Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hzy132/liboemcryptodisabler) to temporarily disable L1, thereby facilitating L3 key extraction.
 
 ## Credits
 
