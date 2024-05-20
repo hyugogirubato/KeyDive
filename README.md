@@ -63,6 +63,7 @@ Extract Widevine L3 keys from an Android device.
 
 options:
   -h, --help            show this help message and exit
+  -a, --auto            Open Bitmovin\'s demo automatically
   -d DEVICE, --device DEVICE
                         Target Android device ID.
   -f FUNCTIONS, --functions FUNCTIONS

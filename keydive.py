@@ -19,6 +19,7 @@ if __name__ == '__main__':
 
     # Parse command line arguments for device ID
     parser = argparse.ArgumentParser(description='Extract Widevine L3 keys from an Android device.')
+    parser.add_argument('-a', '--auto', required=False, action='store_true', help='Open Bitmovin\'s demo automatically.')
     parser.add_argument('-d', '--device', required=False, type=str, help='Target Android device ID.')
     parser.add_argument('-f', '--functions', required=False, type=Path, help='Path to Ghidra XML functions file.')
     parser.add_argument('--force', required=False, action='store_true', help='Force using the default vendor (skipping analysis).')
@@ -46,6 +47,9 @@ if __name__ == '__main__':
         if not cdm.hook_process(pid=pid):
             raise Exception('Failed to hook into the Widevine process')
         logger.info('Successfully hooked. To test, play a DRM-protected video: https://bitmovin.com/demos/drm')
+
+        if args.auto:
+            subprocess.run(['adb', 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', 'https://bitmovin.com/demos/drm'])
 
         # Keep script running while extracting keys
         while cdm.running:
