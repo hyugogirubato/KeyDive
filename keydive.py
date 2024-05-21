@@ -22,6 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--auto', required=False, action='store_true', help='Open Bitmovin\'s demo automatically.')
     parser.add_argument('-d', '--device', required=False, type=str, help='Target Android device ID.')
     parser.add_argument('-f', '--functions', required=False, type=Path, help='Path to Ghidra XML functions file.')
+    parser.add_argument('-w', '--wvd', required=False, action='store_true', help='Generate WVD')
     parser.add_argument('--force', required=False, action='store_true', help='Force using the default vendor (skipping analysis).')
 
     args = parser.parse_args()
@@ -35,7 +36,7 @@ if __name__ == '__main__':
             raise EnvironmentError('ADB is not recognized as an environment variable, see https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#adb-android-debug-bridge')
 
         # Initialize the CDM handler with the specified or default device
-        cdm = Cdm(device=args.device, functions=args.functions, force=args.force)
+        cdm = Cdm(device=args.device, functions=args.functions, force=args.force, wvd=args.wvd)
 
         # Attempt to locate and identify the Widevine process on the target device
         pid = cdm.enumerate_processes().get(cdm.vendor.process)

@@ -11,6 +11,7 @@ from Cryptodome.PublicKey import RSA
 
 from extractor.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, DrmCertificate, SignedDrmCertificate
 from extractor.vendor import Vendor
+from pywidevine.device import Device, DeviceTypes
 
 SCRIPT_PATH = Path(__file__).parent / 'script.js'
 
@@ -28,7 +29,7 @@ class Cdm:
         # Add more as needed for different versions.
     }
 
-    def __init__(self, device: str = None, functions: Path = None, force: bool = False):
+    def __init__(self, device: str = None, functions: Path = None, force: bool = False, wvd: bool = False):
         self.logger = logging.getLogger('Cdm')
         self.functions = functions
         self.running = True
@@ -36,6 +37,9 @@ class Cdm:
         # Select device based on provided ID or default to the first USB device.
         self.device: Device = frida.get_device(id=device, timeout=5) if device else frida.get_usb_device(timeout=5)
         self.logger.info('Device: %s (%s)', self.device.name, self.device.id)
+
+        # Select if create WVD or not
+        self.wvd = wvd
 
         # Obtain device properties
         self.properties = self._fetch_device_properties()
@@ -252,6 +256,18 @@ class Cdm:
 
             self.logger.info('Dumped client ID: %s', path_client_id)
             self.logger.info('Dumped private key: %s', path_private_key)
+
+            if self.wvd:
+                path_wvd = path / 'device.wvd'
+                Device(
+                    client_id=client_id.SerializeToString(),
+                    private_key=private_key.exportKey('PEM'),
+                    type_=DeviceTypes['ANDROID'],
+                    security_level=3,
+                    flags=None
+                ).dump(path_wvd)
+                self.logger.info('Created WVD: %s', path_wvd)
+
             self.running = False
         else:
             self.logger.warning('Failed to intercept the private key')
