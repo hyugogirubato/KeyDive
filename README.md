@@ -57,16 +57,18 @@ For a detailed step-by-step guide on setting up and executing KeyDive without in
 ### Command-Line Options
 
 ```shell
-usage: keydive.py [-h] [-d DEVICE] [-f FUNCTIONS] [--force]
+usage: keydive.py [-h] [-a] [-d DEVICE] [-f FUNCTIONS] [-w] [--force]
 
 Extract Widevine L3 keys from an Android device.
 
 options:
   -h, --help            show this help message and exit
+  -a, --auto            Open Bitmovin’s demo automatically
   -d DEVICE, --device DEVICE
                         Target Android device ID.
   -f FUNCTIONS, --functions FUNCTIONS
                         Path to Ghidra XML functions file.
+  -w, --wvd             Generate WVD
   --force               Force using the default vendor (skipping analysis).
 
 ```
