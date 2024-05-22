@@ -4,11 +4,35 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] - 2024-05-22
+
+### Added
+
+- Auto mode for opening the Bitmovin DRM player.
+- Additional generation of the .wvd device.
+- Added a function known from SDK 30 (arm64-v8a).
+
+### Fixed
+
+- Support for int device names.
+- Fixed dynamic auto mode.
+
+### Changed
+
+- Renamed JS script.
+- Updated dependency versions.
+- Use pywidevine for the protobuf part.
+
+### New Contributors
+
+- [FoxRefire](https://github.com/FoxRefire)
+
 ## [1.0.7] - 2024-05-12
 
 ### Added
 
-- Added a new function specific to VENDOR 15 based on insights from [videohelp](https://forum.videohelp.com/threads/414104-Impossible-situation-dumping-keys-using-virtual-Android#post2730673).
+- Added a new function specific to VENDOR 15 based on insights
+  from [videohelp](https://forum.videohelp.com/threads/414104-Impossible-situation-dumping-keys-using-virtual-Android#post2730673).
 - Included a detailed process for extracting keys in offline mode.
 
 ## [1.0.6] - 2024-04-26
@@ -48,7 +72,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Switched from Frida to ADB for listing processes due to a [Frida issue](https://github.com/frida/frida/issues/1225#issuecomment-604181822).
+- Switched from Frida to ADB for listing processes due to
+  a [Frida issue](https://github.com/frida/frida/issues/1225#issuecomment-604181822).
 - Optimized process search to improve performance.
 - Improved error reporting when the Widevine process is not detected.
 
@@ -100,6 +125,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[1.0.8]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.8
 [1.0.7]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.7
 [1.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.6
 [1.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.5
