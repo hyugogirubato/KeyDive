@@ -24,7 +24,7 @@ class Cdm:
         'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd',
         'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
         'qbjxtubz', 'qkfrcjtw', 'rbhjspoh', 'zgtjmxko', 'igrqajte',
-        'ofskesua', 'qllcoqcg'
+        'ofskesua', 'qllcoacg'
         # Add more as needed for different versions.
     }
 
