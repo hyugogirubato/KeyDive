@@ -9,11 +9,12 @@ import frida
 from frida.core import Device, Session, Script
 from Cryptodome.PublicKey import RSA
 
-from extractor.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, DrmCertificate, SignedDrmCertificate
-from extractor.vendor import Vendor
 from pywidevine.device import Device, DeviceTypes
+from pywidevine.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, DrmCertificate, SignedDrmCertificate
 
-SCRIPT_PATH = Path(__file__).parent / 'script.js'
+from extractor.vendor import Vendor
+
+PARENT = Path(__file__).parent
 
 
 class Cdm:
@@ -86,7 +87,7 @@ class Cdm:
         """
         Prepares the Frida hook script, injecting dynamic content like SDK API and selected functions.
         """
-        content = SCRIPT_PATH.read_text(encoding='utf-8')
+        content = (PARENT / 'keydive.js').read_text(encoding='utf-8')
         selected = self._select_functions() if self.functions else {}
 
         # Replace placeholders in script template
@@ -246,7 +247,7 @@ class Cdm:
 
         private_key = self.keys.get(key_id)
         if private_key:
-            path = Path() / 'device' / self.device.name / 'private_keys' / str(drm_certificate.system_id) / str(key_id)[:10]
+            path = Path() / 'device' / str(self.device.name) / 'private_keys' / str(drm_certificate.system_id) / str(key_id)[:10]
             path.mkdir(parents=True, exist_ok=True)
             path_client_id = path / 'client_id.bin'
             path_private_key = path / 'private_key.pem'
@@ -262,7 +263,7 @@ class Cdm:
                 Device(
                     client_id=client_id.SerializeToString(),
                     private_key=private_key.exportKey('PEM'),
-                    type_=DeviceTypes['ANDROID'],
+                    type_=DeviceTypes.ANDROID,
                     security_level=3,
                     flags=None
                 ).dump(path_wvd)
