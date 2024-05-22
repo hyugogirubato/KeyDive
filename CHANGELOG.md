@@ -12,16 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Additional generation of the .wvd device.
 - Added a function known from SDK 30 (arm64-v8a).
 
-### Fixed
-
-- Support for int device names.
-- Fixed dynamic auto mode.
-
 ### Changed
 
 - Renamed JS script.
 - Updated dependency versions.
 - Use pywidevine for the protobuf part.
+
+### Fixed
+
+- Support for int device names.
+- Fixed dynamic auto mode.
 
 ### New Contributors
 
