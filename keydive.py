@@ -50,7 +50,10 @@ if __name__ == '__main__':
         logger.info('Successfully hooked. To test, play a DRM-protected video: https://bitmovin.com/demos/drm')
 
         if args.auto:
-            subprocess.run(['adb', '-s', cdm.device.id, 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', 'https://bitmovin.com/demos/drm'])
+            logger.info('Starting DRM player launch process...')
+            sp = subprocess.run(['adb', '-s', cdm.device.id, 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', 'https://bitmovin.com/demos/drm'], capture_output=True)
+            if sp.returncode != 0:
+                logger.error('Error launching DRM player: %s' % sp.stdout.decode('utf-8').strip())
 
         # Keep script running while extracting keys
         while cdm.running:
