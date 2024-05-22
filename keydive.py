@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--auto', required=False, action='store_true', help='Open Bitmovin\'s demo automatically.')
     parser.add_argument('-d', '--device', required=False, type=str, help='Target Android device ID.')
     parser.add_argument('-f', '--functions', required=False, type=Path, help='Path to Ghidra XML functions file.')
-    parser.add_argument('-w', '--wvd', required=False, action='store_true', help='Generate WVD')
+    parser.add_argument('-w', '--wvd', required=False, action='store_true', help='Generate WVD.')
     parser.add_argument('--force', required=False, action='store_true', help='Force using the default vendor (skipping analysis).')
 
     args = parser.parse_args()
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         logger.info('Successfully hooked. To test, play a DRM-protected video: https://bitmovin.com/demos/drm')
 
         if args.auto:
-            subprocess.run(['adb', 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', 'https://bitmovin.com/demos/drm'])
+            subprocess.run(['adb', '-s', cdm.device.id, 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', 'https://bitmovin.com/demos/drm'])
 
         # Keep script running while extracting keys
         while cdm.running:
