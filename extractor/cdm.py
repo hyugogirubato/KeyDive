@@ -3,6 +3,7 @@ import logging
 import re
 import subprocess
 from pathlib import Path
+from zlib import crc32
 
 import xmltodict
 import frida
@@ -11,6 +12,7 @@ from Cryptodome.PublicKey import RSA
 
 from pywidevine.device import Device, DeviceTypes
 from pywidevine.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, DrmCertificate, SignedDrmCertificate
+from unidecode import unidecode
 
 from extractor.vendor import Vendor
 
@@ -259,15 +261,30 @@ class Cdm:
             self.logger.info('Dumped private key: %s', path_private_key)
 
             if self.wvd:
-                path_wvd = path / 'device.wvd'
-                Device(
+                # https://github.com/devine-dl/pywidevine/blob/master/pywidevine/main.py#L211
+                client_info = {}
+                for entry in client_id.client_info:
+                    client_info[entry.name] = entry.value
+
+                device = Device(
                     client_id=client_id.SerializeToString(),
                     private_key=private_key.exportKey('PEM'),
                     type_=DeviceTypes.ANDROID,
                     security_level=3,
                     flags=None
-                ).dump(path_wvd)
-                self.logger.info('Created WVD: %s', path_wvd)
+                )
+                wvd_bin = device.dumps()
+
+                name = f"{client_info['company_name']} {client_info['model_name']}"
+                if client_info.get('widevine_cdm_version'):
+                    name += f" {client_info['widevine_cdm_version']}"
+                name += f" {crc32(wvd_bin).to_bytes(4, 'big').hex()}"
+
+                name = unidecode(name.strip().lower().replace(' ', '_'))
+                out_path = path / f'{name}_{device.system_id}_l{device.security_level}.wvd'
+
+                out_path.write_bytes(data=wvd_bin)
+                self.logger.info('Created WVD: %s', out_path)
 
             self.running = False
         else:
