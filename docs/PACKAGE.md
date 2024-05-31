@@ -16,7 +16,7 @@ A file manager for root users, offering access to the entire Android file system
 ### [Firefox](https://apkcombo.com/fr/firefox/org.mozilla.firefox/)
 A free and open-source web browser for Android, used for downloading files, testing DRM content playback, and other web-related tasks during research.
 
-### [liboemcrypto Disabler](https://github.com/Magisk-Modules-Repo/liboemcryptodisabler)
+### [liboemcrypto Disabler](https://github.com/hzy132/liboemcryptodisabler)
 A Magisk module that disables the OEMCrypto service, responsible for L1 DRM protection, forcing devices to fallback to L3 protection and enabling the extraction of L3 keys.
 
 ### [MagiskFrida](https://github.com/ViRb3/magisk-frida)
