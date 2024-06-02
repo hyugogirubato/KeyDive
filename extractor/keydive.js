@@ -140,9 +140,9 @@ const prepareKeyRequest = (address) => {
             } else if ([24, 25, 26, 27, 28, 29, 30].includes(SDK_API)) {
                 index = 4;
             } else if ([34].includes(SDK_API)) {
-                index = 6;
+                index = 5; // Possibly value 5 too, depending on the architecture
             } else {
-                index = 6; // Default index assignment
+                index = 5; // Default index assignment
                 print(Level.WARNING, 'SDK API not implemented');
                 print(Level.WARNING, `Defaulting to args[${index}] for PrepareKeyRequest`);
             }
