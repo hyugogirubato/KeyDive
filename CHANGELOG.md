@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] - 2024-06-02
+
+### Added
+
+- Added autostart error message.
+- Added private key function (30/arm64-v8a).
+- Added private key function (34/arm64-v8a)
+
+### Changed
+
+- Changed `.wvd` filename to original filename.
+- Updated liboemcrypto-disabler link in docs.
+
+### Fixed
+
+- Changed default index for vendor 34.
+
 ## [1.0.8] - 2024-05-22
 
 ### Added
@@ -125,6 +142,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[1.0.9]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.9
 [1.0.8]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.8
 [1.0.7]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.7
 [1.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.6
