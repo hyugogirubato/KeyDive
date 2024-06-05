@@ -249,7 +249,7 @@ class Cdm:
 
         private_key = self.keys.get(key_id)
         if private_key:
-            path = Path() / 'device' / str(self.device.name) / 'private_keys' / str(drm_certificate.system_id) / str(key_id)[:10]
+            path = Path() / 'device' / str(self.device.name.strip().lower().replace(' ', '_')) / 'private_keys' / str(drm_certificate.system_id) / str(key_id)[:10]
             path.mkdir(parents=True, exist_ok=True)
             path_client_id = path / 'client_id.bin'
             path_private_key = path / 'private_key.pem'
