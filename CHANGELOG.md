@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2024-06-22
+
+### Added
+
+- Implemented a system to filter potentially crash-inducing native C function names.
+
+### Changed
+
+- Support for custom library names for new versions.
+
+### Fixed
+
+- Corrected directory structure creation for devices.
+
+### New Contributors
+
+- [azimabid00](https://github.com/azimabid00)
+
 ## [1.0.9] - 2024-06-02
 
 ### Added
@@ -142,6 +160,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[1.1.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.1.0
 [1.0.9]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.9
 [1.0.8]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.8
 [1.0.7]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.7
