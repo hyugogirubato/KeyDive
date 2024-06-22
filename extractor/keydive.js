@@ -7,6 +7,7 @@
 // Placeholder values dynamically replaced at runtime.
 const SDK_API = parseInt('${SDK_API}', 10);
 const OEM_CRYPTO_API = JSON.parse('${OEM_CRYPTO_API}');
+const NATIVE_C_API = JSON.parse('${NATIVE_C_API}');
 const SYMBOLS = JSON.parse('${SYMBOLS}');
 
 
@@ -78,15 +79,18 @@ const hookLibrary = (name) => {
     let functions, target;
     if (SYMBOLS.length > 0) {
         functions = SYMBOLS.map(symbol => ({
-            'type': 'function',
-            'name': symbol.name,
-            'address': ptr(parseInt(symbol.address, 16) + parseInt(library.base, 16))
+            type: 'function',
+            name: symbol.name,
+            address: ptr(parseInt(symbol.address, 16) + parseInt(library.base, 16))
         }));
     } else {
         functions = library.enumerateExports();
         // functions = [...library.enumerateExports(), ...library.enumerateImports()];
         target = functions.find(func => OEM_CRYPTO_API.includes(func.name));
     }
+
+    // Remove native C functions
+    functions = functions.filter(func => !NATIVE_C_API.includes(func.name));
 
     let hookedCount = 0;
     functions.forEach((func) => {
