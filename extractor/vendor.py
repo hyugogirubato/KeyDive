@@ -11,6 +11,7 @@ class Vendor:
     """
     # https://developer.android.com/tools/releases/platforms
     SDK_VERSIONS = {
+        # 34: (18, '18.0.0', 'android.hardware.drm-service.widevine-v17', 'android.hardware.drm-service.widevine-v17'),
         34: (18, '18.0.0', 'android.hardware.drm-service.widevine', 'android.hardware.drm-service.widevine'),
         33: (17, '17.0.0', 'android.hardware.drm-service.widevine', 'libwvaidl.so'),
         32: (16, '16.1.0', 'android.hardware.drm@1.4-service.widevine', 'libwvhidl.so'),
