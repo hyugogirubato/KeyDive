@@ -14,6 +14,8 @@ from pywidevine.device import Device, DeviceTypes
 from pywidevine.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, DrmCertificate, SignedDrmCertificate
 from unidecode import unidecode
 
+from extractor.constants import Native
+from extractor.uils import sanitize
 from extractor.vendor import Vendor
 
 PARENT = Path(__file__).parent
@@ -96,6 +98,7 @@ class Cdm:
         replacements = {
             '${SDK_API}': str(self.sdk_api),
             '${OEM_CRYPTO_API}': json.dumps(list(self.OEM_CRYPTO_API)),
+            '${NATIVE_C_API}': json.dumps([v for i in list(Native) for v in i.value]),
             '${SYMBOLS}': json.dumps(list(selected.values())),
         }
 
@@ -168,15 +171,17 @@ class Cdm:
         details: [int] = []
         processes = self.enumerate_processes()
         for k, v in Vendor.SDK_VERSIONS.items():
-            pid = processes.get(v[2])
-            if pid:
-                self.logger.debug('Analysing... (%s)', v[2])
-                session: Session = self.device.attach(pid)
-                script: Script = session.create_script(self.script)
-                script.load()
-                if script.exports_sync.getlibrary(v[3]):
-                    details.append(k)
-                session.detach()
+            # https://github.com/hyugogirubato/KeyDive/issues/14#issuecomment-2146788792
+            for name, pid in processes.items():
+                if v[2] in name:
+                    self.logger.debug('Analysing... (%s)', v[2])
+                    session: Session = self.device.attach(pid)
+                    script: Script = session.create_script(self.script)
+                    script.load()
+                    if script.exports_sync.getlibrary(v[3]):
+                        details.append(k)
+                    session.detach()
+                    break
 
         # If no compatible versions found
         if details:
@@ -249,7 +254,9 @@ class Cdm:
 
         private_key = self.keys.get(key_id)
         if private_key:
-            path = Path() / 'device' / str(self.device.name.strip().lower().replace(' ', '_')) / 'private_keys' / str(drm_certificate.system_id) / str(key_id)[:10]
+            path = Path() / 'device' / sanitize(str(self.device.name)) / 'private_keys' / str(drm_certificate.system_id) / str(key_id)[:10]
+            # https://github.com/hyugogirubato/KeyDive/issues/14#issuecomment-2146958022
+            path = sanitize(path)
             path.mkdir(parents=True, exist_ok=True)
             path_client_id = path / 'client_id.bin'
             path_private_key = path / 'private_key.pem'
