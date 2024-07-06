@@ -170,7 +170,6 @@ const GetCertificatePrivateKey = (address, name) => {
                     const bytes = new Uint8Array(buffer);
                     // Check for DER encoding markers for the beginning of a private key (MII).
                     if (bytes[0] === 0x30 && bytes[1] === 0x82) {
-                        /*
                         let key = bytes;
                         try {
                             // Fixing key size
@@ -180,10 +179,9 @@ const GetCertificatePrivateKey = (address, name) => {
                         } catch (e) {
                             print(Level.ERROR, `${e.message} (${address})`);
                         }
-                         */
                         print(Level.DEBUG, `[*] GetCertificatePrivateKey: ${name}`);
                         !OEM_CRYPTO_API.includes(name) && print(Level.WARNING, `The function "${name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.`);
-                        send('private_key', bytes);
+                        send('private_key', key);
                     }
                 }
             }
