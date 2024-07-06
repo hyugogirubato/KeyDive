@@ -6,6 +6,7 @@ from typing import Union
 from zlib import crc32
 
 from Cryptodome.PublicKey import RSA
+from Cryptodome.PublicKey.RSA import RsaKey
 from pywidevine import Device
 from pywidevine.device import DeviceTypes
 from pywidevine.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, SignedDrmCertificate, DrmCertificate
@@ -41,7 +42,7 @@ class Cdm:
         self.logger = logging.getLogger(self.__class__.__name__)
         # https://github.com/devine-dl/pywidevine
         self.client_id: dict[int, ClientIdentification] = {}
-        self.private_key: dict[int, RSA] = {}
+        self.private_key: dict[int, RsaKey] = {}
 
     def __client_info(self, client_id: ClientIdentification) -> dict:
         """
