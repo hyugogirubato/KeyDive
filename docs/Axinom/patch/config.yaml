@@ -1,0 +1,26 @@
+keystore:
+  algo: RSA
+  alias: Axinom_DRM_DEMO
+  meta:
+    common_name: Axinom
+    country: EE
+    locality: Tartu
+    organization: Axinom
+    organizational_unit: Front-End
+    state: Tartumaa
+  password: Axinom_PASSWORD
+  sign: SHA-256
+  size: 2048
+  validity: 9125
+metadata:
+  input: axinom.apk
+  output: axinom_signed.apk
+  source: https://github.com/Axinom/drm-sample-player-android
+  version: '202211021'
+patch:
+  assets/samplelist.json:
+  - - null
+    - samplelist.json
+  com/axinom/drm/sample/activity/SampleChooserActivity.smali:
+  - - SampleChooserActivity.smali
+    - null

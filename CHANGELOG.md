@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2024-07-06
+
+### Added
+
+- Support for custom library names.
+- Patch for the `GetCdmClientPropertySet` function to enforce unencrypted challenges on specific devices.
+- Hook for the `getOemcryptoDeviceId` function for compatible devices.
+- Native C API filter to prevent crashes during hooks.
+- Handling of a binary challenge file to aid in resolving client IDs.
+- Optional verbosity with output files if specified.
+- Process watcher for library resolution, primarily for older devices.
+
+### Changed
+
+- Removed display of OEM and library version as they were often incorrect.
+- New patch method (rewriting) to enforce unencrypted challenges.
+- Widevine detection method now based on process names.
+- Program no longer stops when the function file is not used when normally required.
+- Full path display of the library (instead of parent only).
+- Program is now formatted as a library.
+- Simplified symbol address resolution.
+- New, more relevant output structure.
+- Private key size is no longer recalculated.
+
+### Fixed
+
+- Dynamic detection of the argument position for challenges.
+- Corrected path for extracted files.
+- Backward-compatible support for listing all processes via ADB.
+- Fixed automatic mode device usage.
+- Support for parsing errors related to CDM data.
+- Frida session closure after process analysis.
+
 ## [1.1.0] - 2024-06-22
 
 ### Added
@@ -160,6 +193,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.0.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.0
 [1.1.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.1.0
 [1.0.9]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.9
 [1.0.8]: https://github.com/hyugogirubato/KeyDive/releases/tag/v1.0.8

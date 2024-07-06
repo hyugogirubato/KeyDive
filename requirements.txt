@@ -1,8 +1,0 @@
-frida~=16.2.5
-pathlib~=1.0.1
-coloredlogs~=15.0.1
-pycryptodomex~=3.20.0
-xmltodict~=0.13.0
-PyYAML~=6.0.1
-Flask~=3.0.3
-pywidevine~=1.8.0
