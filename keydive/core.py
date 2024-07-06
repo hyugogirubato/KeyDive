@@ -203,6 +203,8 @@ class Core:
         """
         try:
             session: Session = self.device.attach(pid, persist_timeout=timeout)
+        except frida.ServerNotRunningError as e:
+            raise EnvironmentError('Frida server is not running') from e
         except Exception as e:
             self.logger.error(e)
             return False
