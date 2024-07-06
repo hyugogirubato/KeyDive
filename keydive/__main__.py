@@ -79,7 +79,7 @@ def main() -> None:
     opt_cdm = parser.add_argument_group('Cdm options')
     opt_cdm.add_argument('-a', '--auto', required=False, action='store_true', help='Automatically open Bitmovin\'s demo.')
     opt_cdm.add_argument('-c', '--challenge', required=False, type=Path, metavar='<file>', help='Path to unencrypted challenge for extracting client ID.')
-    opt_cdm.add_argument('-w', '--wvd', required=False, action='store_true', help='Generate WVD.')
+    opt_cdm.add_argument('-w', '--wvd', required=False, action='store_true', help='Generate a pywidevine WVD device file.')
     opt_cdm.add_argument('-o', '--output', required=False, type=Path, default=Path('device'), metavar='<dir>', help='Output directory path for extracted data.')
     opt_cdm.add_argument('-f', '--functions', required=False, type=Path, metavar='<file>', help='Path to Ghidra XML functions file.')
     args = parser.parse_args()
