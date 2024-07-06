@@ -110,7 +110,7 @@ CDM_VENDOR_API = {
     }
 }
 
-# https://developer.android.com/tools/releases/platforms
+# https://developers.google.com/widevine
 CDM_FUNCTION_API = {
     'UsePrivacyMode',
     'GetCdmClientPropertySet',
