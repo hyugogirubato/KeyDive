@@ -105,7 +105,7 @@ def main() -> None:
             cdm.set_challenge(data=args.challenge)
 
         # Initialize Core instance for interacting with the device
-        core = Core(cdm=cdm, device=args.device, symbols=args.functions)
+        core = Core(cdm=cdm, device=args.device, functions=args.functions)
 
         # Process watcher loop
         logger.info('Watcher delay: %ss' % args.delay)

@@ -18,14 +18,14 @@ class Core:
     Core class for handling DRM operations and device interactions.
     """
 
-    def __init__(self, cdm: Cdm, device: str = None, symbols: Path = None):
+    def __init__(self, cdm: Cdm, device: str = None, functions: Path = None):
         """
         Initializes a Core instance.
 
         Args:
             cdm (Cdm): Instance of Cdm for managing DRM related operations.
             device (str, optional): ID of the Android device to connect to via ADB. Defaults to None (uses USB device).
-            symbols (Path, optional): Path to Ghidra XML functions file for symbol extraction. Defaults to None.
+            functions (Path, optional): Path to Ghidra XML functions file for symbol extraction. Defaults to None.
         """
         self.logger = logging.getLogger(self.__class__.__name__)
         self.running = True
@@ -37,11 +37,12 @@ class Core:
 
         # Obtain device properties
         properties = self.device_properties()
-        self.logger.info('SDK API: %s', properties['ro.build.version.sdk'])
+        self.sdk_api = properties['ro.build.version.sdk']
+        self.logger.info('SDK API: %s', self.sdk_api)
         self.logger.info('ABI CPU: %s', properties['ro.product.cpu.abi'])
 
         # Load the hook script
-        self.symbols = self.__prepare_symbols(symbols)
+        self.functions = functions
         self.script = self.__prepare_hook_script()
         self.logger.info('Script loaded successfully')
 
@@ -53,12 +54,13 @@ class Core:
             str: The prepared script content.
         """
         content = Path(__file__).with_name('keydive.js').read_text()
+        symbols = self.__prepare_symbols(self.functions)
 
         # Replace placeholders in script template
         replacements = {
             '${OEM_CRYPTO_API}': json.dumps(list(OEM_CRYPTO_API)),
             '${NATIVE_C_API}': json.dumps(list(NATIVE_C_API)),
-            '${SYMBOLS}': json.dumps(self.symbols)
+            '${SYMBOLS}': json.dumps(symbols)
         }
 
         for placeholder, value in replacements.items():
@@ -222,9 +224,9 @@ class Core:
             self.logger.info('Library: %s (%s)', library['name'], library['path'])
 
             # Check if Ghidra XML functions loaded
-            if vendor.oem > 17 and not self.symbols:
+            if vendor.oem > 17 and not self.functions:
                 self.logger.warning('For OEM API > 17, specifying "functions" is required, refer to https://github.com/hyugogirubato/KeyDive/blob/main/docs/FUNCTIONS.md')
-            elif vendor.oem < 18 and self.symbols:
+            elif vendor.oem < 18 and self.functions:
                 self.logger.warning('The "functions" attribute is deprecated for OEM API < 18')
 
             return script.exports_sync.hooklibrary(vendor.name)
