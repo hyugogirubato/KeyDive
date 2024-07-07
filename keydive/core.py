@@ -188,8 +188,6 @@ class Core:
             self.cdm.set_private_key(data=data)
         elif level == 'client_id':
             self.cdm.set_client_id(data=data)
-        else:
-            self.logger.warning('Malformed message: %s -> %s' % (level, data))
 
     def hook_process(self, pid: int, vendor: Vendor, timeout: int = 0) -> bool:
         """
