@@ -53,7 +53,7 @@ class Core:
         Returns:
             str: The prepared script content.
         """
-        content = Path(__file__).with_name('keydive.js').read_text()
+        content = Path(__file__).with_name('keydive.js').read_text(encoding='utf-8')
         symbols = self.__prepare_symbols(self.functions)
 
         # Replace placeholders in script template
