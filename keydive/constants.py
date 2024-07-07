@@ -82,32 +82,31 @@ OEM_CRYPTO_API = {
     # Add more as needed for different versions.
 }
 
-# TODO: Add minimum required sdk
 CDM_VENDOR_API = {
     'mediaserver': {
-        Vendor(11, '1.0', 'libwvdrmengine.so')  # 23
+        Vendor(23, 11, '1.0', 'libwvdrmengine.so')
     },
     'mediadrmserver': {
-        Vendor(11, '1.0', 'libwvdrmengine.so')  # 24
+        Vendor(24, 11, '1.0', 'libwvdrmengine.so')
     },
     'android.hardware.drm@1.0-service.widevine': {
-        Vendor(13, '5.1.0', 'libwvhidl.so')  # 26
+        Vendor(26, 13, '5.1.0', 'libwvhidl.so')
     },
     'android.hardware.drm@1.1-service.widevine': {
-        Vendor(14, '14.0.0', 'libwvhidl.so')  # 28
+        Vendor(28, 14, '14.0.0', 'libwvhidl.so')
     },
     'android.hardware.drm@1.2-service.widevine': {
-        Vendor(15, '15.0.0', 'libwvhidl.so')  # 29
+        Vendor(29, 15, '15.0.0', 'libwvhidl.so')
     },
     'android.hardware.drm@1.3-service.widevine': {
-        Vendor(16, '16.0.0', 'libwvhidl.so')  # 30
+        Vendor(30, 16, '16.0.0', 'libwvhidl.so')
     },
     'android.hardware.drm@1.4-service.widevine': {
-        Vendor(16, '16.1.0', 'libwvhidl.so')  # 31
+        Vendor(31, 16, '16.1.0', 'libwvhidl.so')
     },
     'android.hardware.drm-service.widevine': {
-        Vendor(17, '17.0.0', 'libwvaidl.so'),  # 33
-        Vendor(18, '18.0.0', 'android.hardware.drm-service.widevine')  # 34
+        Vendor(33, 17, '17.0.0', 'libwvaidl.so'),
+        Vendor(34, 18, '18.0.0', 'android.hardware.drm-service.widevine')
     }
 }
 

@@ -1,17 +1,19 @@
 class Vendor:
     """
-    Represents a Vendor with OEM, version, and name attributes.
+    Represents a Vendor with SDK, OEM, version, and name attributes.
     """
 
-    def __init__(self, oem: int, version: str, name: str):
+    def __init__(self, sdk: int, oem: int, version: str, name: str):
         """
         Initializes a Vendor instance.
 
         Args:
-            oem (int): The OEM identifier.
-            version (str): The version of the vendor.
-            name (str): The name of the vendor.
+            sdk (int): Minimum SDK version required.
+            oem (int): OEM identifier.
+            version (str): Version of the vendor.
+            name (str): Name of the vendor.
         """
+        self.sdk = sdk
         self.oem = oem
         self.version = version
         self.name = name
