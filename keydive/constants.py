@@ -84,31 +84,31 @@ OEM_CRYPTO_API = {
 }
 
 CDM_VENDOR_API = {
-    'mediaserver': {
+    'mediaserver': [
         Vendor(23, 11, '1.0', 'libwvdrmengine.so')
-    },
-    'mediadrmserver': {
+    ],
+    'mediadrmserver': [
         Vendor(24, 11, '1.0', 'libwvdrmengine.so')
-    },
-    'android.hardware.drm@1.0-service.widevine': {
+    ],
+    'android.hardware.drm@1.0-service.widevine': [
         Vendor(26, 13, '5.1.0', 'libwvhidl.so')
-    },
-    'android.hardware.drm@1.1-service.widevine': {
+    ],
+    'android.hardware.drm@1.1-service.widevine': [
         Vendor(28, 14, '14.0.0', 'libwvhidl.so')
-    },
-    'android.hardware.drm@1.2-service.widevine': {
+    ],
+    'android.hardware.drm@1.2-service.widevine': [
         Vendor(29, 15, '15.0.0', 'libwvhidl.so')
-    },
-    'android.hardware.drm@1.3-service.widevine': {
+    ],
+    'android.hardware.drm@1.3-service.widevine': [
         Vendor(30, 16, '16.0.0', 'libwvhidl.so')
-    },
-    'android.hardware.drm@1.4-service.widevine': {
+    ],
+    'android.hardware.drm@1.4-service.widevine': [
         Vendor(31, 16, '16.1.0', 'libwvhidl.so')
-    },
-    'android.hardware.drm-service.widevine': {
+    ],
+    'android.hardware.drm-service.widevine': [
         Vendor(33, 17, '17.0.0', 'libwvaidl.so'),
         Vendor(34, 18, '18.0.0', 'android.hardware.drm-service.widevine')
-    }
+    ]
 }
 
 # https://developers.google.com/widevine
