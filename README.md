@@ -58,7 +58,7 @@ For a detailed step-by-step guide on setting up and executing KeyDive without in
 ### Command-Line Options
 
 ```shell
-usage: __main__.py [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-a] [-c <file>] [-w] [-o <dir>] [-f <file>]
+usage: keydive [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-a] [-c <file>] [-w] [-o <dir>] [-f <file>]
 
 Extract Widevine L3 keys from an Android device.
 
