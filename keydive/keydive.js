@@ -1,5 +1,5 @@
 /**
- * Date: 2024-06-30
+ * Date: 2024-07-07
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -133,7 +133,7 @@ const PrepareKeyRequest = (address) => {
 
             // https://github.com/hyugogirubato/KeyDive/issues/13#issue-2327487249
             this.params = [];
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 7; i++) {
                 this.params.push(args[i]);
             }
         },
