@@ -76,7 +76,7 @@ class Cdm:
             license_request.ParseFromString(signed_message.msg)
 
             client_id: ClientIdentification = license_request.client_id
-            self.set_client_id(data=client_id.SerializeToString())
+            self.set_client_id(data=client_id)
         except Exception as e:
             self.logger.error('Error parsing challenge: %s', e)
 
