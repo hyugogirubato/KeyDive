@@ -107,17 +107,6 @@ def main() -> None:
         # Initialize Core instance for interacting with the device
         core = Core(cdm=cdm, device=args.device, functions=args.functions)
 
-        # Map process keys to their compatible CDM vendors
-        cdm_vendor = {}
-        for key, vendors in CDM_VENDOR_API.items():
-            for vendor in vendors:
-                # Check if vendor's SDK matches the core's SDK or the previous version
-                if vendor.sdk in (core.sdk_api, core.sdk_api - 1):
-                    cdm_vendor.setdefault(key, []).append(vendor)
-
-        if not cdm_vendor:
-            raise NotImplementedError('SDK version is not supported.')
-
         # Process watcher loop
         logger.info('Watcher delay: %ss' % args.delay)
         current = None
@@ -126,7 +115,7 @@ def main() -> None:
             processes = {
                 key: (name, pid)
                 for name, pid in core.enumerate_processes().items()
-                for key in cdm_vendor.keys() if key in name
+                for key in CDM_VENDOR_API.keys() if key in name
             }
 
             if not processes:
@@ -147,7 +136,7 @@ def main() -> None:
                 for key, (name, pid) in processes.items():
                     if current:
                         break
-                    for vendor in cdm_vendor[key]:
+                    for vendor in CDM_VENDOR_API[key]:
                         if core.hook_process(pid=pid, vendor=vendor):
                             logger.info('Process: %s (%s)', pid, name)
                             current = pid
