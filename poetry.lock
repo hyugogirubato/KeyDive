@@ -238,24 +238,24 @@ reference = "localpypi"
 
 [[package]]
 name = "frida"
-version = "16.4.1"
+version = "16.4.2"
 description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "frida-16.4.1-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:095d3d4b224f86d72472568ed6f2a44564bd7412783a785148cc766fc7cfcc68"},
-    {file = "frida-16.4.1-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:11afd9a4b6c5bbe6a295c7d60271af578d0ec0024a196851498dfd3a75e8d55d"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux1_i686.whl", hash = "sha256:25f15e41bfc1b647ccab1b03ece46d2eccd8ad2150cfa77c1a20e1f7c6077f02"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:005b557081e87d7e7da32ba82e2db7d959c6d3b22600d0c510851dbd9481f2b2"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:0b69455642e6423f8794817045485e25e62c860867672b8c20b58314ccf619c8"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux2014_armv7l.whl", hash = "sha256:3e6ff9575208d0cc151c6bbed2f0265f3f0b4f10911b0434069eb0354622e0d4"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux_2_17_aarch64.whl", hash = "sha256:4bfd7dc350aae3d46f9e06a5cb49651ce796ac9b3db08338917cccdc36660ba0"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux_2_17_armv7l.whl", hash = "sha256:774583b492fe73e0199bc9d49fadb5c2d0332f0c77b076efa888d4995ad26a60"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux_2_5_i686.whl", hash = "sha256:473cd7fea8e80973553a79ca6c11d070ffe79f3bc7a2f03696cc80d22b6525e1"},
-    {file = "frida-16.4.1-cp37-abi3-manylinux_2_5_x86_64.whl", hash = "sha256:e0f073aef8974530b693f750615b289088538796b27198faf81780e1fdc6c040"},
-    {file = "frida-16.4.1-cp37-abi3-win32.whl", hash = "sha256:4569057c02064fb7cd6d790469631e3c56f49e0a62bb4045d6d13cb76a05ede4"},
-    {file = "frida-16.4.1-cp37-abi3-win_amd64.whl", hash = "sha256:ff8f82f4518ef4335d2d2dcf6de9c57a656aae50aa5ca272bb0d53b403a00a62"},
-    {file = "frida-16.4.1.tar.gz", hash = "sha256:c76e22323a80d4f9d22c0813c690ef956e6d55add223cbc533892e045a19e955"},
+    {file = "frida-16.4.2-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:dce52c90de65a798213e06ee47b9cc4f0867beebc30dba57e18a2049e14ee48e"},
+    {file = "frida-16.4.2-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:5836e3c7aec8c343b6214ae0ba24a7f93b682d91d2f8f1081486d0e6e05b650d"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux1_i686.whl", hash = "sha256:cb8f7e3f5a59412bedec778f02b5c3ae97496e53208464136e9aa2259104c43b"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:4f23120df6699959ef841bb8857567b0448ca51ba6f379e7ea28192bc69be5fb"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:ea5d725d5cb9ace25e6937188f0bf8e3cfb4f9808996b221fe935c2e3eaad0e1"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux2014_armv7l.whl", hash = "sha256:b89cbdc35fe8965df33c65a6cd2caeb79df995400cb2d6b71b355d44100c56eb"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux_2_17_aarch64.whl", hash = "sha256:a70df120e7489539028156dd4f205a62746408271f9cc3a9aa74732f7351f1c3"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux_2_17_armv7l.whl", hash = "sha256:5ee53c1aa8be45eabb63cac773b715e14556eda424f604fd475c8303b95fc4a5"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux_2_5_i686.whl", hash = "sha256:f8ab7df238a07d002d7a6e9a206e0218e4608367d8cf005997c5137e81892571"},
+    {file = "frida-16.4.2-cp37-abi3-manylinux_2_5_x86_64.whl", hash = "sha256:706cf50fb558addd1bf1de905ce20675a1b67179b61e811a933e9f12628476dc"},
+    {file = "frida-16.4.2-cp37-abi3-win32.whl", hash = "sha256:bf47aebd923efb12957c8b550b6519f5451d4bb3b2961541c2ed9cebefacb4f7"},
+    {file = "frida-16.4.2-cp37-abi3-win_amd64.whl", hash = "sha256:d962ad9ccaa31fa88240918159660e761f820634337b340490192017b16d4eb4"},
+    {file = "frida-16.4.2.tar.gz", hash = "sha256:b0807db6d0430053a70bc5abdf2a335f3c248d7cccb59cce49caeed30dc7f4b3"},
 ]
 
 [package.dependencies]
@@ -839,4 +839,4 @@ reference = "localpypi"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "0976c2b2ac220d7a9dc2b0d17acd15c0d6e012e8d5c2eded1c63ae0346e59a74"
+content-hash = "a6a66434c23f0d151b89f96d1d56e885705e40e1be8b39d6a3bdfe6045bb28f3"
