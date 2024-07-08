@@ -145,7 +145,7 @@ def main() -> None:
                             raise KeyboardInterrupt
 
                 if current:
-                    logger.info('Successfully hooked.')
+                    logger.info('Successfully hooked')
                     if args.auto:
                         logger.info('Starting DRM player launch process...')
                         sp = subprocess.run(['adb', '-s', str(core.device.id), 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', 'https://bitmovin.com/demos/drm'], capture_output=True)
