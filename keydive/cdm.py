@@ -1,3 +1,4 @@
+import base64
 import json
 import logging
 import re
@@ -7,9 +8,9 @@ from zlib import crc32
 
 from Cryptodome.PublicKey import RSA
 from Cryptodome.PublicKey.RSA import RsaKey
-from pywidevine import Device
-from pywidevine.device import DeviceTypes
-from pywidevine.license_protocol_pb2 import SignedMessage, LicenseRequest, ClientIdentification, SignedDrmCertificate, DrmCertificate
+from pywidevine.device import Device, DeviceTypes
+from pywidevine.license_protocol_pb2 import (SignedMessage, LicenseRequest, ClientIdentification, SignedDrmCertificate,
+                                             DrmCertificate, EncryptedClientIdentification)
 from unidecode import unidecode
 
 
@@ -56,6 +57,28 @@ class Cdm:
         """
         return {e.name: e.value for e in client_id.client_info}
 
+    def __encrypted_client_info(self, encrypted_client_id: EncryptedClientIdentification) -> dict:
+        """
+        Converts encrypted client identification information to a dictionary.
+
+        Args:
+            encrypted_client_id (EncryptedClientIdentification): The encrypted client identification.
+
+        Returns:
+            dict: A dictionary of encrypted client information.
+        """
+        content = {
+            'providerId': encrypted_client_id.provider_id,
+            'serviceCertificateSerialNumber': encrypted_client_id.service_certificate_serial_number,
+            'encryptedClientId': encrypted_client_id.encrypted_client_id,
+            'encryptedClientIdIv': encrypted_client_id.encrypted_client_id_iv,
+            'encryptedPrivacyKey': encrypted_client_id.encrypted_privacy_key
+        }
+        return {
+            k: base64.b64encode(v).decode('utf-8') if isinstance(v, bytes) else v
+            for k, v in content.items()
+        }
+
     def set_challenge(self, data: Union[Path, bytes]) -> None:
         """
         Sets the challenge data by extracting device information.
@@ -75,8 +98,14 @@ class Cdm:
             license_request = LicenseRequest()
             license_request.ParseFromString(signed_message.msg)
 
-            client_id: ClientIdentification = license_request.client_id
-            self.set_client_id(data=client_id)
+            # https://integration.widevine.com/diagnostics
+            encrypted_client_id: EncryptedClientIdentification = license_request.encrypted_client_id
+            if encrypted_client_id.SerializeToString():
+                self.logger.debug('Receive encrypted client id: \n\n%s\n', json.dumps(self.__encrypted_client_info(encrypted_client_id), indent=2))
+                self.logger.warning('The client ID of the challenge is encrypted')
+            else:
+                client_id: ClientIdentification = license_request.client_id
+                self.set_client_id(data=client_id)
         except Exception as e:
             self.logger.debug('Failed to set challenge data: %s', e)
 
