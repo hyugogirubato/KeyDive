@@ -85,6 +85,9 @@ class Cdm:
 
         Args:
             data (Union[Path, bytes]): The challenge data as a file path or bytes.
+
+        Raises:
+            FileNotFoundError: If the provided file path does not exist.
         """
         if isinstance(data, Path):
             if not data.is_file():
