@@ -1,5 +1,5 @@
 /**
- * Date: 2024-07-07
+ * Date: 2024-07-08
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -88,6 +88,27 @@ const getFunctions = (library) => {
     } catch (e) {
         print(Level.CRITICAL, e.message);
         return [];
+    }
+}
+
+const disableLibrary = (name) => {
+    // Disables all functions in the specified library by replacing their implementations.
+    const library = getLibrary(name);
+    if (library) {
+        const functions = getFunctions(library);
+        functions.forEach(func => {
+            if (func.type !== 'function') return;
+            try {
+                Interceptor.replace(func.address, new NativeCallback(function () {
+                    return 0;
+                }, 'int', []));
+            } catch (e) {
+                print(Level.ERROR, `${e.message} for ${func.name}`);
+            }
+        });
+        print(Level.INFO, `The ${name} library has been disabled`);
+    } else {
+        print(Level.DEBUG, `The ${name} library was not found`);
     }
 }
 
@@ -287,6 +308,8 @@ const hookLibrary = (name) => {
         return false;
     }
 
+    // https://github.com/hzy132/liboemcryptodisabler/blob/master/customize.sh#L33
+    disableLibrary('liboemcrypto.so');
     return true;
 }
 
