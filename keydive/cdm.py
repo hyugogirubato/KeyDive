@@ -86,12 +86,12 @@ class Cdm:
         Args:
             data (Union[Path, bytes]): The challenge data as a file path or bytes.
         """
-        try:
-            if isinstance(data, Path):
-                if not data.is_file():
-                    raise FileNotFoundError(data)
-                data = data.read_bytes()
+        if isinstance(data, Path):
+            if not data.is_file():
+                raise FileNotFoundError(data)
+            data = data.read_bytes()
 
+        try:
             signed_message = SignedMessage()
             signed_message.ParseFromString(data)
 
