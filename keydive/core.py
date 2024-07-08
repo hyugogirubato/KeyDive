@@ -37,8 +37,7 @@ class Core:
 
         # Obtain device properties
         properties = self.device_properties()
-        self.sdk_api = properties['ro.build.version.sdk']
-        self.logger.info('SDK API: %s', self.sdk_api)
+        self.logger.info('SDK API: %s', properties['ro.build.version.sdk'])
         self.logger.info('ABI CPU: %s', properties['ro.product.cpu.abi'])
 
         # Load the hook script
