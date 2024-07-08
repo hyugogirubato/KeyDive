@@ -78,7 +78,7 @@ class Cdm:
             client_id: ClientIdentification = license_request.client_id
             self.set_client_id(data=client_id)
         except Exception as e:
-            self.logger.warning('Failed to set challenge data: %s', e)
+            self.logger.debug('Failed to set challenge data: %s', e)
 
     def set_private_key(self, data: bytes) -> None:
         """
@@ -93,7 +93,7 @@ class Cdm:
                 self.logger.debug('Receive private key: \n\n%s\n', key.exportKey('PEM').decode('utf-8'))
             self.private_key[key.n] = key
         except Exception as e:
-            self.logger.warning('Failed to set private key: %s', e)
+            self.logger.debug('Failed to set private key: %s', e)
 
     def set_client_id(self, data: Union[ClientIdentification, bytes]) -> None:
         """
@@ -122,7 +122,7 @@ class Cdm:
                 self.logger.debug('Receive client id: \n\n%s\n', json.dumps(self.__client_info(client_id), indent=2))
             self.client_id[key.n] = client_id
         except Exception as e:
-            self.logger.warning('Failed to set client ID: %s', e)
+            self.logger.debug('Failed to set client ID: %s', e)
 
     def export(self, parent: Path, wvd: bool = False) -> bool:
         """
