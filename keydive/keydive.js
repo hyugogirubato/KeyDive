@@ -275,11 +275,11 @@ const hookLibrary = (name) => {
 
     functions = functions.filter(f => !NATIVE_C_API.includes(f.name));
     const targets = functions.filter(f => OEM_CRYPTO_API.includes(f.name)).map(f => f.name);
-    let hooked = 0;
+    const hooked = [];
 
     functions.forEach(func => {
-        if (func.type !== 'function') return;
         const {name: funcName, address: funcAddr} = func;
+        if (func.type !== 'function' || hooked.includes(funcAddr)) return;
 
         try {
             if (funcName.includes('UsePrivacyMode')) {
@@ -296,14 +296,14 @@ const hookLibrary = (name) => {
                 return;
             }
 
-            hooked++;
+            hooked.push(funcAddr);
             print(Level.DEBUG, `Hooked (${funcAddr}): ${funcName}`);
         } catch (e) {
             print(Level.ERROR, `${e.message} for ${funcName}`);
         }
     });
 
-    if (hooked < 3) {
+    if (hooked.length < 3) {
         print(Level.CRITICAL, 'Insufficient functions hooked.');
         return false;
     }
