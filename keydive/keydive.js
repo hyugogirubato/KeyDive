@@ -106,7 +106,7 @@ const disableLibrary = (name) => {
                 print(Level.ERROR, `${e.message} for ${func.name}`);
             }
         });
-        print(Level.INFO, `The ${name} library has been disabled`);
+        print(Level.INFO, `The ${library.name} (${library.address}) library has been disabled`);
     } else {
         print(Level.DEBUG, `The ${name} library was not found`);
     }
@@ -180,8 +180,8 @@ const PrepareKeyRequest = (address) => {
     });
 }
 
-const LoadDRMPrivateKey = (address, name) => {
-    // wvcdm::CryptoSession::LoadDRMPrivateKey
+const LoadDeviceRSAKey = (address, name) => {
+    // wvcdm::OEMCrypto::LoadDeviceRSAKey
     Interceptor.attach(address, {
         onEnter: function (args) {
             if (!args[6].isNull()) {
@@ -200,7 +200,7 @@ const LoadDRMPrivateKey = (address, name) => {
                         } catch (e) {
                             print(Level.ERROR, `${e.message} (${address})`);
                         }
-                        print(Level.DEBUG, `[*] LoadDRMPrivateKey: ${name}`);
+                        print(Level.DEBUG, `[*] LoadDeviceRSAKey: ${name}`);
                         !OEM_CRYPTO_API.includes(name) && print(Level.WARNING, `The function "${name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.`);
                         send('private_key', key);
                     }
@@ -291,7 +291,7 @@ const hookLibrary = (name) => {
             } else if (funcName.includes('getOemcryptoDeviceId')) {
                 GetDeviceId(funcAddr);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
-                LoadDRMPrivateKey(funcAddr, funcName);
+                LoadDeviceRSAKey(funcAddr, funcName);
             } else {
                 return;
             }
