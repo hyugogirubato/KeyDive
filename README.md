@@ -2,18 +2,19 @@
 
 KeyDive is a sophisticated Python script designed for precise extraction of Widevine L3 DRM (Digital Rights Management) keys from Android devices. This tool leverages the capabilities of the Widevine CDM (Content Decryption Module) to facilitate the recovery of DRM keys, enabling a deeper understanding and analysis of the Widevine L3 DRM implementation across various Android SDK versions.
 
-> [!IMPORTANT]
-> 
-> Support for OEM API 18+ (SDK > 33) require the use of functions extracted from Ghidra.
+> [!IMPORTANT]  
+> Support for OEM API 18+ (SDK > 33) requires the use of functions extracted from Ghidra.
 
 ## Features
 
-- **Automated extraction** of Widevine L3 DRM keys.
-- Compatibility with a wide range of Android versions (SDK > 22), ensuring broad applicability.
-- Seamless extraction process, yielding essential DRM components such as the `client_id.bin` for device identification and the `private_key.pem` for the RSA private key.
-- **Offline extraction mode** for situations without internet access.
-- Command-line options for flexibility in usage.
-- Support for custom functions extracted from Widevine libraries using Ghidra.
+- 🚀 Seamless Installation via [pip](#installation)
+- 🔄 Automated extraction of Widevine L3 DRM keys.
+- 📱 Compatibility with a wide range of Android versions (SDK > 22), ensuring broad applicability.
+- 💾 Seamless extraction process, yielding essential DRM components such as the `client_id.bin` and `private_key.pem`.
+- 🌐 Offline extraction mode for environments without internet access.
+- 🖥️ Command-line options for flexible usage.
+- 🛠️ Support for custom functions extracted from Widevine libraries using Ghidra.
+- ❤️ Fully Open-Source! Pull Requests Welcome
 
 ## Prerequisites
 
@@ -38,22 +39,10 @@ Follow these steps to set up KeyDive:
 2. Launch the KeyDive script.
 3. Reload the DRM-protected video on your device.
 4. The script will automatically extract the Widevine L3 keys, saving them as follows:
-   - `client_id.bin` - This file contains device identification information.
-   - `private_key.pem` - This file contains the RSA private key.
+    - `client_id.bin` - This file contains device identification information.
+    - `private_key.pem` - This file contains the RSA private key for decryption.
 
 This sequence ensures that the DRM-protected content is active and ready for key extraction by the time the KeyDive script is initiated, optimizing the extraction process.
-
-### Offline Extraction Process
-
-For situations where internet access is limited or unavailable, KeyDive supports an offline extraction mode. This mode allows for the extraction of DRM keys without an active internet connection. Follow these steps to prepare:
-
-1. **Prepare the Android Device:**
-   - Install all necessary dependencies and tools while connected to the internet. Ensure that all software and libraries required by KeyDive are properly configured on the device. This includes making sure the device is fully prepared to handle DRM extraction in an offline environment.
-
-2. **Execute KeyDive in Offline Mode:**
-   - Once all the preparations are complete and the device is disconnected from the internet, run the KeyDive script to extract the Widevine L3 keys. Ensure that the DRM-protected content is ready and available on the device for extraction.
-
-For a detailed step-by-step guide on setting up and executing KeyDive without internet access, please refer to our dedicated document: [Offline Mode Detailed Guide](./docs/axinom/OFFLINE.md).
 
 ### Command-Line Options
 
@@ -86,22 +75,45 @@ Cdm options:
 
 ```
 
-### Extracting Functions for Advanced Usage
+## Advanced Usage
 
-For advanced users looking to use custom functions with KeyDive, a comprehensive guide on extracting functions from Widevine libraries using Ghidra is available. Please refer to our [Functions Extraction Guide](./docs/FUNCTIONS.md) for detailed instructions.
+### Extracting Functions
 
-## Temporary Disabling L1 for L3 Extraction
+For advanced users looking to use custom functions with KeyDive, a comprehensive guide on extracting functions from Widevine libraries using Ghidra is available. Please refer to our [Functions Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/FUNCTIONS.md) for detailed instructions.
+
+### Offline Extraction
+
+KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/Axinom/OFFLINE.md) for step-by-step instructions.
+
+### Obtaining Unencrypted Challenge Data
+
+To extract the unencrypted challenge data required for KeyDive's advanced features, follow the steps outlined in our [Challenge Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/CHALLENGE.md). This data is crucial for analyzing DRM-protected content and enhancing your DRM key extraction capabilities.
+
+### Temporary Disabling L1 for L3 Extraction
+
+> [!NOTE]  
+> Usage of the module is now deprecated because the deactivation of the library was natively added.
 
 Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#liboemcrypto-disabler) to temporarily disable L1, thereby facilitating L3 key extraction.
-
-## Credits
-
-Special thanks to the original developers and contributors who have made KeyDive possible. This tool is the culmination of collaborative efforts, research, and a deep understanding of DRM technologies.
 
 ## Disclaimer
 
 KeyDive is intended for educational and research purposes only. The use of this tool in unauthorized testing of protected content is strictly prohibited. Please ensure you have permission before proceeding with DRM key extraction.
 
----
+## Contributors
 
-By using KeyDive, you acknowledge and agree to the terms of use and disclaimer stated above.
+<a href="https://github.com/hyugogirubato"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/65763543?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="hyugogirubato"/></a>
+<a href="https://github.com/FoxRefire"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/155989196?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="FoxRefire"/></a>
+<a href="https://github.com/azimabid00"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/110490898?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="azimabid00"/></a>
+
+## Licensing
+
+This software is licensed under the terms of [MIT License](https://github.com/hyugogirubato/KeyDive/blob/main/LICENSE).  
+You can find a copy of the license in the LICENSE file in the root folder.
+
+* * * 
+
+© hyugogirubato 2024
+
+
+
