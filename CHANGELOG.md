@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.6] - 2024-07-12
+
+### Changed
+
+- Renamed the private key function.
+- Updated the device ID function.
+- Improved the deactivation message for a library.
+
+### Fixed
+
+- Prevented multiple function replacements during a single execution.
+
 ## [2.0.5] - 2024-07-08
 
 ### Added
@@ -260,6 +272,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.6
 [2.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.5
 [2.0.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.4
 [2.0.3]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.3
