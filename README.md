@@ -87,11 +87,14 @@ KeyDive supports offline extraction mode for situations without internet access.
 
 ### Obtaining Unencrypted Challenge Data
 
+> [!NOTE]  
+> Usage of unencrypted challenge is not required by default. It is only necessary when the script cannot extract the client id.
+
 To extract the unencrypted challenge data required for KeyDive's advanced features, follow the steps outlined in our [Challenge Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/CHALLENGE.md). This data is crucial for analyzing DRM-protected content and enhancing your DRM key extraction capabilities.
 
 ### Temporary Disabling L1 for L3 Extraction
 
-> [!NOTE]  
+> [!WARNING]  
 > Usage of the module is now deprecated because the deactivation of the library was natively added.
 
 Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#liboemcrypto-disabler) to temporarily disable L1, thereby facilitating L3 key extraction.
