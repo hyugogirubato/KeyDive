@@ -42,7 +42,7 @@ A software reverse engineering (SRE) framework developed by the National Securit
 
 ### Additional Tips
 
-- **Native liboemcrypto Handling:** As of the latest updates to KeyDive, manage liboemcrypto directly within the `keydive.js` script using the `disableLibrary` function. This eliminates the need for the liboemcrypto Disabler Magisk module in many cases, streamlining the setup process and reducing dependencies.
+- **Native liboemcrypto Handling:** As of the latest updates to KeyDive, it manages liboemcrypto directly within the `keydive.js` script using the `disableLibrary` function. This eliminates the need for the liboemcrypto Disabler Magisk module in many cases, streamlining the setup process and reducing dependencies.
 - **Optimize Frida server Usage:** To optimize the performance of Frida server, ensure that it is compatible with your device's architecture and that you have the appropriate permissions set on the device. Running it as a background process (`adb shell /data/local/tmp/frida-server -D`) ensures that it remains active during your research sessions without interruptions.
 
 The combination of these tools provides a comprehensive toolkit for DRM research, allowing for the exploration of digital content protection mechanisms on Android devices. Each tool has been selected for its ability to contribute to the setup, execution, or support of the KeyDive project, enabling detailed analysis and extraction of digital rights management keys.
