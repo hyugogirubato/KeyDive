@@ -180,8 +180,8 @@ const PrepareKeyRequest = (address) => {
     });
 }
 
-const GetCertificatePrivateKey = (address, name) => {
-    // wvcdm::CryptoSession::GetCertificatePrivateKey
+const LoadDRMPrivateKey = (address, name) => {
+    // wvcdm::CryptoSession::LoadDRMPrivateKey
     Interceptor.attach(address, {
         onEnter: function (args) {
             if (!args[6].isNull()) {
@@ -200,7 +200,7 @@ const GetCertificatePrivateKey = (address, name) => {
                         } catch (e) {
                             print(Level.ERROR, `${e.message} (${address})`);
                         }
-                        print(Level.DEBUG, `[*] GetCertificatePrivateKey: ${name}`);
+                        print(Level.DEBUG, `[*] LoadDRMPrivateKey: ${name}`);
                         !OEM_CRYPTO_API.includes(name) && print(Level.WARNING, `The function "${name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.`);
                         send('private_key', key);
                     }
@@ -291,7 +291,7 @@ const hookLibrary = (name) => {
             } else if (funcName.includes('getOemcryptoDeviceId')) {
                 GetDeviceId(funcAddr);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
-                GetCertificatePrivateKey(funcAddr, funcName);
+                LoadDRMPrivateKey(funcAddr, funcName);
             } else {
                 return;
             }
