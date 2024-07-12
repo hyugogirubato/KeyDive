@@ -181,7 +181,7 @@ const PrepareKeyRequest = (address) => {
 }
 
 const LoadDeviceRSAKey = (address, name) => {
-    // wvcdm::OEMCrypto::LoadDeviceRSAKey
+    // wvdash::OEMCrypto::LoadDeviceRSAKey
     Interceptor.attach(address, {
         onEnter: function (args) {
             if (!args[6].isNull()) {
@@ -233,22 +233,22 @@ const getKeyLength = (key) => {
     return pos + lengthValue;
 }
 
-const GetDeviceId = (address, name) => {
-    // wvcdm::Properties::GetCdmClientPropertySet
+const GetDeviceID = (address, name) => {
+    // wvdash::OEMCrypto::GetDeviceID
     Interceptor.attach(address, {
         onEnter: function (args) {
-            print(Level.DEBUG, '[+] onEnter: getOemcryptoDeviceId');
+            print(Level.DEBUG, '[+] onEnter: GetDeviceID');
             this.data = args[0];
             this.size = args[1];
         },
         onLeave: function (retval) {
-            print(Level.DEBUG, '[-] onLeave: getOemcryptoDeviceId');
+            print(Level.DEBUG, '[-] onLeave: GetDeviceID');
             try {
                 const size = Memory.readPointer(this.size).toInt32();
                 const data = Memory.readByteArray(this.data, size);
                 data && send('client_id', data);
             } catch (e) {
-                print(Level.ERROR, `Failed to dump device Id.`);
+                print(Level.ERROR, `Failed to dump device ID.`);
             }
         }
     });
@@ -289,7 +289,7 @@ const hookLibrary = (name) => {
             } else if (funcName.includes('PrepareKeyRequest')) {
                 PrepareKeyRequest(funcAddr);
             } else if (funcName.includes('getOemcryptoDeviceId')) {
-                GetDeviceId(funcAddr);
+                GetDeviceID(funcAddr);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
                 LoadDeviceRSAKey(funcAddr, funcName);
             } else {
