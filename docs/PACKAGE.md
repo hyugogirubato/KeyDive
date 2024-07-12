@@ -40,6 +40,10 @@ A command-line tool for communicating with a device, facilitating actions such a
 
 A software reverse engineering (SRE) framework developed by the National Security Agency (NSA) that helps analyze malicious code and malware, and understand their functionality. Ghidra is essential for decompiling and analyzing the binaries and libraries involved in the DRM mechanisms, offering insights into how they operate and can be interacted with.
 
+### [HTTP Toolkit](https://httptoolkit.com/)
+
+An HTTP and HTTPS traffic debugging and testing tool that intercepts traffic between devices and servers. It provides a user-friendly interface to inspect, manipulate, and analyze HTTP requests and responses, crucial for monitoring DRM-related communications during research.
+
 ### Additional Tips
 
 - **Native liboemcrypto Handling:** As of the latest updates to KeyDive, it manages liboemcrypto directly within the `keydive.js` script using the `disableLibrary` function. This eliminates the need for the liboemcrypto Disabler Magisk module in many cases, streamlining the setup process and reducing dependencies.
