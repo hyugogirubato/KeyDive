@@ -10,7 +10,7 @@ KeyDive is a sophisticated Python script designed for precise extraction of Wide
 - 🚀 Seamless Installation via [pip](#installation)
 - 🔄 Automated extraction of Widevine L3 DRM keys.
 - 📱 Compatibility with a wide range of Android versions (SDK > 22), ensuring broad applicability.
-- 💾 Seamless extraction process, yielding essential DRM components such as the `client_id.bin` and `private_key.pem`.
+- 💾 Seamless extraction process, yielding essential DRM components.
 - 🌐 Offline extraction mode for environments without internet access.
 - 🖥️ Command-line options for flexible usage.
 - 🛠️ Support for custom functions extracted from Widevine libraries using Ghidra.
