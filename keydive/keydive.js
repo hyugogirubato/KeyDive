@@ -106,7 +106,7 @@ const disableLibrary = (name) => {
                 print(Level.ERROR, `${e.message} for ${func.name}`);
             }
         });
-        print(Level.INFO, `The library ${library.name} (${library.address}) has been disabled`);
+        print(Level.INFO, `The library ${library.name} (${library.base}) has been disabled`);
     } else {
         print(Level.DEBUG, `The library ${name} was not found`);
     }
