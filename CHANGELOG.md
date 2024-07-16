@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Fix disabled library address.
-- Fixed multiple hook for library disabler.
+- Fix multiple hook for library disabler.
 
 ### New Contributors
 
