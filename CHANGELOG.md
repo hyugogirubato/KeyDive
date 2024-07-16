@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [2.0.7] - Not released
 
+### Changed
+
+- Updated display of library disabler.
+
 ### Fixed
 
 - Fix disabled library address.
+- Fixed multiple hook for library disabler.
 
 ### New Contributors
 

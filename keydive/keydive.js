@@ -95,20 +95,27 @@ const disableLibrary = (name) => {
     // Disables all functions in the specified library by replacing their implementations.
     const library = getLibrary(name);
     if (library) {
+        // https://github.com/hyugogirubato/KeyDive/issues/23#issuecomment-2230374415
         const functions = getFunctions(library);
+        const disabled = [];
+
         functions.forEach(func => {
-            if (func.type !== 'function') return;
+            const {name: funcName, address: funcAddr} = func;
+            if (func.type !== 'function' || disabled.includes(funcAddr)) return;
+
             try {
-                Interceptor.replace(func.address, new NativeCallback(function () {
+                Interceptor.replace(funcAddr, new NativeCallback(function () {
                     return 0;
                 }, 'int', []));
+
+                disabled.push(funcAddr);
             } catch (e) {
-                print(Level.ERROR, `${e.message} for ${func.name}`);
+                print(Level.DEBUG, `${e.message} for ${funcName}`);
             }
         });
         print(Level.INFO, `The library ${library.name} (${library.base}) has been disabled`);
     } else {
-        print(Level.DEBUG, `The library ${name} was not found`);
+        print(Level.INFO, `The library ${name} was not found`);
     }
 }
 
