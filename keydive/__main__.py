@@ -2,12 +2,14 @@ import argparse
 import logging
 import subprocess
 import time
+
 from datetime import datetime
 from pathlib import Path
 
 import coloredlogs
 
 import keydive
+
 from keydive.cdm import Cdm
 from keydive.constants import CDM_VENDOR_API
 from keydive.core import Core

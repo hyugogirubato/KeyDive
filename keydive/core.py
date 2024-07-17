@@ -2,10 +2,12 @@ import json
 import logging
 import re
 import subprocess
+
 from pathlib import Path
 
 import frida
 import xmltodict
+
 from frida.core import Device, Session, Script
 
 from keydive.cdm import Cdm

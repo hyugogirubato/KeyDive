@@ -2,16 +2,17 @@ import base64
 import json
 import logging
 import re
+
 from pathlib import Path
 from typing import Union
 from zlib import crc32
 
+from unidecode import unidecode
 from Cryptodome.PublicKey import RSA
 from Cryptodome.PublicKey.RSA import RsaKey
 from pywidevine.device import Device, DeviceTypes
 from pywidevine.license_protocol_pb2 import (SignedMessage, LicenseRequest, ClientIdentification, SignedDrmCertificate,
                                              DrmCertificate, EncryptedClientIdentification)
-from unidecode import unidecode
 
 
 def sanitize(path: Path) -> Path:
