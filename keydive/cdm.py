@@ -168,7 +168,7 @@ class Cdm:
         Returns:
             bool: True if any keys were exported, otherwise False.
         """
-        keys = set(self.client_id.keys()) & set(self.private_key.keys())
+        keys = self.client_id.keys() & self.private_key.keys()
         for k in keys:
             client_info = self.__client_info(self.client_id[k])
             # https://github.com/devine-dl/pywidevine/blob/master/pywidevine/main.py#L211
