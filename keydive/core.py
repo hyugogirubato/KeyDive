@@ -151,12 +151,11 @@ class Core:
 
         # https://github.com/frida/frida/issues/1225#issuecomment-604181822
         prompt = ['adb', '-s', str(self.device.id), 'shell', 'ps']
-        sp = subprocess.run([*prompt, '-A'], capture_output=True)
-        if sp.returncode != 0:
-            sp = subprocess.run(prompt, capture_output=True)
-
+        lines = subprocess.run([*prompt, '-A'], capture_output=True).stdout.decode('utf-8').strip().splitlines()
+        if len(lines) <= 1:
+            lines = subprocess.run(prompt, capture_output=True).stdout.decode('utf-8').strip().splitlines()
         # Iterate through lines starting from the second line (skipping header)
-        for line in sp.stdout.decode('utf-8').splitlines()[1:]:
+        for line in lines[1:]:
             try:
                 line = line.split()  # USER,PID,PPID,VSZ,RSS,WCHAN,ADDR,S,NAME
                 name = ' '.join(line[8:]).strip()
