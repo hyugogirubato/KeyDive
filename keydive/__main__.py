@@ -113,6 +113,10 @@ def main() -> None:
         logger.info('Watcher delay: %ss' % args.delay)
         current = None
         while core.running:
+            # Check if for current process data has been exported
+            if current and cdm.export(args.output, args.wvd):
+                raise KeyboardInterrupt
+
             # https://github.com/hyugogirubato/KeyDive/issues/14#issuecomment-2146788792
             processes = {
                 key: (name, pid)
@@ -124,12 +128,9 @@ def main() -> None:
                 raise EnvironmentError('Unable to detect Widevine, refer to https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#drm-info')
 
             # Check if the current process has changed
-            if current:
-                if current not in [v[1] for v in processes.values()]:
-                    logger.warning('Widevine process has changed')
-                    current = None
-                elif cdm.export(args.output, args.wvd):
-                    raise KeyboardInterrupt
+            if current and current not in [v[1] for v in processes.values()]:
+                logger.warning('Widevine process has changed')
+                current = None
 
             # If current process not found, attempt to hook into the detected processes
             if not current:
