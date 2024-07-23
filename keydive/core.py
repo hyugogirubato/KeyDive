@@ -69,7 +69,8 @@ class Core:
 
         return content
 
-    def __prepare_symbols(self, path: Path) -> list:
+    @staticmethod
+    def __prepare_symbols(path: Path) -> list:
         """
         Parses the provided XML functions file to select relevant functions.
 
@@ -151,9 +152,9 @@ class Core:
 
         # https://github.com/frida/frida/issues/1225#issuecomment-604181822
         prompt = ['adb', '-s', str(self.device.id), 'shell', 'ps']
-        lines = subprocess.run([*prompt, '-A'], capture_output=True).stdout.decode('utf-8').strip().splitlines()
-        if len(lines) <= 1:
-            lines = subprocess.run(prompt, capture_output=True).stdout.decode('utf-8').strip().splitlines()
+        lines = subprocess.run([*prompt, '-A'], capture_output=True).stdout.decode('utf-8').splitlines()
+        if len(lines) < 10:
+            lines = subprocess.run(prompt, capture_output=True).stdout.decode('utf-8').splitlines()
         # Iterate through lines starting from the second line (skipping header)
         for line in lines[1:]:
             try:
