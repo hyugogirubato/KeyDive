@@ -238,24 +238,24 @@ reference = "localpypi"
 
 [[package]]
 name = "frida"
-version = "16.4.2"
+version = "16.4.7"
 description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "frida-16.4.2-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:dce52c90de65a798213e06ee47b9cc4f0867beebc30dba57e18a2049e14ee48e"},
-    {file = "frida-16.4.2-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:5836e3c7aec8c343b6214ae0ba24a7f93b682d91d2f8f1081486d0e6e05b650d"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux1_i686.whl", hash = "sha256:cb8f7e3f5a59412bedec778f02b5c3ae97496e53208464136e9aa2259104c43b"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:4f23120df6699959ef841bb8857567b0448ca51ba6f379e7ea28192bc69be5fb"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:ea5d725d5cb9ace25e6937188f0bf8e3cfb4f9808996b221fe935c2e3eaad0e1"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux2014_armv7l.whl", hash = "sha256:b89cbdc35fe8965df33c65a6cd2caeb79df995400cb2d6b71b355d44100c56eb"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux_2_17_aarch64.whl", hash = "sha256:a70df120e7489539028156dd4f205a62746408271f9cc3a9aa74732f7351f1c3"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux_2_17_armv7l.whl", hash = "sha256:5ee53c1aa8be45eabb63cac773b715e14556eda424f604fd475c8303b95fc4a5"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux_2_5_i686.whl", hash = "sha256:f8ab7df238a07d002d7a6e9a206e0218e4608367d8cf005997c5137e81892571"},
-    {file = "frida-16.4.2-cp37-abi3-manylinux_2_5_x86_64.whl", hash = "sha256:706cf50fb558addd1bf1de905ce20675a1b67179b61e811a933e9f12628476dc"},
-    {file = "frida-16.4.2-cp37-abi3-win32.whl", hash = "sha256:bf47aebd923efb12957c8b550b6519f5451d4bb3b2961541c2ed9cebefacb4f7"},
-    {file = "frida-16.4.2-cp37-abi3-win_amd64.whl", hash = "sha256:d962ad9ccaa31fa88240918159660e761f820634337b340490192017b16d4eb4"},
-    {file = "frida-16.4.2.tar.gz", hash = "sha256:b0807db6d0430053a70bc5abdf2a335f3c248d7cccb59cce49caeed30dc7f4b3"},
+    {file = "frida-16.4.7-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:82887e0b76ed6c83ced556abc71ae7b5b441bf6f1d4f8d4077fd2b8aaad96ff0"},
+    {file = "frida-16.4.7-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:a09a551491f67252b002ab729f9abd90c77629f866132be0d42a5e686b99609c"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux1_i686.whl", hash = "sha256:7249a7d91dd8db9c0f4f4963ef03bd7be55cd1c7803643de6978ef065a5ed29c"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:8edb260bed11fe9765e43d1e26144144f7c8545a43da186b4767ba8a7652ff56"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:1cd536313d3ae1bab5c6d462752ee41aab28de892a9c9640c6d48001e68f11b0"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux2014_armv7l.whl", hash = "sha256:7b4d39c618a6c0f2135778089fab01d04f56e22234b20036ff81e40dba84151c"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux_2_17_aarch64.whl", hash = "sha256:b7ca5f8b2dc07d47f1c3dc71816cf3590222ca331fee8a04d721475c125d9bfe"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux_2_17_armv7l.whl", hash = "sha256:ede39a1169971bdaf4b94b0f62a6dc091e9a6361861b0e5f6e478af1dd8cd0e9"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux_2_5_i686.whl", hash = "sha256:9555c511cf5a4fbe0db21281792eac87cc3a45381abe457614ad2a21ce5875c6"},
+    {file = "frida-16.4.7-cp37-abi3-manylinux_2_5_x86_64.whl", hash = "sha256:576599759de2f326ed3f8f26f3f7118517cf25cf1728ec7f86a70f3308778ff3"},
+    {file = "frida-16.4.7-cp37-abi3-win32.whl", hash = "sha256:705a8db36c0588199f459cae712642d4228c113e098c228fed52d5d416595ac7"},
+    {file = "frida-16.4.7-cp37-abi3-win_amd64.whl", hash = "sha256:79212a4fa9ba1dc1f2b951a8fd288b193334e9d0d010937424df4a465124abc3"},
+    {file = "frida-16.4.7.tar.gz", hash = "sha256:0a27cafa405de46796510fbf5846b545ea1b4e21943672e50fe719ea057bfced"},
 ]
 
 [package.dependencies]
@@ -303,13 +303,13 @@ reference = "localpypi"
 
 [[package]]
 name = "importlib-metadata"
-version = "8.0.0"
+version = "8.1.0"
 description = "Read metadata from Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "importlib_metadata-8.0.0-py3-none-any.whl", hash = "sha256:15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f"},
-    {file = "importlib_metadata-8.0.0.tar.gz", hash = "sha256:188bd24e4c346d3f0a933f275c2fec67050326a856b9a359881d7c2a697e8812"},
+    {file = "importlib_metadata-8.1.0-py3-none-any.whl", hash = "sha256:3cd29f739ed65973840b068e3132135ce954c254d48b5b640484467ef7ab3c8c"},
+    {file = "importlib_metadata-8.1.0.tar.gz", hash = "sha256:fcdcb1d5ead7bdf3dd32657bb94ebe9d2aabfe89a19782ddc32da5041d6ebfb4"},
 ]
 
 [package.dependencies]

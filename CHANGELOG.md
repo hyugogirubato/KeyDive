@@ -4,22 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.7] - Not released
+## [2.0.7] - 2024-07-23
 
 ### Changed
 
-- Updated display of library disabler.
-- Optimization of data export.
-- Removing an unnecessary cast.
+- Improved library disabler display.
+- Optimized data export.
+- Removed unnecessary cast.
 
 ### Fixed
 
-- Fix disabled library address.
-- Fix multiple hook for library disabler.
+- Corrected disabled library address.
+- Fixed multiple hooks in library disabler.
+- Enhanced process enumeration for older Android versions.
 
 ### New Contributors
 
 - [JohnDoe1964](https://github.com/JohnDoe1964)
+- [Nineteen93](https://github.com/Nineteen93)
 
 ## [2.0.6] - 2024-07-12
 
@@ -289,6 +291,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.0.7]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.7
 [2.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.6
 [2.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.5
 [2.0.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.4
