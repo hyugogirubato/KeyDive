@@ -6,8 +6,8 @@ import re
 from pathlib import Path
 from typing import Union
 from zlib import crc32
-
 from unidecode import unidecode
+
 from Cryptodome.PublicKey import RSA
 from Cryptodome.PublicKey.RSA import RsaKey
 from pywidevine.device import Device, DeviceTypes
@@ -46,7 +46,8 @@ class Cdm:
         self.client_id: dict[int, ClientIdentification] = {}
         self.private_key: dict[int, RsaKey] = {}
 
-    def __client_info(self, client_id: ClientIdentification) -> dict:
+    @staticmethod
+    def __client_info(client_id: ClientIdentification) -> dict:
         """
         Converts client identification information to a dictionary.
 
@@ -58,7 +59,8 @@ class Cdm:
         """
         return {e.name: e.value for e in client_id.client_info}
 
-    def __encrypted_client_info(self, encrypted_client_id: EncryptedClientIdentification) -> dict:
+    @staticmethod
+    def __encrypted_client_info(encrypted_client_id: EncryptedClientIdentification) -> dict:
         """
         Converts encrypted client identification information to a dictionary.
 
