@@ -83,7 +83,6 @@ OEM_CRYPTO_API = {
     # Add more as needed for different versions.
 }
 
-# TODO: fix support for WSA (android.hardware.drm@1.4-service-lazy.widevine)
 CDM_VENDOR_API = {
     'mediaserver': [
         Vendor(23, 11, '1.0', 'libwvdrmengine.so')
