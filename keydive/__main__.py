@@ -121,7 +121,7 @@ def main() -> None:
             processes = {
                 key: (name, pid)
                 for name, pid in core.enumerate_processes().items()
-                for key in CDM_VENDOR_API.keys() if key in name
+                for key in CDM_VENDOR_API.keys() if key in name or key.replace('-service', '-service-lazy') in name
             }
 
             if not processes:
