@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.8] - 2024-07-27
+
+### Added
+
+- Added compatibility with WSA (Windows Subsystem for Android).
+
+### Changed
+
+- Display location of `liboemcrypto.so` if detected (instead of the base address of the library).
+- Simplified text for disabling the library.
+
+### New Contributors
+
+- [sn-o-w](https://github.com/sn-o-w)
+
 ## [2.0.7] - 2024-07-23
 
 ### Changed
@@ -291,6 +306,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.0.8]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.8
 [2.0.7]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.7
 [2.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.6
 [2.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.5
