@@ -79,7 +79,7 @@ OEM_CRYPTO_API = {
     # Mapping of function names across different API levels (obfuscated names may vary).
     'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd', 'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
     'qbjxtubz', 'qkfrcjtw', 'rbhjspoh', 'zgtjmxko', 'igrqajte', 'ofskesua', 'qllcoacg', 'pukctkiv', 'ehmduqyt',
-    'xftzvkwx', 'gndskkuk', 'wcggmnnx'
+    'xftzvkwx', 'gndskkuk', 'wcggmnnx', 'kaatohcz'
     # Add more as needed for different versions.
 }
 
