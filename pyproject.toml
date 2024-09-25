@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "keydive"
-version = "2.0.8"
+version = "2.0.9"
 description = "Extract Widevine L3 keys from Android devices effortlessly, spanning multiple Android versions for DRM research and education."
 license = "MIT"
 authors = ["hyugogirubato <65763543+hyugogirubato@users.noreply.github.com>"]
@@ -43,6 +43,7 @@ xmltodict = "^0.13.0"
 pywidevine = "^1.8.0"
 PyYAML = "^6.0.1"
 Flask = "^3.0.3"
+pathvalidate = "^3.2.1"
 
 [tool.poetry.scripts]
 keydive = "keydive.__main__:main"
