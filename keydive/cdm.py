@@ -1,37 +1,18 @@
 import base64
 import json
 import logging
-import re
 
 from pathlib import Path
 from typing import Union
 from zlib import crc32
 from unidecode import unidecode
 
+from pathvalidate import sanitize_filepath, sanitize_filename
 from Cryptodome.PublicKey import RSA
 from Cryptodome.PublicKey.RSA import RsaKey
 from pywidevine.device import Device, DeviceTypes
 from pywidevine.license_protocol_pb2 import (SignedMessage, LicenseRequest, ClientIdentification, SignedDrmCertificate,
                                              DrmCertificate, EncryptedClientIdentification)
-
-
-def sanitize(path: Path) -> Path:
-    """
-    Sanitizes the given path by replacing invalid characters.
-
-    Args:
-        path (Path): The path to sanitize.
-
-    Returns:
-        Path: The sanitized path.
-    """
-    paths = [path.name, *[p.name for p in path.parents if p.name]][::-1]
-    for i, p in enumerate(paths):
-        p = p.replace('...', '').strip()
-        p = re.sub(r'[<>:"/|?*\x00-\x1F]', '_', p)
-        paths[i] = p
-
-    return Path().joinpath(*paths)
 
 
 class Cdm:
@@ -183,7 +164,7 @@ class Cdm:
             )
 
             # https://github.com/hyugogirubato/KeyDive/issues/14#issuecomment-2146958022
-            parent = sanitize(parent / client_info['company_name'] / client_info['model_name'] / str(device.system_id) / str(k)[:10])
+            parent = sanitize_filepath(parent / client_info['company_name'] / client_info['model_name'] / str(device.system_id) / str(k)[:10])
             parent.mkdir(parents=True, exist_ok=True)
 
             path_id_bin = parent / 'client_id.bin'
@@ -202,7 +183,7 @@ class Cdm:
                     name += f" {client_info['widevine_cdm_version']}"
                 name += f" {crc32(wvd_bin).to_bytes(4, 'big').hex()}"
                 name = unidecode(name.strip().lower().replace(' ', '_'))
-                path_wvd = parent / f'{name}_{device.system_id}_l{device.security_level}.wvd'
+                path_wvd = parent / sanitize_filename(f'{name}_{device.system_id}_l{device.security_level}.wvd')
 
                 path_wvd.write_bytes(data=wvd_bin)
                 self.logger.info('Exported WVD: %s', path_wvd)
