@@ -33,6 +33,8 @@ class Core:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.running = True
         self.cdm = cdm
+
+        # https://github.com/hyugogirubato/KeyDive/issues/38#issuecomment-2411932679
         self.skip = skip
 
         # Select device based on provided ID or default to the first USB device.
