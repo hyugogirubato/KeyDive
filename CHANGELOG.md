@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Added private key function.
 - Option to Skip automatic detection of private function.
+- Widevine SDK 22 support confirmed.
 
 ## [2.0.9] - 2024-09-25
 

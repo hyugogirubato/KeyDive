@@ -83,8 +83,10 @@ OEM_CRYPTO_API = {
     # Add more as needed for different versions.
 }
 
+# https://developer.android.com/tools/releases/platforms
 CDM_VENDOR_API = {
     'mediaserver': [
+        Vendor(22, 11, '1.0', 'libwvdrmengine.so'),
         Vendor(23, 11, '1.0', 'libwvdrmengine.so')
     ],
     'mediadrmserver': [
