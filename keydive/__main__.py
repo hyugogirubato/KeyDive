@@ -84,6 +84,7 @@ def main() -> None:
     opt_cdm.add_argument('-w', '--wvd', required=False, action='store_true', help='Generate a pywidevine WVD device file.')
     opt_cdm.add_argument('-o', '--output', required=False, type=Path, default=Path('device'), metavar='<dir>', help='Output directory path for extracted data.')
     opt_cdm.add_argument('-f', '--functions', required=False, type=Path, metavar='<file>', help='Path to Ghidra XML functions file.')
+    opt_cdm.add_argument('-s', '--skip', required=False, action='store_true', help='Skip auto-detect of private function.')
     args = parser.parse_args()
 
     if args.version:
@@ -107,7 +108,7 @@ def main() -> None:
             cdm.set_challenge(data=args.challenge)
 
         # Initialize Core instance for interacting with the device
-        core = Core(cdm=cdm, device=args.device, functions=args.functions)
+        core = Core(cdm=cdm, device=args.device, functions=args.functions, skip=args.skip)
 
         # Process watcher loop
         logger.info('Watcher delay: %ss' % args.delay)

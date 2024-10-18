@@ -72,6 +72,7 @@ Cdm options:
                         Output directory path for extracted data.
   -f <file>, --functions <file>
                         Path to Ghidra XML functions file.
+  -s, --skip            Skip auto-detect of private function.
 
 ```
 

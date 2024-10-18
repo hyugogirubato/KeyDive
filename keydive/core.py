@@ -20,7 +20,7 @@ class Core:
     Core class for handling DRM operations and device interactions.
     """
 
-    def __init__(self, cdm: Cdm, device: str = None, functions: Path = None):
+    def __init__(self, cdm: Cdm, device: str = None, functions: Path = None, skip: bool = False):
         """
         Initializes a Core instance.
 
@@ -28,10 +28,12 @@ class Core:
             cdm (Cdm): Instance of Cdm for managing DRM related operations.
             device (str, optional): ID of the Android device to connect to via ADB. Defaults to None (uses USB device).
             functions (Path, optional): Path to Ghidra XML functions file for symbol extraction. Defaults to None.
+            skip (bool, optional): Flag to determine whether to skip predefined functions (e.g., OEM_CRYPTO_API).
         """
         self.logger = logging.getLogger(self.__class__.__name__)
         self.running = True
         self.cdm = cdm
+        self.skip = skip
 
         # Select device based on provided ID or default to the first USB device.
         self.device: Device = frida.get_device(id=device, timeout=5) if device else frida.get_usb_device(timeout=5)
@@ -61,7 +63,8 @@ class Core:
         replacements = {
             '${OEM_CRYPTO_API}': json.dumps(list(OEM_CRYPTO_API)),
             '${NATIVE_C_API}': json.dumps(list(NATIVE_C_API)),
-            '${SYMBOLS}': json.dumps(symbols)
+            '${SYMBOLS}': json.dumps(symbols),
+            '${SKIP}': str(self.skip)
         }
 
         for placeholder, value in replacements.items():
@@ -69,8 +72,7 @@ class Core:
 
         return content
 
-    @staticmethod
-    def __prepare_symbols(path: Path) -> list:
+    def __prepare_symbols(self, path: Path) -> list:
         """
         Parses the provided XML functions file to select relevant functions.
 
@@ -95,7 +97,7 @@ class Core:
             functions = program['FUNCTIONS']['FUNCTION']
 
             # Find a target function from a predefined list
-            target = next((f['@NAME'] for f in functions if f['@NAME'] in OEM_CRYPTO_API), None)
+            target = None if self.skip else next((f['@NAME'] for f in functions if f['@NAME'] in OEM_CRYPTO_API), None)
 
             # Extract relevant functions
             selected = {}
@@ -106,7 +108,7 @@ class Core:
                 # Add function if it matches specific criteria
                 if name not in selected and (
                         name == target
-                        or any(keyword in name for keyword in CDM_FUNCTION_API)
+                        or any(None if self.skip else keyword in name for keyword in CDM_FUNCTION_API)
                         or (not target and re.match(r'^[a-z]+$', name) and args >= 6)
                 ):
                     selected[name] = {

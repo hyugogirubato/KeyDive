@@ -8,6 +8,7 @@
 const OEM_CRYPTO_API = JSON.parse('${OEM_CRYPTO_API}');
 const NATIVE_C_API = JSON.parse('${NATIVE_C_API}');
 const SYMBOLS = JSON.parse('${SYMBOLS}');
+const SKIP = '${SKIP}' === 'True';
 
 
 // Logging levels to synchronize with Python's logging module.
@@ -281,7 +282,7 @@ const hookLibrary = (name) => {
     }
 
     functions = functions.filter(f => !NATIVE_C_API.includes(f.name));
-    const targets = functions.filter(f => OEM_CRYPTO_API.includes(f.name)).map(f => f.name);
+    const targets = SKIP ? [] : functions.filter(f => OEM_CRYPTO_API.includes(f.name)).map(f => f.name);
     const hooked = [];
 
     functions.forEach(func => {
