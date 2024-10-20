@@ -187,10 +187,10 @@ class Core:
             logger.log(level=level, msg=data.decode('utf-8'))
             if level in (logging.FATAL, logging.CRITICAL):
                 self.running = False
+        elif isinstance(level, dict) and 'private_key' in level:
+            self.cdm.set_private_key(data=data, name=level['private_key'])
         elif level == 'challenge':
             self.cdm.set_challenge(data=data)
-        elif level == 'private_key':
-            self.cdm.set_private_key(data=data)
         elif level == 'client_id':
             self.cdm.set_client_id(data=data)
 
