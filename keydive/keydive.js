@@ -1,5 +1,5 @@
 /**
- * Date: 2024-10-18
+ * Date: 2024-10-20
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -209,8 +209,7 @@ const LoadDeviceRSAKey = (address, name) => {
                             print(Level.ERROR, `${e.message} (${address})`);
                         }
                         print(Level.DEBUG, `[*] LoadDeviceRSAKey: ${name}`);
-                        !OEM_CRYPTO_API.includes(name) && print(Level.WARNING, `The function "${name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.`);
-                        send('private_key', key);
+                        send({'private_key': name}, key);
                     }
                 }
             }
@@ -241,7 +240,7 @@ const getKeyLength = (key) => {
     return pos + lengthValue;
 }
 
-const GetDeviceID = (address, name) => {
+const GetDeviceID = (address) => {
     // wvdash::OEMCrypto::GetDeviceID
     Interceptor.attach(address, {
         onEnter: function (args) {
