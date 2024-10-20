@@ -1,11 +1,12 @@
 from keydive.vendor import Vendor
 
+# https://developer.android.com/ndk/guides/cpp-support
 NATIVE_C_API = {
     # STDIO
     'fclose', 'fflush', 'fgetc', 'fgetpos', 'fgets', 'fopen', 'fprintf', 'fputc', 'fputs', 'fread', 'freopen',
     'fscanf', 'fseek', 'fsetpos', 'ftell', 'fwrite', 'getc', 'getchar', 'gets', 'perror', 'printf', 'putc',
     'putchar', 'puts', 'remove', 'rename', 'rewind', 'scanf', 'setbuf', 'setvbuf', 'sprintf', 'sscanf', 'tmpfile',
-    'tmpnam', 'ungetc', 'vfprintf', 'vprintf', 'vsprintf', 'fileno', 'feof', 'ferror',
+    'tmpnam', 'ungetc', 'vfprintf', 'vprintf', 'vsprintf', 'fileno', 'feof', 'ferror', 'snprintf',
     # STDLIB
     'abort', 'abs', 'atexit', 'atof', 'atoi', 'atol', 'bsearch', 'calloc', 'div', 'exit', 'free', 'getenv', 'labs',
     'ldiv', 'malloc', 'mblen', 'mbstowcs', 'mbtowc', 'qsort', 'rand', 'realloc', 'srand', 'strtod', 'strtol',
