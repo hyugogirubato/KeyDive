@@ -14,6 +14,8 @@ from pywidevine.device import Device, DeviceTypes
 from pywidevine.license_protocol_pb2 import (SignedMessage, LicenseRequest, ClientIdentification, SignedDrmCertificate,
                                              DrmCertificate, EncryptedClientIdentification)
 
+from keydive.constants import OEM_CRYPTO_API
+
 
 class Cdm:
     """
@@ -22,6 +24,13 @@ class Cdm:
     """
 
     def __init__(self):
+        """
+        Initializes the Cdm object, setting up a logger and containers for client IDs and private keys.
+
+        Attributes:
+            client_id (dict[int, ClientIdentification]): Stores client identification info mapped by key modulus.
+            private_key (dict[int, RsaKey]): Stores private keys mapped by key modulus.
+        """
         self.logger = logging.getLogger(self.__class__.__name__)
         # https://github.com/devine-dl/pywidevine
         self.client_id: dict[int, ClientIdentification] = {}
@@ -96,17 +105,22 @@ class Cdm:
         except Exception as e:
             self.logger.debug('Failed to set challenge data: %s', e)
 
-    def set_private_key(self, data: bytes) -> None:
+    def set_private_key(self, data: bytes, name: str) -> None:
         """
         Sets the private key from the provided data.
 
         Args:
             data (bytes): The private key data.
+            name (str): The name of the function.
         """
         try:
             key = RSA.import_key(data)
             if key.n not in self.private_key:
                 self.logger.debug('Receive private key: \n\n%s\n', key.exportKey('PEM').decode('utf-8'))
+
+                if name not in OEM_CRYPTO_API:
+                    self.logger.warning(f'The function "{name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.')
+
             self.private_key[key.n] = key
         except Exception as e:
             self.logger.debug('Failed to set private key: %s', e)
