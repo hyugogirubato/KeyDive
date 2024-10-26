@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from keydive.vendor import Vendor
 
 # https://developer.android.com/ndk/guides/cpp-support
@@ -120,4 +122,11 @@ CDM_FUNCTION_API = {
     'GetCdmClientPropertySet',
     'PrepareKeyRequest',
     'getOemcryptoDeviceId'
+}
+
+# https://github.com/kaltura/kaltura-device-info-android
+DRM_PLAYER = {
+    'package': 'com.kaltura.kalturadeviceinfo',
+    'path': Path(__file__).parent.parent / 'docs' / 'server' / 'kaltura.apk',
+    'url': 'https://github.com/kaltura/kaltura-device-info-android/releases/download/t3/kaltura-device-info-release.apk'
 }
