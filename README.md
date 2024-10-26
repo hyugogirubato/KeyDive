@@ -47,32 +47,35 @@ This sequence ensures that the DRM-protected content is active and ready for key
 ### Command-Line Options
 
 ```shell
-usage: keydive [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-a] [-c <file>] [-w] [-o <dir>] [-f <file>]
+usage: keydive [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-o <dir>] [-w] [-s] [-a] [-p] [-f <file>] [--challenge <file>] [--private-key <file>]
 
 Extract Widevine L3 keys from an Android device.
 
 options:
   -h, --help            show this help message and exit
 
-Global options:
+Global:
   -d <id>, --device <id>
-                        Specify the target Android device ID to connect with via ADB.
+                        Specify the target Android device ID for ADB connection.
   -v, --verbose         Enable verbose logging for detailed debug output.
   -l <dir>, --log <dir>
                         Directory to store log files.
-  --delay <delay>       Delay (in seconds) between process checks in the watcher.
+  --delay <delay>       Delay (in seconds) between process checks.
   --version             Display KeyDive version information.
 
-Cdm options:
-  -a, --auto            Automatically open Bitmovin's demo.
-  -c <file>, --challenge <file>
-                        Path to unencrypted challenge for extracting client ID.
-  -w, --wvd             Generate a pywidevine WVD device file.
+Cdm:
   -o <dir>, --output <dir>
-                        Output directory path for extracted data.
+                        Output directory for extracted data.
+  -w, --wvd             Generate a pywidevine WVD device file.
+  -s, --skip            Skip auto-detection of the private function.
+  -a, --auto            Automatically start the Bitmovin web player.
+  -p, --player          Install and start the Kaltura app automatically.
+
+Advanced:
   -f <file>, --functions <file>
                         Path to Ghidra XML functions file.
-  -s, --skip            Skip auto-detect of private function.
+  --challenge <file>    Path to unencrypted challenge for extracting client ID.
+  --private-key <file>  Path to private key for extracting client ID.
 
 ```
 
@@ -84,7 +87,7 @@ For advanced users looking to use custom functions with KeyDive, a comprehensive
 
 ### Offline Extraction
 
-KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/Axinom/OFFLINE.md) for step-by-step instructions.
+KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/server/OFFLINE.md) for step-by-step instructions.
 
 ### Obtaining Unencrypted Challenge Data
 
