@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - Not released
+
+### Added
+
+- Option to import the private key.
+- Option to automatically install and use a player locally.
+- Distribution of arguments in the new `Advanced` group.
+
+### Changed
+
+- Migrating device interactions into the `ADB` class.
+- Added new comments and code optimization.
+
+### Fixed
+
+- Handling shell command errors.
+
 ## [2.1.0] - 2024-10-20
 
 ### Added
@@ -332,6 +349,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.1.1]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.1
 [2.1.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.0
 [2.0.9]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.9
 [2.0.8]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.8
