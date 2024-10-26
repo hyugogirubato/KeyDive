@@ -105,20 +105,28 @@ class Cdm:
         except Exception as e:
             self.logger.debug('Failed to set challenge data: %s', e)
 
-    def set_private_key(self, data: bytes, name: str) -> None:
+    def set_private_key(self, data: Union[Path, bytes], name: str = None) -> None:
         """
         Sets the private key from the provided data.
 
         Args:
-            data (bytes): The private key data.
-            name (str): The name of the function.
+            data (Union[Path, bytes]): The private key data, either as a file path or bytes.
+            name (str, optional): Function name for verification against known functions.
+
+        Raises:
+            FileNotFoundError: If the provided file path does not exist or is not a file.
         """
+        if isinstance(data, Path):
+            if not data.is_file():
+                raise FileNotFoundError(data)
+            data = data.read_bytes()
+
         try:
             key = RSA.import_key(data)
             if key.n not in self.private_key:
                 self.logger.debug('Receive private key: \n\n%s\n', key.exportKey('PEM').decode('utf-8'))
 
-                if name not in OEM_CRYPTO_API:
+                if name and name not in OEM_CRYPTO_API:
                     self.logger.warning(f'The function "{name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.')
 
             self.private_key[key.n] = key
