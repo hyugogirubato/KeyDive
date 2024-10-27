@@ -42,9 +42,9 @@ pycryptodomex = "^3.21.0"
 pywidevine = "^1.8.0"
 pathvalidate = "^3.2.1"
 requests = "^2.32.3"
+xmltodict = "^0.14.2"
 PyYAML = { version = "^6.0.2", optional = true }
 Flask = { version = "^3.0.3", optional = true }
-xmltodict = { version = "^0.14.2", optional = true }
 
 [tool.poetry.scripts]
 keydive = "keydive.__main__:main"
