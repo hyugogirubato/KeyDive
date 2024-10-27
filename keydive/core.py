@@ -36,9 +36,10 @@ class Core:
         self.adb = adb
 
         # https://github.com/hyugogirubato/KeyDive/issues/38#issuecomment-2411932679
+        # Flag to skip predefined functions based on the vendor's API level
         self.skip = skip
 
-        # Load the hook script
+        # Load the hook script and prepare for injection
         self.functions = functions
         self.script = self.__prepare_hook_script()
         self.logger.info('Script loaded successfully')
@@ -134,8 +135,10 @@ class Core:
             self.cdm.set_private_key(data=data, name=level['private_key'])
         elif level == 'challenge':
             self.cdm.set_challenge(data=data)
-        elif level == 'client_id':
-            self.cdm.set_client_id(data=data)
+        elif level == 'device_id':
+            self.cdm.set_device_id(data)
+        elif level == 'keybox':
+            self.cdm.set_keybox(data)
 
     def hook_process(self, pid: int, vendor: Vendor, timeout: int = 0) -> bool:
         """

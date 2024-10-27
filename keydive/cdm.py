@@ -15,6 +15,7 @@ from pywidevine.license_protocol_pb2 import (SignedMessage, LicenseRequest, Clie
                                              DrmCertificate, EncryptedClientIdentification)
 
 from keydive.constants import OEM_CRYPTO_API
+from keydive.keybox import Keybox
 
 
 class Cdm:
@@ -23,18 +24,20 @@ class Cdm:
     extracting and storing private keys, and exporting device information.
     """
 
-    def __init__(self):
+    def __init__(self, keybox: bool = False):
         """
         Initializes the Cdm object, setting up a logger and containers for client IDs and private keys.
 
         Attributes:
             client_id (dict[int, ClientIdentification]): Stores client identification info mapped by key modulus.
             private_key (dict[int, RsaKey]): Stores private keys mapped by key modulus.
+            keybox (bool, optional): Initializes a Keybox instance for secure key management.
         """
         self.logger = logging.getLogger(self.__class__.__name__)
         # https://github.com/devine-dl/pywidevine
         self.client_id: dict[int, ClientIdentification] = {}
         self.private_key: dict[int, RsaKey] = {}
+        self.keybox = Keybox() if keybox else None
 
     @staticmethod
     def __client_info(client_id: ClientIdentification) -> dict:
@@ -97,7 +100,7 @@ class Cdm:
             # https://integration.widevine.com/diagnostics
             encrypted_client_id: EncryptedClientIdentification = license_request.encrypted_client_id
             if encrypted_client_id.SerializeToString():
-                self.logger.debug('Receive encrypted client id: \n\n%s\n', json.dumps(self.__encrypted_client_info(encrypted_client_id), indent=2))
+                self.logger.info('Receive encrypted client id: \n\n%s\n', json.dumps(self.__encrypted_client_info(encrypted_client_id), indent=2))
                 self.logger.warning('The client ID of the challenge is encrypted')
             else:
                 client_id: ClientIdentification = license_request.client_id
@@ -124,10 +127,10 @@ class Cdm:
         try:
             key = RSA.import_key(data)
             if key.n not in self.private_key:
-                self.logger.debug('Receive private key: \n\n%s\n', key.exportKey('PEM').decode('utf-8'))
+                self.logger.info('Receive private key: \n\n%s\n', key.exportKey('PEM').decode('utf-8'))
 
                 if name and name not in OEM_CRYPTO_API:
-                    self.logger.warning(f'The function "{name}" does not belong to the referenced functions. Communicate it to the developer to improve the tool.')
+                    self.logger.warning('The function "%s" does not belong to the referenced functions. Communicate it to the developer to improve the tool.', name)
 
             self.private_key[key.n] = key
         except Exception as e:
@@ -157,10 +160,30 @@ class Cdm:
             key = RSA.importKey(public_key)
 
             if key.n not in self.client_id:
-                self.logger.debug('Receive client id: \n\n%s\n', json.dumps(self.__client_info(client_id), indent=2))
+                self.logger.info('Receive client id: \n\n%s\n', json.dumps(self.__client_info(client_id), indent=2))
             self.client_id[key.n] = client_id
         except Exception as e:
             self.logger.debug('Failed to set client ID: %s', e)
+
+    def set_device_id(self, data: bytes) -> None:
+        """
+        Sets the device ID in the keybox if it is enabled.
+
+        Args:
+            data (bytes): The device ID data to be stored in the keybox.
+        """
+        if self.keybox:
+            self.keybox.set_device_id(data=data)
+
+    def set_keybox(self, data: bytes) -> None:
+        """
+        Sets the keybox data.
+
+        Args:
+            data (bytes): The keybox data to be set.
+        """
+        if self.keybox:
+            self.keybox.set_keybox(data=data)
 
     def export(self, parent: Path, wvd: bool = False) -> bool:
         """
@@ -209,6 +232,9 @@ class Cdm:
 
                 path_wvd.write_bytes(data=wvd_bin)
                 self.logger.info('Exported WVD: %s', path_wvd)
+
+            if self.keybox and not self.keybox.export(parent=parent):
+                self.logger.warning('The keybox has not been intercepted or decrypted')
 
         return len(keys) > 0
 

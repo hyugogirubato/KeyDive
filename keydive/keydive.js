@@ -1,5 +1,5 @@
 /**
- * Date: 2024-10-20
+ * Date: 2024-10-27
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -253,7 +253,7 @@ const GetDeviceID = (address) => {
             try {
                 const size = Memory.readPointer(this.size).toInt32();
                 const data = Memory.readByteArray(this.data, size);
-                data && send('client_id', data);
+                data && send('device_id', data);
             } catch (e) {
                 print(Level.ERROR, `Failed to dump device ID.`);
             }
@@ -262,10 +262,49 @@ const GetDeviceID = (address) => {
 }
 
 
+const memcpy = (address) => {
+    // libc::memcpy
+    Interceptor.attach(address, {
+        onEnter: function (args) {
+            // Convert size argument from hexadecimal to integer
+            const size = parseInt(args[2], 16);
+
+            // Check if the size matches known keybox sizes (128 or 132 bytes)
+            if ([128, 132].includes(size)) {
+                const data = Memory.readByteArray(args[1], size);
+
+                // Define the target bytes for "kbox"
+                const targetBytes = [0x6b, 0x62, 0x6f, 0x78]; // "kbox" in hex
+
+                // Function to check if target bytes are present
+                function containsTargetBytes(buffer, target) {
+                    const dataArray = Array.from(new Uint8Array(buffer));
+                    for (let i = 0; i <= dataArray.length - target.length; i++) {
+                        if (target.every((byte, index) => dataArray[i + index] === byte)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                // Check if "kbox" is present in the data
+                if (data && containsTargetBytes(data, targetBytes)) {
+                    print(Level.DEBUG, `[*] Keybox: memcpy`);
+                    send('keybox', data);
+                }
+            }
+        },
+        onLeave: function (retval) {
+            // print(Level.DEBUG, `[-] onLeave: memcpy`);
+        }
+    });
+}
+
+
 // @Hooks
 const hookLibrary = (name) => {
     // https://github.com/poxyran/misc/blob/master/frida-enumerate-imports.py
-    const library = getLibrary(name);
+    let library = getLibrary(name);
     if (!library) return false;
 
     let functions;
@@ -281,7 +320,7 @@ const hookLibrary = (name) => {
     }
 
     functions = functions.filter(f => !NATIVE_C_API.includes(f.name));
-    const targets = SKIP ? [] : functions.filter(f => OEM_CRYPTO_API.includes(f.name)).map(f => f.name);
+    let targets = SKIP ? [] : functions.filter(f => OEM_CRYPTO_API.includes(f.name)).map(f => f.name);
     const hooked = [];
 
     functions.forEach(func => {
@@ -295,11 +334,19 @@ const hookLibrary = (name) => {
                 GetCdmClientPropertySet(funcAddr);
             } else if (funcName.includes('PrepareKeyRequest')) {
                 PrepareKeyRequest(funcAddr);
-            } else if (funcName.includes('getOemcryptoDeviceId')) {
+            } else if (funcName.includes('_lcc07') || funcName.includes('_oecc07') || funcName.includes('getOemcryptoDeviceId')) {
                 GetDeviceID(funcAddr);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
                 LoadDeviceRSAKey(funcAddr, funcName);
             } else {
+                /*
+                    1. wvcdm::CdmEngine::GetProvisioningRequest
+                    2. wvcdm::ClientIdentification::GetProvisioningTokenType
+                    3. wvcdm::CryptoSession::GetProvisioningToken
+                       1. wvcdm::CryptoSession::GetTokenFromOemCert
+                       2. wvcdm::CryptoSession::GetTokenFromKeybox
+                 */
+                // print(Level.WARNING, `Hooked (${funcAddr}): ${funcName}`);
                 return;
             }
 
@@ -313,6 +360,18 @@ const hookLibrary = (name) => {
     if (hooked.length < 3) {
         print(Level.CRITICAL, 'Insufficient functions hooked.');
         return false;
+    }
+
+    // Keybox (experimental)
+    library = getLibrary('libc.so');
+    targets = getFunctions(library).find(func => func.name === 'memcpy' && func.type === 'function');
+    if (targets) {
+        try {
+            memcpy(targets.address);
+            print(Level.DEBUG, `Hooked (${targets.address}): ${targets.name}`);
+        } catch (e) {
+            print(Level.ERROR, `${e.message} for ${targets.name}`);
+        }
     }
 
     // https://github.com/hzy132/liboemcryptodisabler/blob/master/customize.sh#L33
