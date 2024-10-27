@@ -95,7 +95,7 @@ def main() -> None:
     # Advanced options
     group_advanced = parser.add_argument_group('Advanced')
     group_advanced.add_argument('-f', '--functions', required=False, type=Path, metavar='<file>', help='Path to Ghidra XML functions file.')
-    # group_advanced.add_argument('-k', '--keybox', required=False, action='store_true', help='Export keybox if available.')
+    group_advanced.add_argument('-k', '--keybox', required=False, action='store_true', help='Enable export of the Keybox data if it is available.')
     group_advanced.add_argument('--challenge', required=False, type=Path, metavar='<file>', help='Path to unencrypted challenge for extracting client ID.')
     group_advanced.add_argument('--private-key', required=False, type=Path, metavar='<file>', help='Path to private key for extracting client ID.')
 
@@ -115,7 +115,7 @@ def main() -> None:
         adb = ADB(device=args.device)
 
         # Initialize Cdm instance
-        cdm = Cdm()
+        cdm = Cdm(keybox=args.keybox)
         if args.challenge:
             cdm.set_challenge(data=args.challenge)
         if args.private_key:
