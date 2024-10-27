@@ -47,7 +47,7 @@ This sequence ensures that the DRM-protected content is active and ready for key
 ### Command-Line Options
 
 ```shell
-usage: keydive [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-o <dir>] [-w] [-s] [-a] [-p] [-f <file>] [--challenge <file>] [--private-key <file>]
+usage: keydive [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-o <dir>] [-w] [-s] [-a] [-p] [-f <file>] [-k] [--challenge <file>] [--private-key <file>]
 
 Extract Widevine L3 keys from an Android device.
 
@@ -74,6 +74,7 @@ Cdm:
 Advanced:
   -f <file>, --functions <file>
                         Path to Ghidra XML functions file.
+  -k, --keybox          Enable export of the Keybox data if it is available.
   --challenge <file>    Path to unencrypted challenge for extracting client ID.
   --private-key <file>  Path to private key for extracting client ID.
 
