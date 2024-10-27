@@ -173,4 +173,5 @@ pyrightconfig.json
 ### KeyDive ###
 device/
 logs/
-/docs/axinom/
+/docs/server/curl.txt
+/docs/server/provisioning.json
