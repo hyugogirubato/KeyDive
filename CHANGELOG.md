@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Added private key function.
 - Option to import the private key.
 - Option to automatically install and use a player locally.
 - Distribution of arguments in the new `Advanced` group.
@@ -20,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Handling shell command errors.
+- `xmltodict` dependency now required.
 
 ## [2.1.0] - 2024-10-20
 
