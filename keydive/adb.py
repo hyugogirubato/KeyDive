@@ -6,8 +6,8 @@ import subprocess
 import frida
 import requests
 
-from frida.core import Device
 from pathlib import Path
+from frida.core import Device
 
 # Suppress urllib3 warnings
 logging.getLogger('urllib3.connectionpool').setLevel(logging.ERROR)
