@@ -8,20 +8,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- Added private key function.
-- Option to import the private key.
-- Option to automatically install and use a player locally.
-- Distribution of arguments in the new `Advanced` group.
+- Private key functionality for enhanced key extraction security.
+- Local DRM server for (almost) offline use.
+- Option to import the private key for easier management.
+- Automatic installation and usage of a local player.
+- New `Advanced` group for better argument organization.
+- Experimental keybox extraction from the device.
 
 ### Changed
 
-- Migrating device interactions into the `ADB` class.
-- Added new comments and code optimization.
+- Device interactions migrated to the `ADB` class for better encapsulation.
+- Code comments added and optimizations made for clarity.
 
 ### Fixed
 
-- Handling shell command errors.
-- `xmltodict` dependency now required.
+- Improved error handling for shell commands.
+- `xmltodict` is now a required dependency.
+- Enhanced formatting of `logging` messages for better readability.
 
 ## [2.1.0] - 2024-10-20
 
