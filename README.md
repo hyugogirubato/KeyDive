@@ -88,7 +88,7 @@ For advanced users looking to use custom functions with KeyDive, a comprehensive
 
 ### Offline Extraction
 
-KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/server/OFFLINE.md) for step-by-step instructions.
+KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/OFFLINE.md) for step-by-step instructions.
 
 ### Obtaining Unencrypted Challenge Data
 
