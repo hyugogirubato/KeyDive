@@ -92,7 +92,7 @@ class Keybox:
 
                 # Warn if flags indicate encrypted data, requiring a plain-text device token
                 if infos['flags'] > 10:
-                    self.logger.warning('Data are encrypted. Device token must be intercepted in plain text')
+                    self.logger.warning('Received encrypted data. Plaintext device token interception is required')
 
             self.keybox[device_id] = data
         except Exception as e:
