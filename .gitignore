@@ -171,6 +171,7 @@ poetry.toml
 pyrightconfig.json
 
 ### KeyDive ###
+*.xml
 device/
 logs/
 /docs/server/curl.txt
