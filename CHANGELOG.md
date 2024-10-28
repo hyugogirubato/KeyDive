@@ -14,17 +14,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Automatic installation and usage of a local player.
 - New `Advanced` group for better argument organization.
 - Experimental keybox extraction from the device.
+- Added CDM details for SDK 35.
 
 ### Changed
 
 - Device interactions migrated to the `ADB` class for better encapsulation.
 - Code comments added and optimizations made for clarity.
+- Displaying the `GetDeviceId` function name.
 
 ### Fixed
 
 - Improved error handling for shell commands.
 - `xmltodict` is now a required dependency.
 - Enhanced formatting of `logging` messages for better readability.
+- Error in skip option for using a function file.
 
 ## [2.1.0] - 2024-10-20
 
