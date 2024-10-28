@@ -240,22 +240,24 @@ const getKeyLength = (key) => {
     return pos + lengthValue;
 }
 
-const GetDeviceID = (address) => {
+const GetDeviceID = (address, name) => {
     // wvdash::OEMCrypto::GetDeviceID
     Interceptor.attach(address, {
         onEnter: function (args) {
-            print(Level.DEBUG, '[+] onEnter: GetDeviceID');
+            // print(Level.DEBUG, '[+] onEnter: GetDeviceID');
             this.data = args[0];
             this.size = args[1];
         },
         onLeave: function (retval) {
-            print(Level.DEBUG, '[-] onLeave: GetDeviceID');
+            // print(Level.DEBUG, '[-] onLeave: GetDeviceID');
             try {
                 const size = Memory.readPointer(this.size).toInt32();
                 const data = Memory.readByteArray(this.data, size);
-                data && send('device_id', data);
+
+                print(Level.DEBUG, `[*] GetDeviceID: ${name}`);
+                send('device_id', data);
             } catch (e) {
-                print(Level.ERROR, `Failed to dump device ID.`);
+                // print(Level.ERROR, `Failed to dump device ID.`);
             }
         }
     });
@@ -334,8 +336,8 @@ const hookLibrary = (name) => {
                 GetCdmClientPropertySet(funcAddr);
             } else if (funcName.includes('PrepareKeyRequest')) {
                 PrepareKeyRequest(funcAddr);
-            } else if (funcName.includes('_lcc07') || funcName.includes('_oecc07') || funcName.includes('getOemcryptoDeviceId')) {
-                GetDeviceID(funcAddr);
+            } else if (funcName.includes('lcc07') || funcName.includes('oecc07') || funcName.includes('getOemcryptoDeviceId')) {
+                GetDeviceID(funcAddr, funcName);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
                 LoadDeviceRSAKey(funcAddr, funcName);
             } else {
