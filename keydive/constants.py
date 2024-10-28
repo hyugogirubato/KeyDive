@@ -4,6 +4,8 @@ from keydive.vendor import Vendor
 
 # https://developer.android.com/ndk/guides/cpp-support
 NATIVE_C_API = {
+    # BUILT-IN
+    'main',
     # STDIO
     'fclose', 'fflush', 'fgetc', 'fgetpos', 'fgets', 'fopen', 'fprintf', 'fputc', 'fputs', 'fread', 'freopen',
     'fscanf', 'fseek', 'fsetpos', 'ftell', 'fwrite', 'getc', 'getchar', 'gets', 'perror', 'printf', 'putc',
@@ -112,7 +114,8 @@ CDM_VENDOR_API = {
     ],
     'android.hardware.drm-service.widevine': [
         Vendor(33, 17, '17.0.0', 'libwvaidl.so'),
-        Vendor(34, 18, '18.0.0', 'android.hardware.drm-service.widevine')
+        Vendor(34, 18, '18.0.0', 'android.hardware.drm-service.widevine'),
+        Vendor(35, 18, '19.0.1', 'android.hardware.drm-service.widevine')
     ]
 }
 
