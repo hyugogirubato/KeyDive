@@ -103,7 +103,7 @@ class Core:
                 # Add function if it matches specific criteria
                 if name not in selected and (
                         name == target
-                        or any(None if self.skip else keyword in name for keyword in CDM_FUNCTION_API)
+                        or any(True if self.skip else keyword in name for keyword in CDM_FUNCTION_API)
                         or (not target and re.match(r'^[a-z]+$', name) and args >= 6)
                 ):
                     selected[name] = {
