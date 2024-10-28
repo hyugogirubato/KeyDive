@@ -86,8 +86,13 @@ class Keybox:
             self.set_device_id(data=device_id)
 
             if device_id not in self.keybox:
-                # https://github.com/wvdumper/dumper/blob/main/Helpers/Keybox.py#L51
-                self.logger.info('Receive keybox: \n\n%s\n', json.dumps(self.__keybox_info(data), indent=2))
+                # Fetch keybox info for logging, such as flags and other details
+                infos = self.__keybox_info(data)
+                self.logger.info('Receive keybox: \n\n%s\n', json.dumps(infos, indent=2))
+
+                # Warn if flags indicate encrypted data, requiring a plain-text device token
+                if infos['flags'] > 10:
+                    self.logger.warning('Data are encrypted. Device token must be intercepted in plain text')
 
             self.keybox[device_id] = data
         except Exception as e:
@@ -104,6 +109,7 @@ class Keybox:
         Returns:
             dict: A dictionary containing extracted keybox information.
         """
+        # https://github.com/wvdumper/dumper/blob/main/Helpers/Keybox.py#L51
         # Extract key components from the keybox data based on defined byte offsets.
         content = {
             'device_id': data[0:32],  # Unique identifier for the device (32 bytes).
@@ -113,6 +119,7 @@ class Keybox:
             'crc32': bytes2int(data[124:128]),  # CRC32 checksum for data integrity verification (4 bytes).
             'level_tag': data[128:132].decode('utf-8') or None,  # Optional tag indicating keybox level (4 bytes).
 
+            # TODO: decrypt device_token field
             # Key components extracted from the device token (Bytes 48–119).
             'flags': bytes2int(data[48:52]),  # Flags indicating various settings (4 bytes).
             'system_id': bytes2int(data[52:56]),  # System identifier for the device (4 bytes).
