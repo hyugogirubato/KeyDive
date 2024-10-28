@@ -233,7 +233,7 @@ class Cdm:
                 path_wvd.write_bytes(data=wvd_bin)
                 self.logger.info('Exported WVD: %s', path_wvd)
 
-            if self.keybox and not self.keybox.export(parent=parent):
+            if self.keybox and not self.keybox.export(parent=parent.parent):
                 self.logger.warning('The keybox has not been intercepted or decrypted')
 
         return len(keys) > 0
