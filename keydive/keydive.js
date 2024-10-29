@@ -1,5 +1,5 @@
 /**
- * Date: 2024-10-27
+ * Date: 2024-10-29
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -123,7 +123,12 @@ const disableLibrary = (name) => {
 
 // @Libraries
 const UsePrivacyMode = (address) => {
-    // wvcdm::Properties::UsePrivacyMode
+    /*
+    wvcdm::Properties::UsePrivacyMode
+
+    Args:
+        args[0]: std::string const&
+     */
     Interceptor.replace(address, new NativeCallback(function () {
         return 0;
     }, 'int', []));
@@ -139,7 +144,12 @@ const UsePrivacyMode = (address) => {
 }
 
 const GetCdmClientPropertySet = (address) => {
-    // wvcdm::Properties::GetCdmClientPropertySet
+    /*
+    wvcdm::Properties::GetCdmClientPropertySet
+
+    Args:
+        args[0]: std::string const&
+     */
     Interceptor.replace(address, new NativeCallback(function () {
         return 0;
     }, 'int', []));
@@ -155,7 +165,18 @@ const GetCdmClientPropertySet = (address) => {
 }
 
 const PrepareKeyRequest = (address) => {
-    // wvcdm::CdmLicense::PrepareKeyRequest
+    /*
+    wvcdm::CdmLicense::PrepareKeyRequest
+
+    Args:
+        args[0]: wvcdm::CdmLicense *this
+        args[1]: wvcdm::InitializationData const&
+        args[2]: wvcdm::CdmLicenseType
+        args[3]: std::map<std::string
+        args[4]: std::string> const&
+        args[5]: std::string*
+        args[6]: std::string*
+     */
     Interceptor.attach(address, {
         onEnter: function (args) {
             print(Level.DEBUG, '[+] onEnter: PrepareKeyRequest');
@@ -240,8 +261,15 @@ const getKeyLength = (key) => {
     return pos + lengthValue;
 }
 
-const GetDeviceID = (address, name) => {
-    // wvdash::OEMCrypto::GetDeviceID
+const GetDeviceId = (address, name) => {
+    /*
+    wvcdm::_oecc07
+
+    Args:
+        args[0]: uchar *
+        args[1]: ulong *
+        args[3]: wvcdm::SecurityLevel
+     */
     Interceptor.attach(address, {
         onEnter: function (args) {
             // print(Level.DEBUG, '[+] onEnter: GetDeviceID');
@@ -250,54 +278,41 @@ const GetDeviceID = (address, name) => {
         },
         onLeave: function (retval) {
             // print(Level.DEBUG, '[-] onLeave: GetDeviceID');
-            try {
-                const size = Memory.readPointer(this.size).toInt32();
-                const data = Memory.readByteArray(this.data, size);
+            const size = Memory.readPointer(this.size).toInt32();
+            const data = Memory.readByteArray(this.data, size);
 
-                print(Level.DEBUG, `[*] GetDeviceID: ${name}`);
+            if (data) {
+                print(Level.DEBUG, `[*] GetDeviceId: ${name}`);
                 send('device_id', data);
-            } catch (e) {
-                // print(Level.ERROR, `Failed to dump device ID.`);
             }
         }
     });
 }
 
+const FileSystemRead = (address) => {
+    /*
+    wvoec3::OEMCrypto_Level3AndroidFileSystem::Read
 
-const memcpy = (address) => {
-    // libc::memcpy
+    Args:
+        args[0]: wvoec3::OEMCrypto_Level3AndroidFileSystem *this
+        args[1]: char const*
+        args[2]: void *
+        args[3]: ulong
+     */
     Interceptor.attach(address, {
         onEnter: function (args) {
-            // Convert size argument from hexadecimal to integer
-            const size = parseInt(args[2], 16);
+            // print(Level.DEBUG, '[+] onEnter: FileSystemRead');
+            const size = args[3].toInt32();
+            const data = Memory.readByteArray(args[2], size);
 
             // Check if the size matches known keybox sizes (128 or 132 bytes)
-            if ([128, 132].includes(size)) {
-                const data = Memory.readByteArray(args[1], size);
-
-                // Define the target bytes for "kbox"
-                const targetBytes = [0x6b, 0x62, 0x6f, 0x78]; // "kbox" in hex
-
-                // Function to check if target bytes are present
-                function containsTargetBytes(buffer, target) {
-                    const dataArray = Array.from(new Uint8Array(buffer));
-                    for (let i = 0; i <= dataArray.length - target.length; i++) {
-                        if (target.every((byte, index) => dataArray[i + index] === byte)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                // Check if "kbox" is present in the data
-                if (data && containsTargetBytes(data, targetBytes)) {
-                    print(Level.DEBUG, `[*] Keybox: memcpy`);
-                    send('keybox', data);
-                }
+            if ([128, 132].includes(size) && data) {
+                print(Level.DEBUG, '[*] FileSystemRead');
+                send('keybox', data);
             }
         },
         onLeave: function (retval) {
-            // print(Level.DEBUG, `[-] onLeave: memcpy`);
+            // print(Level.DEBUG, '[-] onLeave: FileSystemRead');
         }
     });
 }
@@ -337,9 +352,11 @@ const hookLibrary = (name) => {
             } else if (funcName.includes('PrepareKeyRequest')) {
                 PrepareKeyRequest(funcAddr);
             } else if (funcName.includes('lcc07') || funcName.includes('oecc07') || funcName.includes('getOemcryptoDeviceId')) {
-                GetDeviceID(funcAddr, funcName);
+                GetDeviceId(funcAddr, funcName);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
                 LoadDeviceRSAKey(funcAddr, funcName);
+            } else if (funcName.includes('OEMCrypto_Level3AndroidFileSystem') && funcName.includes('Read')) {
+                FileSystemRead(funcAddr);
             } else {
                 /*
                     1. wvcdm::CdmEngine::GetProvisioningRequest
@@ -364,18 +381,7 @@ const hookLibrary = (name) => {
         return false;
     }
 
-    // Keybox (experimental)
-    library = getLibrary('libc.so');
-    targets = getFunctions(library).find(func => func.name === 'memcpy' && func.type === 'function');
-    if (targets) {
-        try {
-            memcpy(targets.address);
-            print(Level.DEBUG, `Hooked (${targets.address}): ${targets.name}`);
-        } catch (e) {
-            print(Level.ERROR, `${e.message} for ${targets.name}`);
-        }
-    }
-
+    // TODO: Libraries? (https://github.com/wvdumper/dumper/blob/main/Helpers/Scanner.py#L23)
     // https://github.com/hzy132/liboemcryptodisabler/blob/master/customize.sh#L33
     disableLibrary('liboemcrypto.so');
     return true;
