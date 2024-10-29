@@ -124,7 +124,11 @@ CDM_FUNCTION_API = {
     'UsePrivacyMode',
     'GetCdmClientPropertySet',
     'PrepareKeyRequest',
-    'getOemcryptoDeviceId'
+    'getOemcryptoDeviceId',
+    'lcc07',
+    'oecc07',
+    'OEMCrypto_Level3AndroidFileSystem',
+    'Read'
 }
 
 # https://github.com/kaltura/kaltura-device-info-android
