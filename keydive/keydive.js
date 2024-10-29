@@ -272,12 +272,12 @@ const GetDeviceId = (address, name) => {
      */
     Interceptor.attach(address, {
         onEnter: function (args) {
-            // print(Level.DEBUG, '[+] onEnter: GetDeviceID');
+            // print(Level.DEBUG, '[+] onEnter: GetDeviceId');
             this.data = args[0];
             this.size = args[1];
         },
         onLeave: function (retval) {
-            // print(Level.DEBUG, '[-] onLeave: GetDeviceID');
+            // print(Level.DEBUG, '[-] onLeave: GetDeviceId');
             const size = Memory.readPointer(this.size).toInt32();
             const data = Memory.readByteArray(this.data, size);
 
