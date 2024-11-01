@@ -1,5 +1,5 @@
 /**
- * Date: 2024-10-29
+ * Date: 2024-11-01
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -365,7 +365,6 @@ const hookLibrary = (name) => {
                        1. wvcdm::CryptoSession::GetTokenFromOemCert
                        2. wvcdm::CryptoSession::GetTokenFromKeybox
                  */
-                // print(Level.WARNING, `Hooked (${funcAddr}): ${funcName}`);
                 return;
             }
 
