@@ -15,11 +15,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Using a native function to intercept keybox (instead of libc).
 - Execution of player/auto options before DRM detection (improves detection on older devices).
+- Display of different keybox contents for the same device id.
+- Simplifying function detection in JS.
 
 ### Fixed
 
 - Bad start of the widevine service when launching the script.
 - Unsupported error of new `ADB` class.
+- Detection of the `MAIN` activity for applications.
+- Parsing error to list applications.
+- Detection of the minimum number of functions required.
 
 ## [2.1.1] - 2024-10-28
 
