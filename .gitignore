@@ -176,3 +176,4 @@ device/
 logs/
 /docs/server/curl.txt
 /docs/server/provisioning.json
+/docs/debug.js
