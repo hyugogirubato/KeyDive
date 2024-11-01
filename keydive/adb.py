@@ -190,12 +190,8 @@ class ADB:
         # Try to get the list of processes using `ps -A`
         prompt = [*self.prompt, 'ps']
         sp = shell([*prompt, '-A'])
-
-        if sp.returncode != 0:
-            self.logger.error('Failed to execute ps -A command (Error: %s)', sp.stderr.decode('utf-8').strip())
-            return processes
-
         lines = sp.stdout.decode('utf-8').splitlines()
+
         # If the output has less than 10 lines, try the alternative `ps` command
         if len(lines) < 10:
             sp = shell(prompt)
