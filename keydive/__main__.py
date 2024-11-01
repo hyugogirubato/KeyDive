@@ -124,6 +124,26 @@ def main() -> None:
         # Initialize Core instance for interacting with the device
         core = Core(adb=adb, cdm=cdm, functions=args.functions, skip=args.skip)
 
+        # Setup actions based on user arguments
+        if args.player:
+            package = DRM_PLAYER['package']
+
+            # Check if the application is already installed
+            installed  = package in adb.list_applications(user=True, system=False)
+            if not installed:
+                logger.debug('Application %s not found. Installing...', package)
+                installed = adb.install_application(path=DRM_PLAYER['path'], url=DRM_PLAYER['url'])
+
+            # Skip starting the application if installation failed
+            if installed:
+                # Start the application
+                logger.info('Starting application: %s', package)
+                adb.start_application(package)
+        elif args.auto:
+            logger.info('Opening the Bitmovin web player...')
+            adb.open_url('https://bitmovin.com/demos/drm')
+        logger.info('Setup completed')
+
         # Process watcher loop
         logger.info('Watcher delay: %ss' % args.delay)
         current = None  # Variable to track the current Widevine process
@@ -164,27 +184,8 @@ def main() -> None:
                         elif not core.running:
                             raise KeyboardInterrupt
 
-                # Setup actions based on user arguments
                 if current:
                     logger.info('Successfully hooked')
-                    if args.player:
-                        package = DRM_PLAYER['package']
-
-                        # Check if the application is already installed
-                        if not package in adb.list_applications(user=True, system=False):
-                            logger.debug('Application %s not found. Installing...', package)
-                            if not adb.install_application(path=DRM_PLAYER['path'], url=DRM_PLAYER['url']):
-                                logger.error('Failed to install application')
-                                continue  # Skip starting the application if installation failed
-
-                        # Start the application
-                        logger.info('Starting application: %s', package)
-                        adb.start_application(package)
-                    elif args.auto:
-                        logger.info('Opening the Bitmovin web player...')
-                        adb.open_url('https://bitmovin.com/demos/drm')
-
-                    logger.info('Setup completed')
                 else:
                     logger.warning('Widevine library not found, searching...')
 
