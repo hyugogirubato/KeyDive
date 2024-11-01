@@ -371,6 +371,29 @@ const RunningCRC = (address) => {
     });
 }
 
+const GetSystemId = (address) => {
+    /*
+    wvcdm::CryptoSession::GetSystemId
+
+    Args:
+        args[0]: wvcdm::CryptoSession *this
+        args[1]: uint *
+     */
+    Interceptor.attach(address, {
+        onEnter: function (args) {
+            // print(Level.DEBUG, '[+] onEnter: GetSystemId');
+
+            // read registry memory (__readgsdword(0x14u))
+            const data = Memory.readByteArray(args[2], 128);
+            print(Level.DEBUG, '[*] GetSystemId');
+            send('keybox', data);
+        },
+        onLeave: function (retval) {
+            // print(Level.DEBUG, '[-] onLeave: GetSystemId');
+        }
+    });
+}
+
 
 // @Hooks
 const hookLibrary = (name) => {
@@ -395,32 +418,39 @@ const hookLibrary = (name) => {
     const hooked = [];
 
     functions.forEach(func => {
+        let required = false;
         const {name: funcName, address: funcAddr} = func;
         if (func.type !== 'function' || hooked.includes(funcAddr)) return;
 
         try {
             if (funcName.includes('UsePrivacyMode')) {
                 UsePrivacyMode(funcAddr);
+                required = true;
             } else if (funcName.includes('GetCdmClientPropertySet')) {
                 GetCdmClientPropertySet(funcAddr);
+                required = true;
             } else if (funcName.includes('PrepareKeyRequest')) {
                 PrepareKeyRequest(funcAddr);
-            } else if (funcName.includes('lcc07') || funcName.includes('oecc07') || funcName.includes('getOemcryptoDeviceId')) {
-                GetDeviceId(funcAddr, funcName);
+                required = true;
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
                 LoadDeviceRSAKey(funcAddr, funcName);
-            } else if (funcName.includes('FileSystem') && funcName.includes('Read')) {
+                required = true;
+            } else if (['lcc07', 'oecc07', 'getOemcryptoDeviceId'].some(n => funcName.includes(n))) {
+                GetDeviceId(funcAddr, funcName);
+            } else if (['FileSystem', 'Read'].every(n => funcName.includes(n))) {
                 FileSystemRead(funcAddr);
-            } else if (funcName.includes('File') && funcName.includes('Read')) {
+            } else if (['File', 'Read'].every(n => funcName.includes(n))) {
                 FileRead(funcAddr);
             } else if (funcName.includes('runningcrc')) {
                 // https://github.com/Avalonswanderer/widevinel3_Android_PoC/blob/main/PoCs/recover_l3keybox.py#L50
                 RunningCRC(funcAddr);
+            } else if (['CryptoSession', 'GetSystemId'].every(n => funcName.includes(n))) {
+                GetSystemId(funcAddr); // Deprecated
             } else {
                 return;
             }
 
-            hooked.push(funcAddr);
+            required && hooked.push(funcAddr);
             print(Level.DEBUG, `Hooked (${funcAddr}): ${funcName}`);
         } catch (e) {
             print(Level.ERROR, `${e.message} for ${funcName}`);
