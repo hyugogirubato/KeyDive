@@ -9,10 +9,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Added description of functions used by the frida script.
+- Dump keybox from old versions of the CDM.
 
 ### Changed
 
 - Using a native function to intercept keybox (instead of libc).
+- Execution of player/auto options before DRM detection (improves detection on older devices).
+
+### Fixed
+
+- Bad start of the widevine service when launching the script.
+- Unsupported error of new `ADB` class.
 
 ## [2.1.1] - 2024-10-28
 
