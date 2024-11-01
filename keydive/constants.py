@@ -127,10 +127,9 @@ CDM_FUNCTION_API = {
     'getOemcryptoDeviceId',
     'lcc07',
     'oecc07',
-    'OEMCrypto_Level3AndroidFileSystem',
-    'File',
     'Read',
-    'runningcrc'
+    'runningcrc',
+    'GetSystemId'
 }
 
 # https://github.com/kaltura/kaltura-device-info-android
