@@ -86,7 +86,7 @@ class Keybox:
             self.set_device_id(data=device_id)
 
             # TODO: Detect different keybox (e.g. decrypted)
-            if device_id not in self.keybox:
+            if device_id not in self.keybox or self.keybox[device_id] != data:
                 # Fetch keybox info for logging, such as flags and other details
                 infos = self.__keybox_info(data)
                 self.logger.info('Receive keybox: \n\n%s\n', json.dumps(infos, indent=2))
