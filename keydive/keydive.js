@@ -317,6 +317,60 @@ const FileSystemRead = (address) => {
     });
 }
 
+const FileRead = (address) => {
+    /*
+    wvcdm::File::Read
+
+    Args:
+        args[0]: wvcdm::File *this
+        args[1]: char *
+        args[2]: uint
+     */
+    Interceptor.attach(address, {
+        onEnter: function (args) {
+            // print(Level.DEBUG, '[+] onEnter: FileRead');
+            const size = args[2].toInt32();
+            const data = Memory.readByteArray(args[1], size);
+
+            // Check if the size matches known keybox sizes (128 or 132 bytes)
+            if ([128, 132].includes(size) && data) {
+                print(Level.DEBUG, '[*] FileRead');
+                send('keybox', data);
+            }
+        },
+        onLeave: function (retval) {
+            // print(Level.DEBUG, '[-] onLeave: FileRead');
+        }
+    });
+}
+
+const RunningCRC = (address) => {
+    /*
+    wvrunningcrc32
+
+    Args:
+        args[0]: uchar const*
+        args[1]: int
+        args[2]: uint
+     */
+    Interceptor.attach(address, {
+        onEnter: function (args) {
+            // print(Level.DEBUG, '[+] onEnter: RunningCRC');
+            const size = args[1].toInt32();
+
+            // Check if size matches keybox length excluding 4-byte magic/tag fields
+            if (size === 124) {
+                const data = Memory.readByteArray(args[0], 128);
+                print(Level.DEBUG, '[*] RunningCRC');
+                send('keybox', data);
+            }
+        },
+        onLeave: function (retval) {
+            // print(Level.DEBUG, '[-] onLeave: RunningCRC');
+        }
+    });
+}
+
 
 // @Hooks
 const hookLibrary = (name) => {
@@ -355,16 +409,14 @@ const hookLibrary = (name) => {
                 GetDeviceId(funcAddr, funcName);
             } else if (targets.includes(funcName) || (!targets.length && funcName.match(/^[a-z]+$/))) {
                 LoadDeviceRSAKey(funcAddr, funcName);
-            } else if (funcName.includes('OEMCrypto_Level3AndroidFileSystem') && funcName.includes('Read')) {
+            } else if (funcName.includes('FileSystem') && funcName.includes('Read')) {
                 FileSystemRead(funcAddr);
+            } else if (funcName.includes('File') && funcName.includes('Read')) {
+                FileRead(funcAddr);
+            } else if (funcName.includes('runningcrc')) {
+                // https://github.com/Avalonswanderer/widevinel3_Android_PoC/blob/main/PoCs/recover_l3keybox.py#L50
+                RunningCRC(funcAddr);
             } else {
-                /*
-                    1. wvcdm::CdmEngine::GetProvisioningRequest
-                    2. wvcdm::ClientIdentification::GetProvisioningTokenType
-                    3. wvcdm::CryptoSession::GetProvisioningToken
-                       1. wvcdm::CryptoSession::GetTokenFromOemCert
-                       2. wvcdm::CryptoSession::GetTokenFromKeybox
-                 */
                 return;
             }
 
@@ -380,7 +432,7 @@ const hookLibrary = (name) => {
         return false;
     }
 
-    // TODO: Libraries? (https://github.com/wvdumper/dumper/blob/main/Helpers/Scanner.py#L23)
+    // TODO: Disable old L1 libraries? (https://github.com/wvdumper/dumper/blob/main/Helpers/Scanner.py#L23)
     // https://github.com/hzy132/liboemcryptodisabler/blob/master/customize.sh#L33
     disableLibrary('liboemcrypto.so');
     return true;
