@@ -141,8 +141,11 @@ class ADB:
 
         # Parse and store applications in the dictionary
         for line in sp.stdout.decode('utf-8').splitlines():
-            path, package = line.strip().split(':', 1)[1].rsplit('=', 1)
-            applications[package] = path
+            try:
+                path, package = line.strip().split(':', 1)[1].rsplit('=', 1)
+                applications[package] = path
+            except Exception as e:
+                pass
 
         return applications
 
@@ -159,6 +162,9 @@ class ADB:
         # Get package information
         sp = shell([*self.prompt, 'dumpsys', 'package', package])
         lines = sp.stdout.decode('utf-8').splitlines()
+
+        # Remove empty lines to ensure backwards compatibility
+        lines = [l.strip() for l in lines if l.strip()]
 
         # Look for main activity in package information
         for i, line in enumerate(lines):
