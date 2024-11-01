@@ -128,8 +128,8 @@ CDM_FUNCTION_API = {
     'lcc07',
     'oecc07',
     'Read',
-    'runningcrc',
-    'GetSystemId'
+    'x1c36',
+    'runningcrc'
 }
 
 # https://github.com/kaltura/kaltura-device-info-android

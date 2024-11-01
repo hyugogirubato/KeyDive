@@ -317,7 +317,7 @@ const FileSystemRead = (address) => {
     });
 }
 
-const FileRead = (address) => {
+const FileRead = (address, name) => {
     /*
     wvcdm::File::Read
 
@@ -326,20 +326,28 @@ const FileRead = (address) => {
         args[1]: char *
         args[2]: uint
      */
+    /*
+    _x1c36
+
+    Args:
+        args[0]: char *filename
+        args[1]: void *ptr
+        args[2]: size_t n
+     */
     Interceptor.attach(address, {
         onEnter: function (args) {
-            // print(Level.DEBUG, '[+] onEnter: FileRead');
+            // print(Level.DEBUG, `[+] onEnter: FileRead: ${name}`);
             const size = args[2].toInt32();
             const data = Memory.readByteArray(args[1], size);
 
             // Check if the size matches known keybox sizes (128 or 132 bytes)
             if ([128, 132].includes(size) && data) {
-                print(Level.DEBUG, '[*] FileRead');
+                print(Level.DEBUG, `[*] FileRead: ${name}`);
                 send('keybox', data);
             }
         },
         onLeave: function (retval) {
-            // print(Level.DEBUG, '[-] onLeave: FileRead');
+            // print(Level.DEBUG, `[-] onLeave: FileRead: ${name}`);
         }
     });
 }
@@ -367,29 +375,6 @@ const RunningCRC = (address) => {
         },
         onLeave: function (retval) {
             // print(Level.DEBUG, '[-] onLeave: RunningCRC');
-        }
-    });
-}
-
-const GetSystemId = (address) => {
-    /*
-    wvcdm::CryptoSession::GetSystemId
-
-    Args:
-        args[0]: wvcdm::CryptoSession *this
-        args[1]: uint *
-     */
-    Interceptor.attach(address, {
-        onEnter: function (args) {
-            // print(Level.DEBUG, '[+] onEnter: GetSystemId');
-
-            // read registry memory (__readgsdword(0x14u))
-            const data = Memory.readByteArray(args[2], 128);
-            print(Level.DEBUG, '[*] GetSystemId');
-            send('keybox', data);
-        },
-        onLeave: function (retval) {
-            // print(Level.DEBUG, '[-] onLeave: GetSystemId');
         }
     });
 }
@@ -439,13 +424,11 @@ const hookLibrary = (name) => {
                 GetDeviceId(funcAddr, funcName);
             } else if (['FileSystem', 'Read'].every(n => funcName.includes(n))) {
                 FileSystemRead(funcAddr);
-            } else if (['File', 'Read'].every(n => funcName.includes(n))) {
-                FileRead(funcAddr);
+            } else if (['File', 'Read'].every(n => funcName.includes(n)) || funcName.includes('x1c36')) {
+                FileRead(funcAddr, funcName);
             } else if (funcName.includes('runningcrc')) {
                 // https://github.com/Avalonswanderer/widevinel3_Android_PoC/blob/main/PoCs/recover_l3keybox.py#L50
                 RunningCRC(funcAddr);
-            } else if (['CryptoSession', 'GetSystemId'].every(n => funcName.includes(n))) {
-                GetSystemId(funcAddr); // Deprecated
             } else {
                 return;
             }
