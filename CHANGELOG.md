@@ -4,27 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.2] - Not released
+## [2.1.2] - 2024-11-02
 
-### Added
+#### Added
 
-- Added description of functions used by the frida script.
-- Dump keybox from old versions of the CDM.
+- Descriptions for functions used by the Frida script.
+- Support for dumping the keybox from older versions of CDM.
 
 ### Changed
 
-- Using a native function to intercept keybox (instead of libc).
-- Execution of player/auto options before DRM detection (improves detection on older devices).
-- Display of different keybox contents for the same device id.
-- Simplifying function detection in JS.
+- Replaced `libc`-based keybox interception with a native function.
+- Adjusted player/auto options to execute before DRM detection, enhancing detection on legacy devices.
+- Improved handling for displaying varying keybox contents based on the device ID.
+- Streamlined JS function detection for better performance.
 
 ### Fixed
 
-- Bad start of the widevine service when launching the script.
-- Unsupported error of new `ADB` class.
-- Detection of the `MAIN` activity for applications.
-- Parsing error to list applications.
-- Detection of the minimum number of functions required.
+- Resolved startup issue with the Widevine service when launching the script.
+- Addressed unsupported error with the new `ADB` class.
+- Fixed detection of the `MAIN` activity in applications.
+- Corrected parsing errors when listing applications.
+- Improved detection of minimum required functions.
 
 ## [2.1.1] - 2024-10-28
 
@@ -379,6 +379,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.1.2]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.2
 [2.1.1]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.1
 [2.1.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.0
 [2.0.9]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.0.9
