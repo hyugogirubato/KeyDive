@@ -91,8 +91,7 @@ OEM_CRYPTO_API = {
 # https://developer.android.com/tools/releases/platforms
 CDM_VENDOR_API = {
     'mediaserver': [
-        Vendor(22, 11, '1.0', 'libwvdrmengine.so'),
-        Vendor(23, 11, '1.0', 'libwvdrmengine.so')
+        Vendor(22, 11, '1.0', 'libwvdrmengine.so')
     ],
     'mediadrmserver': [
         Vendor(24, 11, '1.0', 'libwvdrmengine.so')
@@ -131,6 +130,8 @@ CDM_FUNCTION_API = {
     'x1c36',
     'runningcrc'
 }
+
+KEYBOX_MAX_CLEAR_API = 28
 
 # https://github.com/kaltura/kaltura-device-info-android
 DRM_PLAYER = {
