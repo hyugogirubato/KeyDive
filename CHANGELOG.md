@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.3] - Not Released
+
+### Added
+
+- Detection system for keybox data changes to prevent redundant exports.
+- Max API version available for plaintext keybox.
+
+### Changed
+
+- Encrypted keybox files are now exported with a `.enc` extension for clarity.
+
+### Fixed
+
+- Issue with invalid keybox data preventing proper reception and export.
+- Device token encoding error for keybox data.
+
 ## [2.1.2] - 2024-11-02
 
 #### Added
@@ -379,6 +395,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.1.3]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.3
 [2.1.2]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.2
 [2.1.1]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.1
 [2.1.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.0
