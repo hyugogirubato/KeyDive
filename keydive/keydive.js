@@ -204,7 +204,7 @@ const PrepareKeyRequest = (address) => {
                     // print(Level.WARNING, `Failed to dump data for arg ${i}`);
                 }
             }
-            !dumped && print(Level.ERROR, 'Failed to dump challenge.');
+            !dumped && print(Level.ERROR, 'Failed to dump challenge');
         }
     });
 }
@@ -441,7 +441,7 @@ const hookLibrary = (name) => {
     });
 
     if (hooked.length < 3) {
-        print(Level.CRITICAL, 'Insufficient functions hooked.');
+        print(Level.CRITICAL, 'Insufficient functions hooked');
         return false;
     }
 
