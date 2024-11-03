@@ -3,4 +3,4 @@ from .adb import ADB
 from .cdm import Cdm
 from .vendor import Vendor
 
-__version__ = '2.1.2'
+__version__ = '2.1.3'
