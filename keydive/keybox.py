@@ -2,6 +2,7 @@ import base64
 import json
 import logging
 
+from json.encoder import encode_basestring_ascii
 from typing import Literal
 from uuid import UUID
 
@@ -34,8 +35,8 @@ class Keybox:
 
         Attributes:
             logger (Logger): Logger instance for logging messages.
-            device_id (list[bytes]): List to store unique device IDs (32 bytes each).
-            keybox (dict[bytes, bytes]): Dictionary to map device IDs to their respective keybox data.
+            device_id (list[bytes]): List of unique device IDs (32 bytes each).
+            keybox (dict[bytes, bytes]): Dictionary mapping device IDs to their respective keybox data.
         """
         self.logger = logging.getLogger(self.__class__.__name__)
         # https://github.com/kaltura/kaltura-device-info-android/blob/master/app/src/main/java/com/kaltura/kalturadeviceinfo/MainActivity.java#L203
@@ -57,7 +58,7 @@ class Keybox:
             assert size == 32, f'Invalid keybox length: {size}. Should be 32 bytes'
 
             if data not in self.device_id:
-                self.logger.info('Receive device id: \n\n%s\n', base64.b64encode(data).decode('utf-8'))
+                self.logger.info('Receive device id: \n\n%s\n', encode_basestring_ascii(data.decode('utf-8')))
                 self.device_id.append(data)
         except Exception as e:
             self.logger.debug('Failed to set device id: %s', e)
@@ -72,30 +73,33 @@ class Keybox:
         Raises:
             AssertionError: If the data length is not 128 or 132 bytes or does not meet other criteria.
         """
-        # https://github.com/wvdumper/dumper/blob/main/Helpers/Keybox.py#L51
+        # https://github.com/zybpp/Python/tree/master/Python/keybox
         try:
             size = len(data)
             assert size in (128, 132), f'Invalid keybox length: {size}. Should be 128 or 132 bytes'
 
             if size == 132:
-                assert data[128:132] == b"LVL1", 'QSEE style keybox does not end in bytes "LVL1"'
+                assert data[128:132] == b"LVL1", 'QSEE-style keybox must end with bytes "LVL1"'
 
             assert data[120:124] == b"kbox", 'Invalid keybox magic'
 
             device_id = data[0:32]
+
+            # Retrieve structured keybox info and log it
+            infos = self.__keybox_info(data)
+            encrypted = infos['flags'] > 10
             self.set_device_id(data=device_id)
 
-            # TODO: Detect different keybox (e.g. decrypted)
-            if device_id not in self.keybox or self.keybox[device_id] != data:
-                # Fetch keybox info for logging, such as flags and other details
-                infos = self.__keybox_info(data)
+            if (device_id in self.keybox and self.keybox[device_id] != (data, encrypted)) or device_id not in self.keybox:
                 self.logger.info('Receive keybox: \n\n%s\n', json.dumps(infos, indent=2))
 
-                # Warn if flags indicate encrypted data, requiring a plain-text device token
-                if infos['flags'] > 10:
-                    self.logger.warning('Received encrypted data. Plaintext device token interception is required')
+                # Warn if flags indicate encryption, which requires an unencrypted device token
+                if encrypted:
+                    self.logger.warning('Keybox contains encrypted data. Interception of plaintext device token is needed')
 
-            self.keybox[device_id] = data
+            # Store or update the keybox for the device if it's not already saved
+            if (device_id in self.keybox and not encrypted) or device_id not in self.keybox:
+                self.keybox[device_id] = (data, encrypted)
         except Exception as e:
             self.logger.debug('Failed to set keybox: %s', e)
 
@@ -111,25 +115,24 @@ class Keybox:
             dict: A dictionary containing extracted keybox information.
         """
         # https://github.com/wvdumper/dumper/blob/main/Helpers/Keybox.py#L51
-        # Extract key components from the keybox data based on defined byte offsets.
+        device_token = data[48:120]
         content = {
-            'device_id': data[0:32],  # Unique identifier for the device (32 bytes).
-            'device_key': data[32:48],  # Device-specific cryptographic key (16 bytes).
-            'device_token': data[48:120],  # AES key used for device token encryption (72 bytes).
-            'keybox_tag': data[120:124].decode('utf-8'),  # Magic tag indicating keybox format (4 bytes).
-            'crc32': bytes2int(data[124:128]),  # CRC32 checksum for data integrity verification (4 bytes).
+            'device_id': data[0:32].decode('utf-8'),  # Device's unique identifier (32 bytes)
+            'device_key': data[32:48],  # Device-specific cryptographic key (16 bytes)
+            'device_token': device_token,  # Token used for device authentication (72 bytes)
+            'keybox_tag': data[120:124].decode('utf-8'),  # Magic tag indicating keybox format (4 bytes)
+            'crc32': bytes2int(data[124:128]),  # CRC32 checksum for data integrity verification (4 bytes)
             'level_tag': data[128:132].decode('utf-8') or None,  # Optional tag indicating keybox level (4 bytes).
 
-            # TODO: decrypt device_token field
-            # Key components extracted from the device token (Bytes 48–119).
-            'flags': bytes2int(data[48:52]),  # Flags indicating various settings (4 bytes).
-            'system_id': bytes2int(data[52:56]),  # System identifier for the device (4 bytes).
+            # Additional metadata parsed from the device token (Bytes 48–120).
+            'flags': bytes2int(device_token[0:4]),  # Flags indicating specific device capabilities (4 bytes).
+            'system_id': bytes2int(device_token[4:8]),  # System identifier (4 bytes).
 
             # Provisioning ID, encrypted and derived from the unique ID in the system.
-            'provisioning_id': UUID(bytes_le=data[56:72]),  # Unique ID for provisioning (16 bytes).
+            'provisioning_id': UUID(bytes_le=device_token[8:24]),  # Provisioning UUID (16 bytes).
 
             # Encrypted bits containing device key, key hash, and additional flags.
-            'encrypted_bits': data[72:120]  # Encrypted data relevant to the device (48 bytes).
+            'encrypted_bits': device_token[24:72]  ## Encrypted device-specific information (48 bytes).
         }
 
         # Encode certain fields in base64 and convert UUIDs to string
@@ -150,11 +153,15 @@ class Keybox:
         """
         keys = self.device_id & self.keybox.keys()
         for k in keys:
+            # Prepare target directory and export file path
             parent.mkdir(parents=True, exist_ok=True)
-            path_keybox_bin = parent / 'keybox.bin'
-            path_keybox_bin.write_bytes(self.keybox[k])
+            path_keybox_bin = parent / f"keybox.{'enc' if self.keybox[k][1] else 'bin'}"
+            path_keybox_bin.write_bytes(self.keybox[k][0])
 
-            self.logger.info('Exported Keybox: %s', path_keybox_bin)
+            if self.keybox[k][1]:
+                self.logger.warning('Exported encrypted keybox: %s', path_keybox_bin)
+            else:
+                self.logger.info('Exported keybox: %s', path_keybox_bin)
         return len(keys) > 0
 
 
