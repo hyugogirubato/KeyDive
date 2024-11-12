@@ -1,5 +1,5 @@
 /**
- * Date: 2024-11-01
+ * Date: 2024-11-12
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -116,7 +116,7 @@ const disableLibrary = (name) => {
         });
         print(Level.INFO, `Library ${library.name} (${library.path}) has been disabled`);
     } else {
-        print(Level.INFO, `Library ${name} was not found`);
+        print(Level.DEBUG, `Library ${name} was not found`);
     }
 }
 
