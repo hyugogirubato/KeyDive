@@ -25,7 +25,7 @@ def shell(prompt: list) -> subprocess.CompletedProcess:
     """
     prompt = list(map(str, prompt))
     # logging.getLogger('Shell').debug(' '.join(prompt))
-    return subprocess.run(prompt, shell=True, capture_output=True)
+    return subprocess.run(prompt, capture_output=True)
 
 
 class ADB:
@@ -58,7 +58,7 @@ class ADB:
         # Start the ADB server if not already running
         sp = shell(['adb', 'start-server'])
         if sp.returncode != 0:
-            self.logger.warning('ADB server startup failed (Error: %s)', sp.stderr.decode('utf-8').strip())
+            self.logger.warning('ADB server startup failed (Error: %s)', sp.stdout.decode('utf-8').strip())
 
         # Select device based on provided ID or default to the first USB device
         try:
@@ -91,7 +91,7 @@ class ADB:
         # Execute shell command to retrieve device properties
         sp = shell([*self.prompt, 'getprop'])
         if sp.returncode != 0:
-            self.logger.error('Failed to retrieve device properties (Error: %s)', sp.stderr.decode('utf-8').strip())
+            self.logger.error('Failed to retrieve device properties (Error: %s)', sp.stdout.decode('utf-8').strip())
             return properties
 
         # Parse the output to fill the properties dictionary
@@ -136,7 +136,7 @@ class ADB:
         # Execute shell command to list applications
         sp = shell(prompt)
         if sp.returncode != 0:
-            self.logger.error('Failed to retrieve application list (Error: %s)', sp.stderr.decode('utf-8').strip())
+            self.logger.error('Failed to retrieve application list (Error: %s)', sp.stdout.decode('utf-8').strip())
             return applications
 
         # Parse and store applications in the dictionary
@@ -177,7 +177,7 @@ class ADB:
                     if sp.returncode == 0:
                         return True
 
-                    self.logger.error('Failed to start application %s (Error: %s)', package, sp.stderr.decode('utf-8').strip())
+                    self.logger.error('Failed to start application %s (Error: %s)', package, sp.stdout.decode('utf-8').strip())
                 break
 
         self.logger.error('Package %s not found or has no MAIN intent action.', package)
@@ -202,7 +202,7 @@ class ADB:
         if len(lines) < 10:
             sp = shell(prompt)
             if sp.returncode != 0:
-                self.logger.error('Failed to execute ps command (Error: %s)', sp.stderr.decode('utf-8').strip())
+                self.logger.error('Failed to execute ps command (Error: %s)', sp.stdout.decode('utf-8').strip())
                 return processes
             lines = sp.stdout.decode('utf-8').splitlines()
 
@@ -239,7 +239,7 @@ class ADB:
             sp = shell([*prompt, path])
             if sp.returncode == 0:
                 return True
-            self.logger.error('Installation failed for local path: %s (Error: %s)', path, sp.stderr.decode('utf-8').strip())
+            self.logger.error('Installation failed for local path: %s (Error: %s)', path, sp.stdout.decode('utf-8').strip())
 
         # Install from a URL if provided
         status = False
@@ -275,7 +275,7 @@ class ADB:
 
         # Check the result and log accordingly
         if sp.returncode != 0:
-            self.logger.error('URL open failed for: %s (Return: %s)', url, sp.stderr.decode('utf-8').strip())
+            self.logger.error('URL open failed for: %s (Return: %s)', url, sp.stdout.decode('utf-8').strip())
             return False
         return True
 
