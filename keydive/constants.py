@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from keydive.vendor import Vendor
@@ -92,30 +93,30 @@ OEM_CRYPTO_API = {
 # https://developer.android.com/tools/releases/platforms
 CDM_VENDOR_API = {
     'mediaserver': [
-        Vendor(22, 11, '1.0', 'libwvdrmengine.so')
+        Vendor(22, 11, '1.0', r'libwvdrmengine(?:@\S+)?\.so')
     ],
     'mediadrmserver': [
-        Vendor(24, 11, '1.0', 'libwvdrmengine.so')
+        Vendor(24, 11, '1.0', r'libwvdrmengine(?:@\S+)?\.so')
     ],
     'android.hardware.drm@1.0-service.widevine': [
-        Vendor(26, 13, '5.1.0', 'libwvhidl.so')
+        Vendor(26, 13, '5.1.0', r'libwvhidl(?:@\S+)?\.so')
     ],
     'android.hardware.drm@1.1-service.widevine': [
-        Vendor(28, 14, '14.0.0', 'libwvhidl.so')
+        Vendor(28, 14, '14.0.0', r'libwvhidl(?:@\S+)?\.so')
     ],
     'android.hardware.drm@1.2-service.widevine': [
-        Vendor(29, 15, '15.0.0', 'libwvhidl.so')
+        Vendor(29, 15, '15.0.0', r'libwvhidl(?:@\S+)?\.so')
     ],
     'android.hardware.drm@1.3-service.widevine': [
-        Vendor(30, 16, '16.0.0', 'libwvhidl.so')
+        Vendor(30, 16, '16.0.0', r'libwvhidl(?:@\S+)?\.so')
     ],
     'android.hardware.drm@1.4-service.widevine': [
-        Vendor(31, 16, '16.1.0', 'libwvhidl.so')
+        Vendor(31, 16, '16.1.0', r'libwvhidl(?:@\S+)?\.so')
     ],
     'android.hardware.drm-service.widevine': [
-        Vendor(33, 17, '17.0.0', 'libwvaidl.so'),
-        Vendor(34, 18, '18.0.0', 'android.hardware.drm-service.widevine'),
-        Vendor(35, 18, '19.0.1', 'android.hardware.drm-service.widevine')
+        Vendor(33, 17, '17.0.0', r'libwvaidl(?:@\S+)?\.so'),
+        Vendor(34, 18, '18.0.0', r'android\.hardware\.drm-service(?:-lazy)?\.widevine(?:@\S+)?'),
+        Vendor(35, 18, '19.0.1', r'android\.hardware\.drm-service(?:-lazy)?\.widevine(?:@\S+)?')
     ]
 }
 
