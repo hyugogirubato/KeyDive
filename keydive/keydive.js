@@ -1,5 +1,5 @@
 /**
- * Date: 2024-11-12
+ * Date: 2025-01-11
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -71,7 +71,7 @@ const getLibraries = (name) => {
     // https://github.com/hyugogirubato/KeyDive/issues/14#issuecomment-2146788792
     try {
         const libraries = Process.enumerateModules();
-        return libraries.filter(l => l.name.includes(name));
+        return name ? libraries.filter(l => l.name.includes(name)) : libraries;
     } catch (e) {
         print(Level.CRITICAL, e.message);
         return [];
@@ -453,6 +453,6 @@ const hookLibrary = (name) => {
 
 // RPC interfaces exposed to external calls.
 rpc.exports = {
-    getlibrary: getLibrary,
+    getlibraries: getLibraries,
     hooklibrary: hookLibrary
 };
