@@ -168,7 +168,9 @@ class Core:
         script.on('destroyed', __process_destroyed)
         script.load()
 
-        library = script.exports_sync.getlibrary(vendor.name)
+        libraries = script.exports_sync.getlibraries()
+        library = next((l for l in libraries if re.match(vendor.pattern, l['name'])), None)
+
         if library:
             self.logger.info('Library: %s (%s)', library['name'], library['path'])
 
@@ -178,10 +180,10 @@ class Core:
             elif vendor.oem < 18 and self.functions:
                 self.logger.warning('The "functions" attribute is deprecated for OEM API < 18')
 
-            return script.exports_sync.hooklibrary(vendor.name)
+            return script.exports_sync.hooklibrary(library['name'])
 
         script.unload()
-        self.logger.warning('Library not found: %s' % vendor.name)
+        self.logger.warning('Library not found: %s' % vendor.pattern)
         return False
 
 
