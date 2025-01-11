@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Added private key function.
 
+### Changed
+
+- Searching for the library via pattern rather than by name.
+
 ## [2.1.4] - 2024-11-19
 
 ### Changed
