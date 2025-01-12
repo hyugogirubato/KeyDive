@@ -125,4 +125,4 @@ You can find a copy of the license in the LICENSE file in the root folder.
 
 * * * 
 
-© hyugogirubato 2024
+© hyugogirubato 2025
