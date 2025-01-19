@@ -130,6 +130,6 @@ KeyDive is intended for educational and research purposes only. The use of this 
 This software is licensed under the terms of [MIT License](https://github.com/hyugogirubato/KeyDive/blob/main/LICENSE).  
 You can find a copy of the license in the LICENSE file in the root folder.
 
-* * * 
+---
 
 © hyugogirubato 2025
