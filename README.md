@@ -3,7 +3,7 @@
 KeyDive is a sophisticated Python script designed for precise extraction of Widevine L3 DRM (Digital Rights Management) keys from Android devices. This tool leverages the capabilities of the Widevine CDM (Content Decryption Module) to facilitate the recovery of DRM keys, enabling a deeper understanding and analysis of the Widevine L3 DRM implementation across various Android SDK versions.
 
 > [!IMPORTANT]  
-> Support for OEM API 18+ (SDK > 33) requires the use of functions extracted from Ghidra.
+> A minimum version of `frida-server 16.6.0` is required for dynamic dumps on OEM API 18+ (SDK > 33). Otherwise, extracted functions from Ghidra are required.
 
 ## Features
 
@@ -28,19 +28,27 @@ Before you begin, ensure you have the following prerequisites in place:
 Follow these steps to set up KeyDive:
 
 1. Ensure all prerequisites are met (see above).
-2. Install KeyDive from PyPI using Poetry:
+2. Install KeyDive directly from PyPI:
    ```shell
    pip install keydive
    ```
 
 ## Usage
 
-1. Play a DRM-protected video on the target device.
-2. Launch the KeyDive script.
-3. Reload the DRM-protected video on your device.
-4. The script will automatically extract the Widevine L3 keys, saving them as follows:
-    - `client_id.bin` - This file contains device identification information.
-    - `private_key.pem` - This file contains the RSA private key for decryption.
+KeyDive enables secure extraction of Widevine L3 keys in a straightforward sequence:
+
+1. Run the KeyDive script:
+   ```bash
+   keydive -kwp
+   ```
+2. The script will install and launch the [Kaltura](https://github.com/kaltura/kaltura-device-info-android) DRM test app (if not already installed).
+3. Follow these steps within the app:
+    - **Provision Widevine** (if the device isn't provisioned).
+    - **Refresh** to intercept the keybox or private key.
+    - **Test DRM Playback** to extract the challenge.
+4. KeyDive automatically captures the Widevine keys, saving them as:
+    - `client_id.bin` (device identification data).
+    - `private_key.pem` (RSA private key).
 
 This sequence ensures that the DRM-protected content is active and ready for key extraction by the time the KeyDive script is initiated, optimizing the extraction process.
 
@@ -102,7 +110,7 @@ To extract the unencrypted challenge data required for KeyDive's advanced featur
 > [!WARNING]  
 > Usage of the module is now deprecated because the deactivation of the library was natively added.
 
-Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#liboemcrypto-disabler) to temporarily disable L1, thereby facilitating L3 key extraction.
+Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#liboemcrypto-disabler)to temporarily disable L1, thereby facilitating L3 key extraction.
 
 ## Disclaimer
 
@@ -116,7 +124,6 @@ KeyDive is intended for educational and research purposes only. The use of this 
 <a href="https://github.com/JohnDoe1964"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/167800584?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="JohnDoe1964"/></a>
 <a href="https://github.com/Nineteen93"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/107993263?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="Nineteen93"/></a>
 <a href="https://github.com/sn-o-w"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/2406819?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="sn-o-w"/></a>
-
 
 ## Licensing
 
