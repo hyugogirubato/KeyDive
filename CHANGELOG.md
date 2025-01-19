@@ -9,17 +9,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Added support for dynamic interception without the need for Ghidra (available only for Frida server versions greater than 16.6.0).
+- Support for Android 16 developer version `Backlava` (SDK 36).
 
 ### Changed
 
 - Added additional comments to help understand the script.
 - Optimized file path management in parameters.
 - Refactored the code globally.
+- Added glossary documentation for DRM/Widevine.
+- Restructured the documentation.
 
 ### Fixed
 
-- Inconsistency in logging messages with certain functions.
-- Fixing the server-generated curl command.
+- Fixed inconsistency in logging messages for certain functions.
+- Fixed server-generated curl command issues.
 
 ## [2.1.5] - 2025-01-12
 
@@ -433,6 +436,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[2.2.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.2.0
 [2.1.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.5
 [2.1.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.4
 [2.1.3]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.3
