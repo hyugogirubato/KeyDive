@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - Not Released
+
+### Added
+
+- Added support for dynamic interception without the need for Ghidra (available only for Frida server versions greater than 16.6.0).
+
+### Changed
+
+- Added additional comments to help understand the script.
+- Optimized file path management in parameters.
+- Refactored the code globally.
+
+### Fixed
+
+- Inconsistency in logging messages with certain functions.
+- Fixing the server-generated curl command.
+
 ## [2.1.5] - 2025-01-12
 
 ### Added

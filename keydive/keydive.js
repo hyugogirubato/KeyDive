@@ -1,5 +1,5 @@
 /**
- * Date: 2025-01-11
+ * Date: 2025-01-18
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -65,6 +65,8 @@ const print = (level, message) => {
     send(level, message);
 }
 
+const getVersion = () => Frida.version;
+
 
 // @Utils
 const getLibraries = (name) => {
@@ -85,7 +87,20 @@ const getLibrary = (name) => {
 
 const getFunctions = (library) => {
     try {
-        return library.enumerateExports();
+        // https://frida.re/news/2025/01/09/frida-16-6-0-released/
+        const functions = library.enumerateSymbols().map(item => ({
+            type: item.type,
+            name: item.name,
+            address: item.address
+        }));
+
+        library.enumerateExports().forEach(item => {
+            if (!functions.includes(item)) {
+                functions.push(item);
+            }
+        });
+
+        return functions;
     } catch (e) {
         print(Level.CRITICAL, e.message);
         return [];
@@ -453,6 +468,7 @@ const hookLibrary = (name) => {
 
 // RPC interfaces exposed to external calls.
 rpc.exports = {
+    getversion: getVersion,
     getlibraries: getLibraries,
     hooklibrary: hookLibrary
 };

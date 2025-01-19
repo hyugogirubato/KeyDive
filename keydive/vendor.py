@@ -7,11 +7,11 @@ class Vendor:
         """
         Initializes a Vendor instance.
 
-        Args:
-            sdk (int): Minimum SDK version required.
-            oem (int): OEM identifier.
+        Parameters:
+            sdk (int): Minimum SDK version required by the vendor.
+            oem (int): OEM identifier for the vendor.
             version (str): Version of the vendor.
-            pattern (str): Name of the vendor.
+            pattern (str): Name pattern of the vendor.
         """
         self.sdk = sdk
         self.oem = oem
@@ -23,12 +23,12 @@ class Vendor:
         Returns a string representation of the Vendor instance.
 
         Returns:
-            str: String representation of the Vendor instance.
+            str:  String representation of the Vendor instance with its attributes.
         """
-        return '{name}({items})'.format(
+        return "{name}({items})".format(
             name=self.__class__.__name__,
-            items=', '.join([f'{k}={repr(v)}' for k, v in self.__dict__.items()])
+            items=", ".join([f"{k}={repr(v)}" for k, v in self.__dict__.items()])
         )
 
 
-__all__ = ('Vendor',)
+__all__ = ("Vendor",)
