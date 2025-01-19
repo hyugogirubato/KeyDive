@@ -205,7 +205,7 @@ class Core:
 
             # Determine if the Frida server version is older than 16.6.0.
             code = tuple(map(int, version.split(".")))
-            minimum = code[0] < 16 or (code == 16 and code[1] < 6)
+            minimum = code[0] > 16 or (code[0] == 16 and code[1] >= 6)
 
             # Warn the user if certain conditions related to the functions option are met.
             if minimum and self.functions:
