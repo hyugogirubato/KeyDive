@@ -1,0 +1,272 @@
+drm_serial_number: "\341we\354N\267\362\353`\024;\002\277\025\312\267"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6172
+  soc: "HiSilicon 3798M"
+  manufacturer: "Coolech"
+  model: "K-Q"
+  device_type: "tv"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: ""w\376\333\250|\273\003p\343\350\3533\334\013K"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 7999
+  soc: "HiSilicon 3798MV100"
+  manufacturer: "SmarDTV"
+  model: "DIP4090"
+  device_type: "stb"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\010\017P\315\237\r\315n\371\313\003\276\023R\247Z"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 9173
+  soc: "HiSilicon 3798MV100"
+  manufacturer: "SmarDTV"
+  model: "DIP4090"
+  device_type: "stb"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "F7\271J^\335EW\201\336\031\362\322\325\307\205"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6053
+  soc: "MTK8639"
+  manufacturer: "MeeBoss"
+  model: "M100"
+  device_type: "tv"
+  model_year: 2015
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\301f\217\310\273\243~\272\250$\327\264\205N\200["
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6054
+  soc: "MTK8639"
+  manufacturer: "MeeBoss"
+  model: "M150"
+  device_type: "tv"
+  model_year: 2015
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "9\320n=\330\203=\237\326\005\335\252M\317\271\364"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 5860
+  soc: "Intel Z2520"
+  manufacturer: "Micromax"
+  model: "P666"
+  device_type: "phone"
+  model_year: 2014
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\223n5V\033\3040\266\025\212\223\025)\360\231\377"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6765
+  soc: "bcm"
+  manufacturer: "Roku"
+  model: "3600"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\222\322h*\003xo\310\240\367\356\034\021\3034\273"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6950
+  soc: "BCM"
+  manufacturer: "Roku"
+  model: "4200"
+  device_type: "video dongle"
+  model_year: 2015
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\007\351\241\014\017k\205^\0301\227l\352`f\353"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 8083
+  soc: "BCM7218"
+  manufacturer: "Roku"
+  model: "2700"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\300\031\010\314\303\347R\316m\W\272\307,\307\350"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 8252
+  soc: "BCM"
+  manufacturer: "Roku"
+  model: "4200"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\236\360\025d\302\344O\026W0\001BzIV\331"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 8253
+  soc: "BCM"
+  manufacturer: "Roku"
+  model: "3500"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\315Q\220l\253\352\026\177\262\374\314\365nu\361D"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 8254
+  soc: "BCM"
+  manufacturer: "Roku"
+  model: "2xxx"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "!cj<WP\344_\274\334\252\304\3474\003\215"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 8353
+  soc: "bcm"
+  manufacturer: "Roku"
+  model: "x2400"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\345\364\353#\335q\342u\301\005\301t\274\374\035\372"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 8354
+  soc: "bcm"
+  manufacturer: "Roku"
+  model: "3400"
+  device_type: "video dongle"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\224\374s\220\304`U.A\231B\254TJ\306\335"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6966
+  soc: "MSD6485"
+  manufacturer: "UMC"
+  model: "BLA-43-134M-XX"
+  device_type: "tv"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\026\337Z]\347f\274\253\371\2325\215\2212(("
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 6975
+  soc: "MSD6486"
+  manufacturer: "UMC"
+  model: "SHARP-6486-S6-XX"
+  device_type: "tv"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\2620\361Q\327\232\211a\240\001\332\313R\244sp"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 7321
+  soc: "MSD6486"
+  manufacturer: "UMC"
+  model: "ETE-6486-S6-XX"
+  device_type: "tv"
+  security_level: LEVEL_2
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
+
+
+
+drm_serial_number: "\226\300\340\001\365\000B\323\205\177\317\006&\341\334`"
+deprecated_status: DEPRECATED_VALID
+device_info {
+  system_id: 1070321
+  soc: "Qualcomm SM4350"
+  manufacturer: "HMD Global"
+  model: "TTG"
+  device_type: "phone"
+  model_year: 2021
+  security_level: LEVEL_1
+  provisioning_method: FACTORY_KEYBOX
+}
+status: STATUS_RELEASED
