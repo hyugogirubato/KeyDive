@@ -8,7 +8,7 @@ This document provides an overview of the external libraries, tools, and applica
 
 A tool designed to root Android Virtual Devices (AVDs). It enables users to gain superuser privileges on their AVDs, essential for accessing and modifying system-level files and settings that are otherwise restricted.
 
-### [DRM Info](https://apkcombo.com/drm-info/com.androidfung.drminfo/download/phone-1.1.9.220313-apk)
+### [DRM Info](https://apkcombo.app/drm-info/com.androidfung.drminfo)
 
 An Android application providing detailed information about the device's Digital Rights Management (DRM) modules, including Widevine. Useful for verifying the DRM support level (L1, L2, L3) on the target device.
 

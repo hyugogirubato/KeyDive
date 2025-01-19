@@ -92,18 +92,18 @@ Advanced:
 
 ### Extracting Functions
 
-For advanced users looking to use custom functions with KeyDive, a comprehensive guide on extracting functions from Widevine libraries using Ghidra is available. Please refer to our [Functions Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/FUNCTIONS.md) for detailed instructions.
+For advanced users looking to use custom functions with KeyDive, a comprehensive guide on extracting functions from Widevine libraries using Ghidra is available. Please refer to our [Functions Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/FUNCTIONS.md) for detailed instructions.
 
 ### Offline Extraction
 
-KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/OFFLINE.md) for step-by-step instructions.
+KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/OFFLINE.md) for step-by-step instructions.
 
 ### Obtaining Unencrypted Challenge Data
 
 > [!NOTE]  
 > Usage of unencrypted challenge is not required by default. It is only necessary when the script cannot extract the client id.
 
-To extract the unencrypted challenge data required for KeyDive's advanced features, follow the steps outlined in our [Challenge Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/CHALLENGE.md). This data is crucial for analyzing DRM-protected content and enhancing your DRM key extraction capabilities.
+To extract the unencrypted challenge data required for KeyDive's advanced features, follow the steps outlined in our [Challenge Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/CHALLENGE.md). This data is crucial for analyzing DRM-protected content and enhancing your DRM key extraction capabilities.
 
 ### Temporary Disabling L1 for L3 Extraction
 
