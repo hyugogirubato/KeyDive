@@ -1,5 +1,5 @@
 /**
- * Date: 2025-01-18
+ * Date: 2025-03-01
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -69,19 +69,18 @@ const getVersion = () => Frida.version;
 
 
 // @Utils
-const getLibraries = (name) => {
+const getLibraries = () => {
     // https://github.com/hyugogirubato/KeyDive/issues/14#issuecomment-2146788792
     try {
-        const libraries = Process.enumerateModules();
-        return name ? libraries.filter(l => l.name.includes(name)) : libraries;
+        return Process.enumerateModules();
     } catch (e) {
         print(Level.CRITICAL, e.message);
         return [];
     }
-};
+}
 
 const getLibrary = (name) => {
-    const libraries = getLibraries(name);
+    const libraries = getLibraries().filter(l => l.name === name);
     return libraries.length === 1 ? libraries[0] : undefined;
 }
 
