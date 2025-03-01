@@ -215,7 +215,9 @@ class Core:
             elif not minimum and vendor.oem > 17 and not self.functions:
                 self.logger.warning("For OEM API > 17, specifying '--functions' is required. Refer to https://github.com/hyugogirubato/KeyDive/blob/main/docs/FUNCTIONS.md")
 
-            return script.exports_sync.hooklibrary(library["name"])
+            # Enable dynamic analysis (symbols) only when necessary
+            dynamic = minimum and vendor.oem > 17 and not self.functions
+            return script.exports_sync.hooklibrary(library["name"], dynamic)
 
         # Unload the script if the target library is not found.
         script.unload()

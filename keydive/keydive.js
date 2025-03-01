@@ -84,14 +84,14 @@ const getLibrary = (name) => {
     return libraries.length === 1 ? libraries[0] : undefined;
 }
 
-const getFunctions = (library) => {
+const getFunctions = (library, dynamic) => {
     try {
         // https://frida.re/news/2025/01/09/frida-16-6-0-released/
-        const functions = library.enumerateSymbols().map(item => ({
+        const functions = dynamic ? library.enumerateSymbols().map(item => ({
             type: item.type,
             name: item.name,
             address: item.address
-        }));
+        })) : [];
 
         library.enumerateExports().forEach(item => {
             if (!functions.includes(item)) {
@@ -111,7 +111,7 @@ const disableLibrary = (name) => {
     const library = getLibrary(name);
     if (library) {
         // https://github.com/hyugogirubato/KeyDive/issues/23#issuecomment-2230374415
-        const functions = getFunctions(library);
+        const functions = getFunctions(library, false);
         const disabled = [];
 
         functions.forEach(func => {
@@ -395,7 +395,7 @@ const RunningCRC = (address) => {
 
 
 // @Hooks
-const hookLibrary = (name) => {
+const hookLibrary = (name, dynamic) => {
     // https://github.com/poxyran/misc/blob/master/frida-enumerate-imports.py
     let library = getLibrary(name);
     if (!library) return false;
@@ -409,7 +409,7 @@ const hookLibrary = (name) => {
             address: library.base.add(s.address)
         }));
     } else {
-        functions = getFunctions(library);
+        functions = getFunctions(library, dynamic);
     }
 
     functions = functions.filter(f => !NATIVE_C_API.includes(f.name));
