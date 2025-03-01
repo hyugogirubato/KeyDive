@@ -4,4 +4,4 @@ from .cdm import Cdm
 from .vendor import Vendor
 from .keybox import Keybox
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
