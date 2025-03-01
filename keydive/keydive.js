@@ -409,6 +409,7 @@ const hookLibrary = (name, dynamic) => {
             address: library.base.add(s.address)
         }));
     } else {
+        // https://github.com/hyugogirubato/KeyDive/issues/50
         functions = getFunctions(library, dynamic);
     }
 
