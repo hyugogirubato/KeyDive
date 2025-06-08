@@ -86,7 +86,7 @@ OEM_CRYPTO_API = {
     "rnmsglvj", "polorucp", "kqzqahjq", "pldrclfq", "kgaitijd", "cwkfcplc", "crhqcdet", "ulns", "dnvffnze", "ygjiljer",
     "qbjxtubz", "qkfrcjtw", "rbhjspoh", "zgtjmxko", "igrqajte", "ofskesua", "qllcoacg", "pukctkiv", "ehdqmfmd",
     "xftzvkwx", "gndskkuk", "wcggmnnx", "kaatohcz", "ktmgdchz", "jkcwonus", "ehmduqyt", "vewtuecx", "mxrbzntq",
-    "isyowgmp", "flzfkhbc", "rtgejgqb", "sxxprljw", "ebxjbtxl", "pcmtpkrj"
+    "isyowgmp", "flzfkhbc", "rtgejgqb", "sxxprljw", "ebxjbtxl", "pcmtpkrj", "ncmqbmbc"
     # Add more as needed for different versions.
 }
 
