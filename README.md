@@ -1,27 +1,26 @@
-# KeyDive: Widevine L3 Extractor for Android
+# KeyDive: Widevine L3 Key Extractor for Android
 
-KeyDive is a sophisticated Python script designed for precise extraction of Widevine L3 DRM (Digital Rights Management) keys from Android devices. This tool leverages the capabilities of the Widevine CDM (Content Decryption Module) to facilitate the recovery of DRM keys, enabling a deeper understanding and analysis of the Widevine L3 DRM implementation across various Android SDK versions.
+KeyDive is a Python tool designed to extract Widevine L3 DRM keys from Android devices seamlessly, supporting multiple Android versions for DRM research, education, and analysis.
 
 > [!IMPORTANT]  
-> A minimum version of `frida-server 16.6.0` is required for dynamic dumps on OEM API 18+ (SDK > 33). Otherwise, extracted functions from Ghidra are required.
+> For dynamic key extraction on devices with Android SDK > 33 (OEM API 18+), a minimum `frida-server 16.6.0` is required. Otherwise, pre-extracted functions from Ghidra are necessary.
 
 ## Features
 
-- 🚀 Seamless Installation via [pip](#installation)
-- 🔄 Automated extraction of Widevine L3 DRM keys
-- 📱 Compatibility with a wide range of Android versions (SDK > 21), ensuring broad applicability
-- 💾 Seamless extraction process, yielding essential DRM components
-- 🌐 Offline extraction mode for environments without internet access
-- 🖥️ Command-line options for flexible usage
-- 🛠️ Support for custom functions extracted from Widevine libraries using Ghidra
-- ❤️ Fully Open-Source! Pull Requests Welcome
+- 🚀 Easy installation with [pip](https://pip.pypa.io/)
+- 🔄 Automated Widevine L3 key extraction supporting SDK > 21
+- 📱 Supports a wide range of Android devices and versions
+- 💾 Export extracted keys and device credentials in multiple formats including pywidevine `.wvd`
+- 🌐 Offline extraction mode available
+- 🖥️ Flexible command-line interface with multiple customization options
+- 🛠️ Supports injecting custom Widevine functions extracted from Ghidra XML files
+- ❤️ Fully open-source and actively maintained
 
 ## Prerequisites
 
-Before you begin, ensure you have the following prerequisites in place:
-
-1. **ADB (Android Debug Bridge):** Make sure to install [ADB](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#adb-android-debug-bridge) and include it in your system's PATH environment variable for easy command-line access.
-2. **Frida-Server:** Install `frida-server` on your target Android device. This requires root access on the device. For installation instructions and downloads, visit the [official Frida documentation](https://frida.re/docs/installation/).
+- **ADB (Android Debug Bridge):** Make sure to install [ADB](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#adb-android-debug-bridge) and include it in your system's PATH environment variable for easy command-line access.
+- **frida-server:** Install `frida-server` on your target Android device. This requires root access on the device. For installation instructions and downloads, visit the [official Frida documentation](https://frida.re/docs/installation/).
+- **Python 3.8+**
 
 ## Installation
 
@@ -29,18 +28,16 @@ Follow these steps to set up KeyDive:
 
 1. Ensure all prerequisites are met (see above).
 2. Install KeyDive directly from PyPI:
-   ```shell
+   ````shell
    pip install keydive
-   ```
+   ````
 
 ## Usage
 
-KeyDive enables secure extraction of Widevine L3 keys in a straightforward sequence:
-
 1. Run the KeyDive script:
-   ```bash
-   keydive -kwp
-   ```
+   ````bash
+   keydive -kw -a player
+   ````
 2. The script will install and launch the [Kaltura](https://github.com/kaltura/kaltura-device-info-android) DRM test app (if not already installed).
 3. Follow these steps within the app:
     - **Provision Widevine** (if the device isn't provisioned).
@@ -50,67 +47,73 @@ KeyDive enables secure extraction of Widevine L3 keys in a straightforward seque
     - `client_id.bin` (device identification data).
     - `private_key.pem` (RSA private key).
 
-This sequence ensures that the DRM-protected content is active and ready for key extraction by the time the KeyDive script is initiated, optimizing the extraction process.
+This will automatically install and launch the recommended DRM test app (Kaltura), provision Widevine if necessary, and perform the extraction steps.
+
+> [!TIP]  
+> This sequence ensures that the DRM-protected content is active and ready for key extraction by the time the KeyDive script is initiated, optimizing the extraction process.
 
 ### Command-Line Options
 
-```shell
-usage: keydive [-h] [-d <id>] [-v] [-l <dir>] [--delay <delay>] [--version] [-o <dir>] [-w] [-s] [-a] [-p] [-f <file>] [-k] [--challenge <file>] [--private-key <file>]
+````shell
+Usage: keydive [-h] [-s <serial>] [-d <delay>] [-v] [-l <dir>] [-V] [-o <dir>] [-w] [-k] [-a <type>] [--no-detect] [--no-disabler] [--no-stop] [--unencrypt] [--symbols <symbols>] [--challenge <challenge>] [--rsa-key <rsa-key>] [--aes-key <aes-key>]
 
-Extract Widevine L3 keys from an Android device.
+Extract Widevine CDM components from an Android device.
 
-options:
+Optional Arguments:
   -h, --help            show this help message and exit
 
-Global:
-  -d <id>, --device <id>
-                        Specify the target Android device ID for ADB connection.
-  -v, --verbose         Enable verbose logging for detailed debug output.
-  -l <dir>, --log <dir>
-                        Directory to store log files.
-  --delay <delay>       Delay (in seconds) between process checks.
-  --version             Display KeyDive version information.
+Global Options:
+  -s, --serial <serial>
+                        ADB serial number of the target Android device.
+  -d, --delay <delay>   Delay in seconds between process status checks. (default: 1.0)
+  -v, --verbose         Enable detailed logging for debugging.
+  -l, --log <dir>       Directory to save log files.
+  -V, --version         Show tool version and exit.
 
-Cdm:
-  -o <dir>, --output <dir>
-                        Output directory for extracted data.
-  -w, --wvd             Generate a pywidevine WVD device file.
-  -s, --skip            Skip auto-detection of the private function.
-  -a, --auto            Automatically start the Bitmovin web player.
-  -p, --player          Install and start the Kaltura app automatically.
+Cdm Extraction:
+  -o, --output <dir>    Directory to store extracted CDM files. (default: ./device)
+  -w, --wvd             Export data in pywidevine-compatible WVD format.
+  -k, --keybox          Export Widevine keybox if available on the device.
+  -a, --auto <type>     Automatically launch a DRM playback test. ("web" or "player")
 
-Advanced:
-  -f <file>, --functions <file>
-                        Path to Ghidra XML functions file.
-  -k, --keybox          Enable export of the Keybox data if it is available.
-  --challenge <file>    Path to unencrypted challenge for extracting client ID.
-  --private-key <file>  Path to private key for extracting client ID.
+Advanced Options:
+  --no-detect           Disable automatic detection of OEM private key function.
+  --no-disabler         Disable liboemcrypto-disabler module (patches memory protection).
+  --no-stop             Do not stop once minimum CDM data is intercepted.
+  --unencrypt           Force the license challenge to keep client ID data unencrypted.
+  --symbols <symbols>   Path to Ghidra-generated XML symbol file for function mapping.
+  --challenge <challenge>
+                        Protobuf challenge file(s) captured via MITM proxy.
+  --rsa-key <rsa-key>   RSA private key(s) in PEM or DER format for client ID decryption.
+  --aes-key <aes-key>   AES key(s) in hex, base64, or file form for decrypting keybox data.
+````
 
-```
+> [!NOTE]  
+> The advanced options are primarily intended for debugging and development purposes. Regular users do not need to use them.
 
 ## Advanced Usage
 
 ### Extracting Functions
 
-For advanced users looking to use custom functions with KeyDive, a comprehensive guide on extracting functions from Widevine libraries using Ghidra is available. Please refer to our [Functions Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/FUNCTIONS.md) for detailed instructions.
+Custom functions extracted from Widevine libraries with Ghidra can be provided to KeyDive to improve compatibility on some devices. See the [Functions Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/FUNCTIONS.md).
 
 ### Offline Extraction
 
-KeyDive supports offline extraction mode for situations without internet access. This mode allows you to extract DRM keys directly from your Android device. Ensure all necessary dependencies are installed and follow the detailed [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/OFFLINE.md) for step-by-step instructions.
+KeyDive supports offline extraction workflows suitable for restricted environments. See the [Offline Mode Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/OFFLINE.md).
 
-### Obtaining Unencrypted Challenge Data
+### Using Unencrypted Challenge Data
 
-> [!NOTE]  
-> Usage of unencrypted challenge is not required by default. It is only necessary when the script cannot extract the client id.
+> [!CAUTION]  
+> The `--unencrypt` option forces the license challenge to keep client ID data unencrypted. This option can cause repetitive crashes or instability in the Widevine library on certain devices.
 
-To extract the unencrypted challenge data required for KeyDive's advanced features, follow the steps outlined in our [Challenge Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/CHALLENGE.md). This data is crucial for analyzing DRM-protected content and enhancing your DRM key extraction capabilities.
+When client ID extraction fails, provide an unencrypted challenge via `--challenge`. See the [Challenge Extraction Guide](https://github.com/hyugogirubato/KeyDive/blob/main/docs/advanced/CHALLENGE.md).
 
 ### Temporary Disabling L1 for L3 Extraction
 
 > [!WARNING]  
 > Usage of the module is now deprecated because the deactivation of the library was natively added.
 
-Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#liboemcrypto-disabler)to temporarily disable L1, thereby facilitating L3 key extraction.
+Some manufacturers (e.g., Xiaomi) allow the use of L1 keyboxes even after unlocking the bootloader. In such cases, it's necessary to install a Magisk module called [liboemcrypto-disabler](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#liboemcrypto-disabler) to temporarily disable L1, thereby facilitating L3 key extraction.
 
 ## Disclaimer
 
@@ -124,6 +127,7 @@ KeyDive is intended for educational and research purposes only. The use of this 
 <a href="https://github.com/JohnDoe1964"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/167800584?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="JohnDoe1964"/></a>
 <a href="https://github.com/Nineteen93"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/107993263?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="Nineteen93"/></a>
 <a href="https://github.com/sn-o-w"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/2406819?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="sn-o-w"/></a>
+<a href="https://github.com/sn-o-w"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/206893953?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="samu87d8dh2"/></a>
 
 ## Licensing
 

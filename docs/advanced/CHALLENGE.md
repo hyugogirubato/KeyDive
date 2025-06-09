@@ -56,7 +56,7 @@ To extract unencrypted challenges using KeyDive and HTTP Toolkit, you can follow
 6. **Use Extracted Data:**
     - Use the extracted data with KeyDive by running:
       ```shell
-      keydive --device <DEVICE_ID> --challenge path/to/challenge
+      keydive --serial <DEVICE_ID> --challenge path/to/challenge
       ```
    Replace `path/to/challenge` with the actual path to the extracted challenge data file.
 

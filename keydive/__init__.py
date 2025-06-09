@@ -1,7 +1,7 @@
 from .core import Core
-from .adb import ADB
-from .cdm import Cdm
-from .vendor import Vendor
-from .keybox import Keybox
+from .adb.remote import Remote
+from .adb.vendor import Vendor
+from .drm.cdm import Cdm
+from .drm.keybox import KeyBox
 
-__version__ = "2.2.1"
+__version__ = '3.0.0'

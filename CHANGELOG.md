@@ -4,6 +4,67 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-06-09
+
+### Added
+
+- Support for OTA provisioning.
+- Dumping of OEM Device Certificate to allow manual L3 provisioning without a keybox.
+- Dynamic keybox generation.
+- Detection of keybox token during provisioning (including L1 support when `device_aes_key` is provided).
+- New challenge interception function (TODO: may reduce dump failures?).
+- Option `--no-stop` to keep capture running after requirement is met.
+- Debug display of DRM player PID.
+- Debug detection and display of default browser PID (supports Google Chrome, Samsung Internet, Mozilla Firefox).
+- Display of client capabilities in debug mode.
+- Full JSON-formatted output for client information.
+- New private function hooks.
+- Support and backward compatibility for Frida API 17+.
+- Ctrl+C support when analyzing the device (ADB shell command).
+- New contributor: [samu87d8dh2](https://github.com/samu87d8dh2)
+
+### Changed
+
+- All C API functions are now filtered.
+- Standardized JS hook functions.
+- The keybox is now handled as an object rather than a separate process.
+- DRM information parsing (keybox, device ID, challenge, token, etc.) is now centralized in a single class.
+- Constants are now split per module instead of being centralized in a single file.
+- Widevine license protobuf updated to 2020 version (partially compatible with CDM 19+).
+- `cryptography` is now used instead of `pycryptodomex`.
+- CDM is now resolved with improved accuracy (security level, system ID).
+- Keybox level is now validated against the SDK.
+- Standardized Frida JS script file reading functions.
+- Clearer output for `-a player` or `-a web` options.
+- Deprecated script message is now shown only once, at the first hook.
+- Data export now occurs after every relevant event (optimization).
+- CDM search is performed in descending version order.
+- Index for extracting `client_id` argument has been adjusted.
+- File names in generated tree are now normalized using `unidecode`.
+
+### Fixed
+
+- Process name resolution for Widevine DRM process.
+- Missing hook on file read function.
+- Vendor model updated to support library checking via regex and fix rendering.
+- Updated function allowlist for Ghidra-based function analysis.
+- ADB process listing fix (handles multiple entries with same name but different PIDs).
+- `dumpsys` check for application package verification.
+- DRM player app is no longer relaunched if already running (even in background).
+- Frida server version is retrieved and displayed only once.
+- Keybox is fully parsed only when decrypted data is available.
+- CRC32 check added for keybox validation.
+- Improved display when encrypted keybox is received (no more invalid output).
+- Regex fix in process analysis.
+- Proper handling of `getprop` output to conform with expected format.
+- Removed dependency on `pywidevine` and unnecessary associated libraries.
+- Option to force plaintext challenge added (disabled by default; encrypted interception now works).
+- Better resolution of CDM level and security parameters.
+
+### New Contributors
+
+- [samu87d8dh2](https://github.com/samu87d8dh2)
+
 ## [2.2.1] - 2025-03-01
 
 ### Added
@@ -446,6 +507,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[3.0.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v3.0.0
 [2.2.1]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.2.1
 [2.2.0]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.2.0
 [2.1.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v2.1.5

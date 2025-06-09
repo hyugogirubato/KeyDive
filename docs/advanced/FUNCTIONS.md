@@ -9,7 +9,7 @@ To utilize custom functions with KeyDive, particularly when extracting Widevine 
 Run KeyDive to detect the library path on the Android device:
 
 ```shell
-keydive --device <DEVICE_ID>
+keydive --serial <DEVICE_ID>
 ```
 
 Replace `<DEVICE_ID>` with the ID of your Android device connected via ADB.
@@ -77,9 +77,9 @@ Ensure you have Ghidra installed on your system. If not, download it from the [G
 Once you have the `functions.xml` file:
 
 - Ensure KeyDive is set up according to its documentation.
-- When running KeyDive, use the `--functions` argument to specify the path to your `functions.xml` file. For example:
+- When running KeyDive, use the `--symbols` argument to specify the path to your `functions.xml` file. For example:
   ```shell
-  keydive --device <DEVICE_ID> --functions /path/to/functions_x86.xml
+  keydive --serial <DEVICE_ID> --symbols /path/to/functions_x86.xml
   ```
 - Proceed with the key extraction process as detailed in KeyDive's usage instructions.
 
