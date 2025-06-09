@@ -4,4 +4,4 @@ from .adb.vendor import Vendor
 from .drm.cdm import Cdm
 from .drm.keybox import KeyBox
 
-__version__ = '3.0.0'
+__version__ = '3.0.1'
