@@ -775,21 +775,21 @@ const hookLibrary = (name, dynamic) => {
             } else if (['runningcrc'].every(n => funcName.includes(n))) {
                 // https://github.com/Avalonswanderer/widevinel3_Android_PoC/blob/main/PoCs/recover_l3keybox.py#L50
                 RunningCRC(funcAddr);
-            } else if (['_oecc07', '_lcc07'].some(n => funcName.includes(n))) {
+            } else if (['_oecc07', '_lcc07'].some(n => funcName === n)) {
                 OEMCrypto_GetDeviceID(funcAddr);
-            } else if (['_oecc04', '_lcc04'].some(n => funcName.includes(n))) {
+            } else if (['_oecc04', '_lcc04'].some(n => funcName === n)) {
                 OEMCrypto_GetKeyData(funcAddr);
             // TODO: Check the keybox implementation on SDK 36
             // TODO: Interception of the certificate's private key
             // Call OEMCrypto_GetOEMPublicCertificate before OEMCrypto_LoadDRMPrivateKey
 
-                // Provisioning Interception
-            } else if (['_oecc49', '_lcc49'].some(n => funcName.includes(n))) {
+            // Provisioning Interception
+            } else if (['_oecc49', '_lcc49'].some(n => funcName === n)) {
                 OEMCrypto_ProvisioningMethod(funcAddr);
-            } else if (['_oecc12', '_lcc12', '_oecc95', '_lcc95'].some(n => funcName.includes(n))) {
-                // Key derivation via keybox for L1 provisioning
+            } else if (['_oecc12', '_lcc12', '_oecc95', '_lcc95'].some(n => funcName === n)) {
+                // Key derivation via keybox provisioning
                 OEMCrypto_GenerateDerivedKeys(funcAddr);
-            //} else if (['_oecc21', '_lcc21'].some(n => funcName.includes(n))) {
+            //} else if (['_oecc21', '_lcc21'].some(n => funcName === n)) {
             //    Key derivation via session key for license request
             //    OEMCrypto_DeriveKeysFromSessionKey(funcAddr);
             } else if (['WVDrmPlugin', 'provideProvisionResponse'].every(n => funcName.includes(n))) {
