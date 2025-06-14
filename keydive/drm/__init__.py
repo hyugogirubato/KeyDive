@@ -25,9 +25,8 @@ CDM_FUNCTIONS = (
     '_oecc07', '_lcc07',
     '_oecc04', '_lcc04',
     '_oecc49', '_lcc49',
-    '_oecc12', '_lcc12',
-    '_oecc95', '_lcc95',
-    '_oecc21', '_lcc21',
+    '_oecc12', '_lcc12', '_oecc95', '_lcc95',
+    #'_oecc21', '_lcc21',
     'GenerateDerivedKeys'
 )
 
