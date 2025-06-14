@@ -234,7 +234,7 @@ class Remote:
         # Run the shell command to get the list of packages
         sp = shell(prompt)
         if sp[0]:
-            self.logger.error('Unable to list installed apps (Error: %s)', sp[0])
+            self.logger.error('Unable to list installed apps (Error: %s)', sp[1])
             return applications
 
         # Parse command output line-by-line
