@@ -26,14 +26,9 @@ def shell(prompt: List[str]) -> Tuple[bool, str]:
         Tuple[bool, str]: A tuple where the first value is True if the command failed,
                           and the second value is the decoded standard output (stdout) string.
 
-    Example:
-        shell(["ls", "-l"])
-        (False, "total 0\n-rw-r--r-- 1 user ...")
-
     Note:
         The return status is inverted (True means failure), which should be considered
         when checking execution outcomes.
-
     """
     # Convert all arguments to strings in case any are not
     prompt = list(map(str, prompt))
@@ -41,12 +36,12 @@ def shell(prompt: List[str]) -> Tuple[bool, str]:
     # Uncomment for debugging shell command execution
     # logging.getLogger('Shell').debug('Executing command: %s', ' '.join(prompt))
     try:
-        # Execute the command and capture the output
-        # TODO: Redirect standard output and error in PIP
-        sp = run(prompt, capture_output=True)
+        # Start the process with stdout and stderr redirected to PIPE
+        process = Popen(prompt, stdout=PIPE, stderr=PIPE, universal_newlines=True, encoding='utf-8')
+        stdout, stderr = process.communicate()  # Waits for process to finish and collects output
 
-        # Return True if the command failed (non-zero exit), along with stdout
-        return sp.returncode != 0, sp.stdout.decode('utf-8').strip()
+        # Return True on failure (non-zero exit code), and the decoded stdout
+        return process.wait() != 0, (stdout + stderr).strip()
     except KeyboardInterrupt:
         return False, ''
 
