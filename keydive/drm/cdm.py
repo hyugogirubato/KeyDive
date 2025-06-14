@@ -73,28 +73,31 @@ def CryptoSession_ExtractSystemIdFromOemCert(cert: Certificate) -> int:
     raise ValueError('The certificate does not contain a Widevine System ID extension.')
 
 
-def CryptoSession_GetSecurityLevel(cert: Certificate) -> Optional[int]:
+def CryptoSession_GetSecurityLevel(data: Union[Certificate, str]) -> int:
     """
-    Determines the Widevine security level (L1, L2, or L3) from the subject field
-    of an X.509 certificate.
+    Determines the Widevine security level (L1, L2, L3) from a certificate or a string.
 
-    The level is inferred by searching for substrings like "_L1_", "_L2_", or "_L3_" in
-    the subject string, which typically reflects the provisioning level of the device
-    (hardware-backed = L1, software-only = L3, etc).
+    The security level is inferred by looking for specific substrings in either:
+    - The subject of an X.509 certificate (e.g., containing "_L1_")
+    - A plain string (e.g., containing "Level1")
 
     Args:
-        cert (Certificate): An X.509 certificate whose subject may contain the security level marker.
+        data (Union[Certificate, str]): An X.509 certificate or a descriptive string.
 
     Returns:
-        Optional[int]: The security level as an integer (1 = L1, 2 = L2, 3 = L3),
-                       or None if no level marker is found in the subject.
+        int: Security level as an integer (1 = L1, 2 = L2, 3 = L3).
+             Defaults to level 3 if no recognizable pattern is found.
     """
-    # Extract the certificate's subject string in a standardized format
-    subject = cert.subject.rfc4514_string()
+    if isinstance(data, Certificate):
+        # Extract the certificate's subject string in a standardized format
+        data = data.subject.rfc4514_string()
+        pattern = '_L{}_'
+    else:
+        pattern = 'Level{}'
 
-    # kSecurityLevel (L1, L2, L3, Unknown)
-    # Check for known security level markers in the subject string
-    return next((level for level in range(1, 4) if f'_L{level}_' in subject), None)
+    # Scan for each level from 1 to 3 in the input string using the appropriate pattern
+    # If no match is found, assume the default security level is 3 (L3 - software-based)
+    return next((l for l in range(1, 4) if pattern.format(l) in data), 3)
 
 
 class Cdm:
@@ -787,6 +790,8 @@ class Cdm:
 
         # Process all client IDs and their associated private keys
         for key, client_id in self._client_id.items():
+            client_info = self.__client_info(client_id)
+
             # Parse DRM certificate from the client token protobuf data
             signed_drm_certificate = SignedDrmCertificate()
             signed_drm_certificate.ParseFromString(client_id.token)
@@ -794,11 +799,12 @@ class Cdm:
             drm_certificate = DrmCertificate()
             drm_certificate.ParseFromString(signed_drm_certificate.drm_certificate)
 
+            # Extract system ID and security level from client ID
             system_id = drm_certificate.system_id
+            level = CryptoSession_GetSecurityLevel(client_info['oem_crypto_build_information'])
 
             # Derive a filesystem path from client info on the first iteration
             if not path:
-                client_info = self.__client_info(client_id)
                 path = Path() / unidec(client_info['company_name']) / unidec(client_info['model_name'])
 
             # Attempt to find the private key matching the current client key
@@ -807,7 +813,7 @@ class Cdm:
             # Initialize or retrieve existing record for this system ID
             item = items.get(system_id, {
                 'path': path,
-                'level': 3,  # Default security level
+                'level': level,  # Default security level
                 'device': [],  # List of device keys associated
                 'keybox': None,  # Associated keybox ID
                 'certificate': None  # Associated certificate ID
@@ -828,7 +834,7 @@ class Cdm:
 
             # Extract system ID and security level from certificate
             system_id = CryptoSession_ExtractSystemIdFromOemCert(intermediate_cert)
-            level = CryptoSession_GetSecurityLevel(intermediate_cert) or 3  # Default to level 3 if unknown
+            level = CryptoSession_GetSecurityLevel(intermediate_cert)
 
             # Find matching private key for this certificate key
             private_key = next((v for k, v in self._private_key.items() if k == key), None)
