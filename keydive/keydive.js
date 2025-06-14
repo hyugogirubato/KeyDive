@@ -66,8 +66,8 @@ Memory.readStdString = function (address) {
 
 Memory.readStdVector = function (address) {
     // https://learnfrida.info/intermediate_usage/#stdvector
-    // Read the vector size (2 bytes) at offset pointerSize
-    let size = Memory.readU16(address.add(Process.pointerSize));
+    // Read the vector size (2 bytes) at offset 8
+    let size = Memory.readU16(address.add(8));
 
     // Read pointer to the start of the vector data (at offset 0)
     const data = Memory.readByteArray(address.readPointer(), size);
