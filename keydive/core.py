@@ -374,6 +374,8 @@ class Core(Remote):
             self.cdm.set_stable_id(data)
         elif level == 'device_id':
             self.cdm.set_device_id(data)
+        elif level == 'encryption_context':
+            self.cdm.set_encryption_context(data)
         elif level == 'provisioning_method':
             self.cdm.set_provisioning_method(data)
         elif level == 'provisioning_response':
