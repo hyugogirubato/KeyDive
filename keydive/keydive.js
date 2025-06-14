@@ -409,6 +409,7 @@ function FileSystem_Read(address) {
             const bufferPtr = args[2];
             const size = args[3].toInt32();
             const data = Memory.readByteArray(bufferPtr, size);
+            // TODO: check compatibility for SDK 36
 
             // Check if the size matches known keybox sizes (128 or 132 bytes)
             if ([128, 132].includes(size) && data) {
