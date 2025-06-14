@@ -536,6 +536,35 @@ function OEMCrypto_GetKeyData(address) {
     });
 }
 
+function CryptoSession_LoadCertificatePrivateKey(address) {
+    /*
+    wvcdm::CryptoSession::LoadCertificatePrivateKey
+
+    Args:
+        args[1]: const CryptoWrappedKey& private_key
+    Return:
+        retval: wvcdm::CdmResponseType
+     */
+    Interceptor.attach(address, {
+        onEnter: function (args) {
+            print(Level.DEBUG, '[+] onEnter: CryptoSession::LoadCertificatePrivateKey');
+            this.privateKeyPtr = args[1];
+            // Call OEMCrypto_GetOEMPublicCertificate before OEMCrypto_LoadDeviceRSAKey (old)
+            // Call OEMCrypto_GetOEMPublicCertificate before OEMCrypto_LoadDRMPrivateKey (new)
+            // Called from LoadPrivateOrLegacyKey
+        },
+        onLeave: function (retval) {
+            print(Level.DEBUG, '[-] onLeave: CryptoSession::LoadCertificatePrivateKey');
+            console.log(hexdump(this.privateKeyPtr, {
+                offset: 0,
+                length: 128,
+                header: true,
+                ansi: true
+            }));
+        }
+    });
+}
+
 function OEMCrypto_ProvisioningMethod(address) {
     /*
     wvcdm::OEMCrypto_GetProvisioningMethod
@@ -779,9 +808,9 @@ const hookLibrary = (name, dynamic) => {
                 OEMCrypto_GetDeviceID(funcAddr);
             } else if (['_oecc04', '_lcc04'].some(n => funcName === n)) {
                 OEMCrypto_GetKeyData(funcAddr);
-            // TODO: Check the keybox implementation on SDK 36
-            // TODO: Interception of the certificate's private key
-            // Call OEMCrypto_GetOEMPublicCertificate before OEMCrypto_LoadDRMPrivateKey
+            // TODO: Intercept the private key of OEM device certificate
+            //} else if (['CryptoSession', 'LoadCertificatePrivateKey'].every(n => funcName.includes(n))) {
+            //    CryptoSession_LoadCertificatePrivateKey(funcAddr);
 
             // Provisioning Interception
             } else if (['_oecc49', '_lcc49'].some(n => funcName === n)) {
