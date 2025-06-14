@@ -2,7 +2,7 @@ import logging
 import re
 import shutil
 
-from subprocess import run
+from subprocess import Popen, PIPE
 from typing import Optional, List, Tuple
 from pathlib import Path
 
