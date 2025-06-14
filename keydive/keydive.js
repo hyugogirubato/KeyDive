@@ -1,5 +1,5 @@
 /**
- * Date: 2025-06-09
+ * Date: 2025-06-14
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -568,12 +568,10 @@ function OEMCrypto_GenerateDerivedKeys(address) {
     */
     Interceptor.attach(address, {
         onEnter: function (args) {
-            print(Level.DEBUG, '[+] onEnter: OEMCrypto_GenerateDerivedKeys');
+            print(Level.DEBUG, '[*] OEMCrypto_GenerateDerivedKeys');
             // https://github.com/Avalonswanderer/widevinel3_Android_PoC/blob/main/PoCs/content_key_recovery.py#L103C55-L103C72
-            const macKeyContext = Memory.readByteArray(args[1], args[2].toInt32());
-            const encKeyContext = Memory.readByteArray(args[3], args[4].toInt32());
 
-            // Used for L1 provisioning
+            // const macKeyContext = Memory.readByteArray(args[1], args[2].toInt32());
             // console.log('macKeyContext:', macKeyContext);
             /*
             macKeyContext:            0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF
@@ -583,6 +581,7 @@ function OEMCrypto_GenerateDerivedKeys(address) {
             00000030  4f e2 a4 4c 76 3b cc 2c 82 6a 2d 6e f9 a7 1a e0  O..Lv;.,.j-n....
             */
 
+            const encKeyContext = Memory.readByteArray(args[3], args[4].toInt32());
             // console.log('encKeyContext:', encKeyContext);
             /*
             encKeyContext:            0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF
@@ -591,9 +590,9 @@ function OEMCrypto_GenerateDerivedKeys(address) {
             00000020  76 69 6e 65 2e 63 6f 6d 12 10 51 43 4f e2 a4 4c  vine.com..QCO..L
             00000030  76 3b cc 2c 82 6a 2d 6e f9 a7 1a e0 03 ec 2a c5  v;.,.j-n......*.
             */
-        },
-        onLeave: function (retval) {
-            print(Level.DEBUG, '[-] onLeave: OEMCrypto_GenerateDerivedKeys');
+            if (encKeyContext) {
+                send('encryption_context', encKeyContext);
+            }
         }
     });
 }
@@ -620,7 +619,6 @@ function OEMCrypto_DeriveKeysFromSessionKey(address) {
             const macKeyContext = Memory.readByteArray(args[3], args[4].toInt32());
             const encKeyContext = Memory.readByteArray(args[5], args[6].toInt32());
 
-            // Used for L1 license request
             // console.log('encSessionKey:', encSessionKey);
             /*
             encSessionKey:            0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF
@@ -784,14 +782,14 @@ const hookLibrary = (name, dynamic) => {
             // TODO: Interception of the certificate's private key
             // Call OEMCrypto_GetOEMPublicCertificate before OEMCrypto_LoadDRMPrivateKey
 
-            // Provisioning Interception
+                // Provisioning Interception
             } else if (['_oecc49', '_lcc49'].some(n => funcName.includes(n))) {
                 OEMCrypto_ProvisioningMethod(funcAddr);
-            // Key derivation via keybox for L1 provisioning
-            //} else if (['_oecc12', '_lcc12', '_oecc95', '_lcc95'].some(n => funcName.includes(n))) {
-            //    OEMCrypto_GenerateDerivedKeys(funcAddr);
-            // Key derivation via session key for L1 license request
+            } else if (['_oecc12', '_lcc12', '_oecc95', '_lcc95'].some(n => funcName.includes(n))) {
+                // Key derivation via keybox for L1 provisioning
+                OEMCrypto_GenerateDerivedKeys(funcAddr);
             //} else if (['_oecc21', '_lcc21'].some(n => funcName.includes(n))) {
+            //    Key derivation via session key for license request
             //    OEMCrypto_DeriveKeysFromSessionKey(funcAddr);
             } else if (['WVDrmPlugin', 'provideProvisionResponse'].every(n => funcName.includes(n))) {
                 WVDrmPlugin_provideProvisionResponse(funcAddr);
