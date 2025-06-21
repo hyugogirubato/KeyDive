@@ -456,7 +456,8 @@ class Core(Remote):
                     )
 
             # Determine whether to enable dynamic symbol resolution based on server and vendor context
-            dynamic = self._server.features and vendor.min_oem[0] > 17 and not self._resolved
+            # Support symbol analysis including on old libraries from sdk 34 (support for manufacturer delays)
+            dynamic = self._server.features and not self._resolved and (vendor.min_oem[0] > 17 or self.sdk > 33)
 
             # Attempt to hook into the identified library with or without dynamic symbols
             status = script.exports_sync.hooklibrary(library['name'], dynamic)
