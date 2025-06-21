@@ -4,7 +4,7 @@ import time
 from typing import Optional, Tuple, Literal
 from pathlib import Path
 
-from frida import ServerNotRunningError
+from frida import ServerNotRunningError, ProtocolError
 from frida.core import Session, Script
 from pathvalidate import sanitize_filepath
 
@@ -413,6 +413,9 @@ class Core(Remote):
         except ServerNotRunningError as e:
             # Handle the case where the Frida server is not running on the device
             raise EnvironmentError('Frida server is not running on the device.') from e
+        except ProtocolError as e:
+            # Handle the case where the Frida python version is different from the server version
+            raise EnvironmentError('Frida python version is different from the server version.') from e
         except Exception as e:
             # Catch and log all other errors that occur during session attachment
             self.logger.error('Could not attach to process %s: %s', pid, e)
