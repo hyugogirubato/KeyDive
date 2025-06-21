@@ -1,5 +1,5 @@
 /**
- * Date: 2025-06-14
+ * Date: 2025-06-21
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -152,8 +152,7 @@ function getFunctions(library, dynamic = false) {
             ? library.enumerateSymbols().map(item => ({
                 type: item.type,
                 name: item.name,
-                address:
-                item.address
+                address: item.address
             })) : [];
 
         return functions.concat(library.enumerateExports());
