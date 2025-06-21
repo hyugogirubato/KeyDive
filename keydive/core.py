@@ -454,13 +454,18 @@ class Core(Remote):
                         'For OEM API > 17, the "--symbols" option is required. '
                         'Refer to: https://github.com/hyugogirubato/KeyDive/blob/main/docs/FUNCTIONS.md'
                     )
-                self._server.dialog = True
 
             # Determine whether to enable dynamic symbol resolution based on server and vendor context
             dynamic = self._server.features and vendor.min_oem[0] > 17 and not self._resolved
 
             # Attempt to hook into the identified library with or without dynamic symbols
-            return script.exports_sync.hooklibrary(library['name'], dynamic)
+            status = script.exports_sync.hooklibrary(library['name'], dynamic)
+            if not (self._server.dialog or status or self._resolved) and self.sdk > 33:
+                # https://github.com/hyugogirubato/KeyDive/issues/60
+                self.logger.warning('Detection without symbols failed, try again with the "--symbols" option.')
+
+            self._server.dialog = True
+            return status
 
         # If the expected library was not found, clean up and notify the user
         script.unload()
