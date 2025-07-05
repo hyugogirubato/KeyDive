@@ -139,7 +139,7 @@ class Cdm(Provisioning):
 
             # Extract system ID and security level from client ID
             system_id = drm_certificate.system_id
-            level = CryptoSession_GetSecurityLevel(client_info['oem_crypto_build_information'])
+            level = CryptoSession_GetSecurityLevel(client_info.get('oem_crypto_build_information') or '')
 
             # Derive a filesystem path from client info on the first iteration
             if not path:
