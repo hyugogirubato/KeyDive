@@ -7,10 +7,11 @@ KEYBOX_MAX_CLEAR_API = 28
 # https://cs.android.com/search?q=oemcrypto&sq=&ss=android%2Fplatform%2Fsuperproject
 OEM_CRYPTO_API = (
     # Mapping of function names across different API levels (obfuscated names may vary).
-    'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd', 'cwkfcplc', 'crhqcdet', 'ulns', 'dnvffnze', 'ygjiljer',
+    'rnmsglvj', 'polorucp', 'kqzqahjq', 'pldrclfq', 'kgaitijd', 'cwkfcplc', 'crhqcdet', 'dnvffnze', 'ygjiljer',
     'qbjxtubz', 'qkfrcjtw', 'rbhjspoh', 'zgtjmxko', 'igrqajte', 'ofskesua', 'qllcoacg', 'pukctkiv', 'ehdqmfmd',
     'xftzvkwx', 'gndskkuk', 'wcggmnnx', 'kaatohcz', 'ktmgdchz', 'jkcwonus', 'ehmduqyt', 'vewtuecx', 'mxrbzntq',
-    'isyowgmp', 'flzfkhbc', 'rtgejgqb', 'sxxprljw', 'ebxjbtxl', 'pcmtpkrj', 'uegpdzus', 'ncmqbmbc', 'faokrmio'
+    'isyowgmp', 'flzfkhbc', 'rtgejgqb', 'sxxprljw', 'ebxjbtxl', 'pcmtpkrj', 'uegpdzus', 'ncmqbmbc', 'faokrmio',
+    'uerbupkh', 'dirwetvo', 'kssgqibl', 'ulns'
     # Add more as needed for different versions.
 )
 
