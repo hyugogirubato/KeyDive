@@ -11,7 +11,7 @@ OEM_CRYPTO_API = (
     'qbjxtubz', 'qkfrcjtw', 'rbhjspoh', 'zgtjmxko', 'igrqajte', 'ofskesua', 'qllcoacg', 'pukctkiv', 'ehdqmfmd',
     'xftzvkwx', 'gndskkuk', 'wcggmnnx', 'kaatohcz', 'ktmgdchz', 'jkcwonus', 'ehmduqyt', 'vewtuecx', 'mxrbzntq',
     'isyowgmp', 'flzfkhbc', 'rtgejgqb', 'sxxprljw', 'ebxjbtxl', 'pcmtpkrj', 'uegpdzus', 'ncmqbmbc', 'faokrmio',
-    'uerbupkh', 'dirwetvo', 'kssgqibl', 'ulns'
+    'uerbupkh', 'dirwetvo', 'kssgqibl', 'wzpmjqna', 'ulns'
     # Add more as needed for different versions.
 )
 
