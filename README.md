@@ -19,7 +19,7 @@ KeyDive is a Python tool designed to extract Widevine L3 DRM keys from Android d
 ## Prerequisites
 
 - **ADB (Android Debug Bridge):** Make sure to install [ADB](https://github.com/hyugogirubato/KeyDive/blob/main/docs/PACKAGE.md#adb-android-debug-bridge) and include it in your system's PATH environment variable for easy command-line access.
-- **frida-server:** Install `frida-server` on your target Android device. This requires root access on the device. For installation instructions and downloads, visit the [official Frida documentation](https://frida.re/docs/installation/).
+- **frida-server:** Install `frida-server` on your target Android device. **This requires root access on the device**. For installation instructions and downloads, visit the [official Frida documentation](https://frida.re/docs/installation/).
 - **Python 3.8+**
 
 ## Installation
