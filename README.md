@@ -128,6 +128,7 @@ KeyDive is intended for educational and research purposes only. The use of this 
 <a href="https://github.com/Nineteen93"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/107993263?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="Nineteen93"/></a>
 <a href="https://github.com/sn-o-w"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/2406819?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="sn-o-w"/></a>
 <a href="https://github.com/sn-o-w"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/206893953?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="samu87d8dh2"/></a>
+<a href="https://github.com/flloschy"><img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/69321390?v=4&h=25&w=25&fit=cover&mask=circle&maxage=7d" alt="flloschy "/></a>
 
 ## Licensing
 
