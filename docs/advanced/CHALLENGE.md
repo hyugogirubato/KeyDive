@@ -17,7 +17,7 @@ To extract unencrypted challenges using KeyDive and HTTP Toolkit, you can follow
 #### 3. Configure KeyDive
 
 - Ensure KeyDive is set up to run on your Android device. This involves:
-    - Installing KeyDive on your device via Magisk or another suitable method.
+    - Installing KeyDive on your device via pip or another suitable method.
     - Running KeyDive with the necessary configurations to intercept DRM-related requests.
 
 #### 4. Intercept Traffic with HTTP Toolkit
@@ -42,7 +42,7 @@ To extract unencrypted challenges using KeyDive and HTTP Toolkit, you can follow
     - Open HTTP Toolkit and ensure interception is enabled for your device's network traffic.
 
 2. **Run KeyDive:**
-    - Execute KeyDive on your Android device, ensuring it intercepts DRM-related requests.
+    - Execute KeyDive on your devive, ensuring it intercepts DRM-related requests.
 
 3. **Access DRM Content:**
     - Access DRM-protected content on your device that triggers DRM challenge requests.
