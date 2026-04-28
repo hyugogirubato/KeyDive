@@ -1,5 +1,5 @@
 /**
- * Date: 2025-06-21
+ * Date: 2026-04-26
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -47,23 +47,92 @@ Memory.readByteArray ??= (address, length) => address.readByteArray(length);
 Memory.readPointer ??= (address) => address.readPointer();
 Memory.readU16 ??= (address) => address.readU16();
 
+// libc++ std::string (SSO flag at bit 0 of byte 0):
+//   short: [size<<1 : 1B][inline data @+1 ...]
+//   long:  [bit0=1 : 1B][...][size_t length @+pSize][char* data ptr @+2*pSize]
+// Bit 0 of the first byte selects short vs long; length read as U16.
+// https://learnfrida.info/intermediate_usage/#stdstring
 Memory.readStdString = function (address) {
-    // https://learnfrida.info/intermediate_usage/#stdstring
-    // Read string size (2 bytes) at offset pointerSize
-    const size = Memory.readU16(address.add(Process.pointerSize));
-
-    // Check if string is using Small String Optimization (SSO)
+    const length = Memory.readU16(address.add(Process.pointerSize));
     const LSB = address.readU8() & 1;
     if (LSB === 0) {
-        // https://codeshare.frida.re/@oleavr/read-std-string/
         // SSO: data is stored inline starting at address + 1
-        return Memory.readByteArray(address.add(1), size);
+        return Memory.readByteArray(address.add(1), length);
     } else {
         // Non-SSO: pointer to data is stored at address
-        return Memory.readByteArray(address.add(Process.pointerSize * 2).readPointer(), size);
+        return Memory.readByteArray(address.add(Process.pointerSize * 2).readPointer(), length);
     }
 }
 
+// libstdc++ C++11 ABI:
+//   [char* _M_p][size_t length][SSO buf 16B or capacity]
+// _M_p always points to the data (heap or local SSO buffer).
+Memory.readStdStringGnuCxx11 = function (address) {
+    try {
+        const dataPtr = address.readPointer();
+        if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
+        const length = address.add(Process.pointerSize).readU32();
+        if (length === 0 || length > 0x10000000) return null;
+        return Memory.readByteArray(dataPtr, length);
+    } catch (e) {
+        return null;
+    }
+}
+
+// libstdc++ classic (pre-C++11) COW std::string:
+//   [char* _M_p @+0]   + _Rep header before data: [length][capacity][refcount]
+// Container is a single pointer; length sits 3*pSize before the data.
+Memory.readStdStringGnuCow = function (address) {
+    try {
+        const dataPtr = address.readPointer();
+        if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
+        const length = dataPtr.sub(3 * Process.pointerSize).readU32();
+        if (length === 0 || length > 0x10000000) return null;
+        return Memory.readByteArray(dataPtr, length);
+    } catch (e) {
+        return null;
+    }
+}
+
+// 24-byte vector-style std::string (old MediaTek/ARMv7 Widevine):
+//   [SSO buf 12B][cap/alloc ptr][char* _M_finish][char* _M_start]   (offsets 0/12/16/20)
+// Length = _M_finish - _M_start (matches IDA *((_DWORD*)s+5)==*(s+4) empty check).
+Memory.readStdStringRange = function (address) {
+    try {
+        const finish = address.add(16).readPointer();
+        const start = address.add(20).readPointer();
+        if (start.isNull() || start.compare(ptr(0x1000)) < 0) return null;
+        if (finish.compare(start) < 0) return null;
+        const length = finish.sub(start).toInt32();
+        if (length === 0 || length > 0x10000000) return null;
+        return Memory.readByteArray(start, length);
+    } catch (e) {
+        return null;
+    }
+}
+
+// Try every known std::string ABI and return the first plausible result.
+Memory.readStdStringAny = function (address) {
+    const readers = [
+        Memory.readStdStringRange,      // 24B vector-style (old MediaTek/ARMv7 Widevine)
+        Memory.readStdString,           // libc++ (modern Android)
+        Memory.readStdStringGnuCxx11,   // libstdc++ C++11 (old NDK GCC, _GLIBCXX_USE_CXX11_ABI=1)
+        Memory.readStdStringGnuCow,     // libstdc++ pre-C++11 (very old NDK GCC)
+    ];
+    for (const reader of readers) {
+        try {
+            const data = reader(address);
+            if (data && data.byteLength > 0) return data;
+        } catch (e) { /* try next */
+        }
+    }
+    return null;
+}
+
+// Legacy compact vector layout (learnfrida.info):
+//   [data ptr @+0][...][U16 size @+8]
+// Doesn't match any current STL; kept as a last-resort fallback.
+// https://learnfrida.info/intermediate_usage/#stdvector
 Memory.readStdVector = function (address) {
     // https://learnfrida.info/intermediate_usage/#stdvector
     // Read the vector size (2 bytes) at offset 8
@@ -310,7 +379,7 @@ function CdmLicense_PrepareKeyRequest(address) {
             for (let i = 0; i < this.params.length; i++) {
                 // Extract the signed_request data (CdmKeyMessage*)
                 try {
-                    const signedRequestData = Memory.readStdString(this.params[i]);
+                    const signedRequestData = Memory.readStdStringAny(this.params[i]);
                     if (signedRequestData) {
                         dumped = true;
                         send('challenge', signedRequestData);
@@ -356,7 +425,7 @@ function CdmEngine_GenerateKeyRequest(address) {
             for (let i = 0; i < this.params.length; i++) {
                 // Extract the signed_request data (CdmKeyMessage*)
                 try {
-                    const signedRequestData = Memory.readStdString(this.params[i]);
+                    const signedRequestData = Memory.readStdStringAny(this.params[i]);
                     if (signedRequestData) {
                         dumped = true;
                         send('challenge', signedRequestData);
@@ -383,7 +452,7 @@ function AesCbcKey_Encrypt(address) {
     */
     Interceptor.attach(address, {
         onEnter: function (args) {
-            const inData = Memory.readStdString(args[1]);
+            const inData = Memory.readStdStringAny(args[1]);
             if (inData) {
                 print(Level.DEBUG, '[*] AesCbcKey::Encrypt');
                 send('client_id', inData);
