@@ -1,5 +1,5 @@
 /**
- * Date: 2026-04-26
+ * Date: 2026-04-28
  * Description: DRM key extraction for research and educational purposes.
  * Source: https://github.com/hyugogirubato/KeyDive
  */
@@ -826,12 +826,12 @@ function Level3_RewrapDeviceRSAKey30(address, name) {
     */
     Interceptor.attach(address, {
         onEnter: function (args) {
-            const bufferPtr = args[5];
-            const sizePtr = args[6];
+            try {
+                const bufferPtr = args[5];
+                const sizePtr = args[6];
 
-            if (!(sizePtr.isNull() || bufferPtr.isNull())) {
-                // Check if this is a pointer to a buffer
-                if (bufferPtr < 0x10000) return;
+                if (sizePtr.isNull() || bufferPtr.isNull()) return;
+                if (bufferPtr.compare(ptr(0x10000)) < 0) return;
 
                 // Check if the size matches a potential 2048 or 4096-bit RSA private key (range 1190-2350)
                 const size = sizePtr.toInt32();
@@ -842,7 +842,7 @@ function Level3_RewrapDeviceRSAKey30(address, name) {
                     print(Level.DEBUG, `[*] Level3_RewrapDeviceRSAKey30: ${name}`);
                     send({'private_key': name}, bufferData);
                 }
-            }
+            } catch (e) { /* not a real RewrapDeviceRSAKey30 call */ }
         }
     });
 }
