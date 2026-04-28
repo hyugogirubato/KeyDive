@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.6] - Not Released
+## [3.0.6] - 2026-04-28
+
+### Added
+
+- Support for older `std::string` and `android::vector` implementations.
+
+### Fixed
+
+- Aggressive RSA private key lookup.
+- Follow back to grep when strings not available for properties enumeration.
 
 ### Changed
 
@@ -568,6 +577,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release of the project, laying the foundation for future enhancements and features.
 
+[3.0.6]: https://github.com/hyugogirubato/KeyDive/releases/tag/v3.0.6
 [3.0.5]: https://github.com/hyugogirubato/KeyDive/releases/tag/v3.0.5
 [3.0.4]: https://github.com/hyugogirubato/KeyDive/releases/tag/v3.0.4
 [3.0.3]: https://github.com/hyugogirubato/KeyDive/releases/tag/v3.0.3
