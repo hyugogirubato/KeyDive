@@ -134,12 +134,8 @@ Memory.readStdStringAny = function (address) {
 // Doesn't match any current STL; kept as a last-resort fallback.
 // https://learnfrida.info/intermediate_usage/#stdvector
 Memory.readStdVector = function (address) {
-    // https://learnfrida.info/intermediate_usage/#stdvector
-    // Read the vector size (2 bytes) at offset 8
-    let size = Memory.readU16(address.add(8));
-
-    // Read pointer to the start of the vector data (at offset 0)
-    const data = Memory.readByteArray(address.readPointer(), size);
+    let length = Memory.readU16(address.add(8));
+    const data = Memory.readByteArray(address.readPointer(), length);
     /*
     const buffer = new Uint8Array(data);
 
@@ -152,6 +148,55 @@ Memory.readStdVector = function (address) {
     return buffer.slice(0, size);
      */
     return data;
+}
+
+// android::Vector<T> from utils/Vector.h (vptr-prefixed because VectorImpl has a virtual dtor):
+//   [vptr][void* mStorage][size_t mCount][uint32_t mFlags][size_t mItemSize]
+// Data ptr = mStorage @+pSize, byte count = mCount @+2*pSize (T = uint8_t).
+Memory.readAndroidVector = function (address) {
+    try {
+        const dataPtr = address.add(Process.pointerSize).readPointer();
+        if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
+        const count = address.add(2 * Process.pointerSize).readU32();
+        if (count === 0 || count > 0x10000000) return null;
+        return Memory.readByteArray(dataPtr, count);
+    } catch (e) {
+        return null;
+    }
+}
+
+// std::vector<T> (libc++ and libstdc++ C++11):
+//   [pointer begin][pointer end][pointer capacity_end]
+// For vector<uint8_t> the byte count is end - begin.
+Memory.readStdVectorRange = function (address) {
+    try {
+        const begin = address.readPointer();
+        const end = address.add(Process.pointerSize).readPointer();
+        if (begin.isNull() || begin.compare(ptr(0x1000)) < 0) return null;
+        if (end.compare(begin) < 0) return null;
+        const length = end.sub(begin).toInt32();
+        if (length === 0 || length > 0x10000000) return null;
+        return Memory.readByteArray(begin, length);
+    } catch (e) {
+        return null;
+    }
+}
+
+// Try every known vector layout and return the first plausible result.
+Memory.readStdVectorAny = function (address) {
+    const readers = [
+        Memory.readAndroidVector,    // android::Vector<uint8_t>
+        Memory.readStdVectorRange,   // std::vector<uint8_t>
+        Memory.readStdVector,        // legacy U16-at-offset-8 layout
+    ];
+    for (const reader of readers) {
+        try {
+            const data = reader(address);
+            if (data && data.byteLength > 0) return data;
+        } catch (e) { /* try next */
+        }
+    }
+    return null;
 }
 
 // Utility for encoding strings into byte arrays (UTF-8).
@@ -768,7 +813,7 @@ function WVDrmPlugin_provideProvisionResponse(address) {
             // Extract and dump the relevant arguments
             for (let i = 0; i < 4; i++) {
                 try {
-                    const responseData = Memory.readStdVector(args[i]);
+                    const responseData = Memory.readStdVectorAny(args[i]);
                     if (responseData) {
                         dumped = true;
                         send('provisioning_response', responseData);
