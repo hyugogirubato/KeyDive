@@ -105,14 +105,13 @@ Memory.readStdStringAny = function (address) {
         Memory.readStdStringRange,      // 24B vector-style (old MediaTek/ARMv7 Widevine)
         Memory.readStdString,           // libc++ (modern Android)
         Memory.readStdStringGnuCxx11,   // libstdc++ C++11 (old NDK GCC, _GLIBCXX_USE_CXX11_ABI=1)
-        Memory.readStdStringGnuCow,     // libstdc++ pre-C++11 (very old NDK GCC)
+        Memory.readStdStringGnuCow      // libstdc++ pre-C++11 (very old NDK GCC)
     ];
     for (const reader of readers) {
         try {
             const data = reader(address);
             if (data && data.byteLength > 0) return data;
-        } catch (e) { /* try next */
-        }
+        } catch (e) { /* try next */ }
     }
     return null;
 }
@@ -167,14 +166,13 @@ Memory.readStdVectorAny = function (address) {
     const readers = [
         Memory.readAndroidVector,    // android::Vector<uint8_t>
         Memory.readStdVectorRange,   // std::vector<uint8_t>
-        Memory.readStdVector,        // legacy U16-at-offset-8 layout
+        Memory.readStdVector         // legacy U16-at-offset-8 layout
     ];
     for (const reader of readers) {
         try {
             const data = reader(address);
             if (data && data.byteLength > 0) return data;
-        } catch (e) { /* try next */
-        }
+        } catch (e) { /* try next */ }
     }
     return null;
 }
@@ -403,14 +401,10 @@ function CdmLicense_PrepareKeyRequest(address) {
             // Extract and dump the relevant arguments
             for (let i = 0; i < this.params.length; i++) {
                 // Extract the signed_request data (CdmKeyMessage*)
-                try {
-                    const signedRequestData = Memory.readStdStringAny(this.params[i]);
-                    if (signedRequestData) {
-                        dumped = true;
-                        send('challenge', signedRequestData);
-                    }
-                } catch (e) {
-                    // print(Level.WARNING, `Failed to extract signed_request data from args[${i}]`);
+                const signedRequestData = Memory.readStdStringAny(this.params[i]);
+                if (signedRequestData) {
+                    dumped = true;
+                    send('challenge', signedRequestData);
                 }
             }
             !dumped && print(Level.ERROR, 'Failed to dump challenge data');
@@ -449,14 +443,10 @@ function CdmEngine_GenerateKeyRequest(address) {
             // Extract and dump the relevant arguments
             for (let i = 0; i < this.params.length; i++) {
                 // Extract the signed_request data (CdmKeyMessage*)
-                try {
-                    const signedRequestData = Memory.readStdStringAny(this.params[i]);
-                    if (signedRequestData) {
-                        dumped = true;
-                        send('challenge', signedRequestData);
-                    }
-                } catch (e) {
-                    // print(Level.WARNING, `Failed to extract signed_request data from args[${i}]`);
+                const signedRequestData = Memory.readStdStringAny(this.params[i]);
+                if (signedRequestData) {
+                    dumped = true;
+                    send('challenge', signedRequestData);
                 }
             }
             !dumped && print(Level.ERROR, 'Failed to dump challenge data');
@@ -792,14 +782,10 @@ function WVDrmPlugin_provideProvisionResponse(address) {
 
             // Extract and dump the relevant arguments
             for (let i = 0; i < 4; i++) {
-                try {
-                    const responseData = Memory.readStdVectorAny(args[i]);
-                    if (responseData) {
-                        dumped = true;
-                        send('provisioning_response', responseData);
-                    }
-                } catch (e) {
-                    // print(Level.WARNING, `Failed to extract provisioning response data from args[${i}]`);
+                const responseData = Memory.readStdVectorAny(args[i]);
+                if (responseData) {
+                    dumped = true;
+                    send('provisioning_response', responseData);
                 }
             }
             !dumped && print(Level.ERROR, 'Failed to dump provisioning response data');
