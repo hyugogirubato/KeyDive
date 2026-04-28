@@ -68,47 +68,35 @@ Memory.readStdString = function (address) {
 //   [char* _M_p][size_t length][SSO buf 16B or capacity]
 // _M_p always points to the data (heap or local SSO buffer).
 Memory.readStdStringGnuCxx11 = function (address) {
-    try {
-        const dataPtr = address.readPointer();
-        if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
-        const length = address.add(Process.pointerSize).readU32();
-        if (length === 0 || length > 0x10000000) return null;
-        return Memory.readByteArray(dataPtr, length);
-    } catch (e) {
-        return null;
-    }
+    const dataPtr = address.readPointer();
+    if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
+    const length = address.add(Process.pointerSize).readU32();
+    if (length === 0 || length > 0x10000000) return null;
+    return Memory.readByteArray(dataPtr, length);
 }
 
 // libstdc++ classic (pre-C++11) COW std::string:
 //   [char* _M_p @+0]   + _Rep header before data: [length][capacity][refcount]
 // Container is a single pointer; length sits 3*pSize before the data.
 Memory.readStdStringGnuCow = function (address) {
-    try {
-        const dataPtr = address.readPointer();
-        if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
-        const length = dataPtr.sub(3 * Process.pointerSize).readU32();
-        if (length === 0 || length > 0x10000000) return null;
-        return Memory.readByteArray(dataPtr, length);
-    } catch (e) {
-        return null;
-    }
+    const dataPtr = address.readPointer();
+    if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
+    const length = dataPtr.sub(3 * Process.pointerSize).readU32();
+    if (length === 0 || length > 0x10000000) return null;
+    return Memory.readByteArray(dataPtr, length);
 }
 
 // 24-byte vector-style std::string (old MediaTek/ARMv7 Widevine):
 //   [SSO buf 12B][cap/alloc ptr][char* _M_finish][char* _M_start]   (offsets 0/12/16/20)
 // Length = _M_finish - _M_start (matches IDA *((_DWORD*)s+5)==*(s+4) empty check).
 Memory.readStdStringRange = function (address) {
-    try {
-        const finish = address.add(16).readPointer();
-        const start = address.add(20).readPointer();
-        if (start.isNull() || start.compare(ptr(0x1000)) < 0) return null;
-        if (finish.compare(start) < 0) return null;
-        const length = finish.sub(start).toInt32();
-        if (length === 0 || length > 0x10000000) return null;
-        return Memory.readByteArray(start, length);
-    } catch (e) {
-        return null;
-    }
+    const finish = address.add(16).readPointer();
+    const start = address.add(20).readPointer();
+    if (start.isNull() || start.compare(ptr(0x1000)) < 0) return null;
+    if (finish.compare(start) < 0) return null;
+    const length = finish.sub(start).toInt32();
+    if (length === 0 || length > 0x10000000) return null;
+    return Memory.readByteArray(start, length);
 }
 
 // Try every known std::string ABI and return the first plausible result.
@@ -154,32 +142,24 @@ Memory.readStdVector = function (address) {
 //   [vptr][void* mStorage][size_t mCount][uint32_t mFlags][size_t mItemSize]
 // Data ptr = mStorage @+pSize, byte count = mCount @+2*pSize (T = uint8_t).
 Memory.readAndroidVector = function (address) {
-    try {
-        const dataPtr = address.add(Process.pointerSize).readPointer();
-        if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
-        const count = address.add(2 * Process.pointerSize).readU32();
-        if (count === 0 || count > 0x10000000) return null;
-        return Memory.readByteArray(dataPtr, count);
-    } catch (e) {
-        return null;
-    }
+    const dataPtr = address.add(Process.pointerSize).readPointer();
+    if (dataPtr.isNull() || dataPtr.compare(ptr(0x1000)) < 0) return null;
+    const count = address.add(2 * Process.pointerSize).readU32();
+    if (count === 0 || count > 0x10000000) return null;
+    return Memory.readByteArray(dataPtr, count);
 }
 
 // std::vector<T> (libc++ and libstdc++ C++11):
 //   [pointer begin][pointer end][pointer capacity_end]
 // For vector<uint8_t> the byte count is end - begin.
 Memory.readStdVectorRange = function (address) {
-    try {
-        const begin = address.readPointer();
-        const end = address.add(Process.pointerSize).readPointer();
-        if (begin.isNull() || begin.compare(ptr(0x1000)) < 0) return null;
-        if (end.compare(begin) < 0) return null;
-        const length = end.sub(begin).toInt32();
-        if (length === 0 || length > 0x10000000) return null;
-        return Memory.readByteArray(begin, length);
-    } catch (e) {
-        return null;
-    }
+    const begin = address.readPointer();
+    const end = address.add(Process.pointerSize).readPointer();
+    if (begin.isNull() || begin.compare(ptr(0x1000)) < 0) return null;
+    if (end.compare(begin) < 0) return null;
+    const length = end.sub(begin).toInt32();
+    if (length === 0 || length > 0x10000000) return null;
+    return Memory.readByteArray(begin, length);
 }
 
 // Try every known vector layout and return the first plausible result.
