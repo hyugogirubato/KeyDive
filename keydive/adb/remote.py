@@ -123,6 +123,10 @@ class Remote:
 
         # Execute shell command to fetch all system properties using 'getprop'
         sp = shell([*self.__prefix, 'getprop', '|', 'strings'])
+        if 'strings: not found' in sp[1]:
+            # Fallback to regex if 'strings' command is not available on the device
+            sp = shell([*self.__prefix, 'getprop', '|', "grep -a -o '[ -~]\\{4,\\}'"])
+
         if sp[0]:
             self.logger.error('Unable to retrieve system properties from the device (error: %s)', sp[1])
             return properties
